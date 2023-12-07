@@ -77,7 +77,12 @@ namespace AppiumWinApp.FeatureFiles
         [NUnit.Framework.DescriptionAttribute("01Test Case ID 1537268: Verify that battery ADL data is restored on original devi" +
             "ce")]
         [NUnit.Framework.CategoryAttribute("tag1")]
+        [NUnit.Framework.TestCaseAttribute("LT961-DRW-UP", "2000800436", "Yes", "Right", "Left", null)]
         [NUnit.Framework.TestCaseAttribute("RE962-DRW", "1886304826", "Yes", "Right", "Left", null)]
+        [NUnit.Framework.TestCaseAttribute("RE962-DRWT", "2000803069", "Yes", "Right", "Left", null)]
+        [NUnit.Framework.TestCaseAttribute("RT962-DRW", "2000800246", "Yes", "Right", "Left", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1600804970", "Yes", "Right", "Left", null)]
+        [NUnit.Framework.TestCaseAttribute("RT961-DRWC", "2000816934", "Yes", "Right", "Left", null)]
         public void _01TestCaseID1537268VerifyThatBatteryADLDataIsRestoredOnOriginalDevice(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string[] exampleTags)
         {
             string[] @__tags = new string[] {

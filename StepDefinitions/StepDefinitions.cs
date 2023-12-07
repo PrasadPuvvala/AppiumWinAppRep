@@ -78,6 +78,7 @@ using Environment = System.Environment;
 using File = System.IO.File;
 using System.Threading.Tasks;
 using OfficeOpenXml.ConditionalFormatting;
+using Newtonsoft.Json.Linq;
 
 namespace MyNamespace
 {
@@ -146,6 +147,26 @@ namespace MyNamespace
 
         {
 
+
+            // Read the scenario title to run from the configuration file //
+            List<string> scenariosToRun = ReadScenariosToRunFromConfig();
+
+            string currentScenarioTitle = ScenarioContext.Current.ScenarioInfo.Title;
+
+            Console.WriteLine($"Starting scenario: {currentScenarioTitle}");
+
+            if (scenariosToRun == null || scenariosToRun.Contains(currentScenarioTitle, StringComparer.OrdinalIgnoreCase))
+            {
+                // Continue with the scenario execution.
+            }
+            else
+            {
+                Console.WriteLine($"Scenario '{currentScenarioTitle}' not found or not configured to run. Skipping...");
+                ScenarioContext.Current.Pending();
+            }
+
+
+
             /*Extract the TestcseId from the Scenario Context*/
 
             Console.WriteLine("Starting " + ScenarioContext.Current.ScenarioInfo.Title);
@@ -175,6 +196,41 @@ namespace MyNamespace
 
         }
 
+        private static List<string> ReadScenariosToRunFromConfig()
+
+        {
+            string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ScenarioConfig.json");
+
+            if (!File.Exists(configFilePath))
+            {
+                Console.WriteLine($"Config file not found at {configFilePath}. No scenarios will be skipped.");
+                return null;
+            }
+
+            try
+            {
+                string jsonContent = File.ReadAllText(configFilePath);
+                JObject config = JObject.Parse(jsonContent);
+
+                JArray scenarios = config["Scenarios"] as JArray;
+
+                if (scenarios != null && scenarios.Any())
+
+                {
+                    //return scenarios.Select(s => s.ToString()).ToList();
+                    return scenarios.Select(s => s.ToString()).ToList();
+
+                }
+
+                Console.WriteLine("No scenarios found in the config file.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading config file: {ex.Message}. No scenarios will be skipped.");
+                return null;
+            }
+        }
 
 
 
