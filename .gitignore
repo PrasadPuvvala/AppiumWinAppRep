@@ -17,4 +17,5 @@ obj/
 
 # Ignore NUnit test files
 *.tmp
+//
 
