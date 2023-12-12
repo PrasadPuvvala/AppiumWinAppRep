@@ -30,8 +30,8 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
  #    | RE962-DRW |   1886304826   | Yes     | Right       | Left       |
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
  #	| RT962-DRW | 2000800246    | Yes     | Right       | Left       |
-	#| LT988-DW | 1600804970     | Yes     | Right       | Left       |
-	| RT961-DRWC | 2000816934     | Yes     | Right       | Left       |
+	| LT988-DW | 1600804970     | Yes     | Right       | Left       |
+	#| RT961-DRWC | 2000816934     | Yes     | Right       | Left       |
 	
 
 
