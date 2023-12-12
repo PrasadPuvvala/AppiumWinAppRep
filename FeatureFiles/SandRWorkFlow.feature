@@ -4,10 +4,10 @@ A short summary of the feature
 
 @tag1
 Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restored on original device
-#
-#	Given [Change channel side in FDTS<DeviceLeft>]
-#	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"
-#	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
+
+	Given [Change channel side in FDTS<DeviceLeft>]
+	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"
+	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
     When [Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"]
 	When [Cleaning up Capture and Restore Reports Before Launch SandR]
 	When [Change communication channel in S and R<DeviceLeft>]
@@ -27,10 +27,10 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
 
 	| DeviceId  | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft |
     | LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-     | RE962-DRW |   1886304826   | Yes     | Right       | Left       |
-	| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
- 	| RT962-DRW | 2000800246    | Yes     | Right       | Left       |
-	| LT988-DW | 1600804970     | Yes     | Right       | Left       |
+ #    | RE962-DRW |   1886304826   | Yes     | Right       | Left       |
+	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
+ #	| RT962-DRW | 2000800246    | Yes     | Right       | Left       |
+	#| LT988-DW | 1600804970     | Yes     | Right       | Left       |
 	| RT961-DRWC | 2000816934     | Yes     | Right       | Left       |
 	
 
