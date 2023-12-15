@@ -27,7 +27,7 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
 
 	| DeviceId  | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-    | RE962-DRW |  2026335112    | Yes     | Right       | Left       |
+    | RE962-DRW |  1800801955    | Yes     | Right       | Left       |
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
  #	| RT962-DRW | 2000800246    | Yes     | Right       | Left       |
 	#| LT988-DW | 1600804970     | Yes     | Right       | Left       |
@@ -50,7 +50,7 @@ Scenario Outline: 02Test Case ID 1103972: Verify device information is shown cor
 	Examples:
 	| DeviceId | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-	 | RE962-DRW | 2026335112     | Yes     | Right       | Left       |
+	 | RE962-DRW | 1800801955     | Yes     | Right       | Left       |
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
 	#| RT962-DRW | 2000800246     | Yes     | Right       | Left       |
 	#| LT988-DW | 1600804970     | Yes     | Right       | Left       |
@@ -72,7 +72,7 @@ Scenario Outline: 03Test Case ID 1105474: Verify capture operation is performed 
 	Examples:
 	| DeviceId  | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-     | RE962-DRW | 2026335112     | Yes     | Right       | Left       |
+     | RE962-DRW | 1800801955     | Yes     | Right       | Left       |
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
 	#| RT962-DRW | 2000800246     | Yes     | Right       | Left       |
     #| LT988-DW | 1600804970     | Yes     | Right       | Left       |
@@ -94,7 +94,7 @@ Scenario Outline: 04Test Case ID 1103482: Verify supported PC configuration
 
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | 
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-	 | RE962-DRW | 2026335112     | Yes     | Right       | Left       |
+	 | RE962-DRW | 1800801955     | Yes     | Right       | Left       |
     #| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
 	#| RT962-DRW | 2000800246     | Yes     | Right       | Left       |
     #| LT988-DW | 1600805306     | Yes     | Right       | Left       |
@@ -113,7 +113,7 @@ Scenario Outline: 05Test Case ID 1103833: Verify channel can be changed while S&
 	Examples:
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | 
    #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-	| RE962-DRW | 2026335112     | Yes     | Right       | Left       |
+	| RE962-DRW | 1800801955     | Yes     | Right       | Left       |
    #| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
    #| RT962-DRW | 2000800246    | Yes     | Right       | Left       |
    #| LT988-DW | 1600805306     | Yes     | Right       | Left       |
@@ -140,7 +140,7 @@ Scenario Outline: 06Test Case ID 1104002: Verify HI capture/restoration report
 	Examples:
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | 
 ##  | LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-	| RE962-DRW | 2026335112     | Yes     | Right       | Left       |
+	| RE962-DRW | 1800801955     | Yes     | Right       | Left       |
 ##	| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       |
  ## | LT988-DW | 1600805306     | Yes     | Right       | Left       |
@@ -162,7 +162,7 @@ Scenario Outline: 07Test Case ID 1142328: PC_Verify HI can be PC programmed prop
 	Examples:
 	| DeviceId     | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo |
 ##	| LT961-DRW-UP | 2000800436     | Yes     | Right       | Left       |            |
-    | RE962-DRW    | 2026335112     | Yes     | Right       | Left       | 2049043374 |
+    | RE962-DRW    | 1800801955     | Yes     | Right       | Left       | 2026335116 |
 ##	| RE962-DRWT   | 2000803069     | Yes     | Right       | Left       | 2000803066 |
 	#| RT962-DRW    | 2000800246     | Yes     | Right       | Left       | 2000800269 |
   ##| LT988-DW     | 1600805306     | Yes     | Right       | Left       | 1600804918 |
@@ -214,7 +214,7 @@ Scenario Outline: 09Test Case ID 1105498: Verify that S&R Tool properly sets lis
 				| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo | 
 				 #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |1700800900|
 				 #| RE962-DRWT | 2000803069     | Yes     | Right       | Left       | 2000803066 |
-				 | RE962-DRW |    2026335112  | Yes     | Right       | Left       | 2049043374 |
+				 | RE962-DRW |    1800801955  | Yes     | Right       | Left       | 2026335116 |
 				 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269 |
 				  #| LT988-DW | 1600805306     | Yes     | Right       | Left       | 1600804918 |
 				 #| RT961-DRWC  | 2000816934     | Yes     | Right       | Left       | 2000816936 | 
@@ -267,7 +267,7 @@ Scenario Outline: 10Test Case ID 1105696: Verify that fitting data is properly r
 	Examples:
 	| DeviceId     | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DeviceTemp | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo   | FlashHI | 
 
-	 | RE962-DRW   | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2049043374 | NoDev    | 2026335112       | Yes     |
+	 | RE962-DRW   | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2026335116 | NoDev    | 1800801955       | Yes     |
 #	 | RE962-DRWT   | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000803066 | NoDev    | 2000803069       | Yes     |
 #	 | LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 1700800900 | NoDev    | 2000800436       | Yes     |
 	  #| LT988-DW | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 1600804918 | NoDev    | 1600805306       | Yes     |
@@ -323,7 +323,7 @@ Scenario Outline: 10Test Case ID 1105696: Verify that fitting data is properly r
      Examples:
     | DeviceId  | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DumpD    | DeviceTemp | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo | FlashHI |
 
-  | RE962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2049043374  | NoDev        | 2026335112     | Yes     |
+  | RE962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2026335116  | NoDev        | 1800801955     | Yes     |
 #	| RE962-DRWT   | Left       | Right       | Device A| Device B | Device C | Device D | Temp       | Yes      | No         | 2000803066 | NoDev    | 2000803069     | Yes     |
 #	| LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1700800900 | NoDev    | 2000800436     | Yes     |
 	#| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1600804918 | NoDev    | 1600805306     | Yes     |
@@ -354,7 +354,7 @@ Scenario Outline: 12Test case ID 1629628: Verify that firmware is upgraded if co
    Examples: 
    | DeviceId  | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DumpD    | DeviceTemp | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo | FlashHI |
 
-    | RE962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2049043374  | NoDev        | 2026335112     | Yes     |
+    | RE962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2026335116  | NoDev        | 1800801955     | Yes     |
 #	| RE962-DRWT   | Left       | Right       | Device A| Device B | Device C | Device D | Temp       | Yes      | No         | 2000803066 | NoDev    | 2000803069     | Yes     |
 #	| LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1700800900 | NoDev    | 2000800436     | Yes     |
 #	| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1600804918 | NoDev    | 1600804970     | Yes     |
@@ -383,7 +383,7 @@ Scenario Outline: 13Test Case ID 1629629: Verify that firmware is downgraded if 
 	Examples:
     | DeviceId  | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DumpD    | DeviceTemp | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo | FlashHI |
 
-    | RE962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2049043374  | NoDev        | 2026335112     | Yes     |
+    | RE962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2026335116  | NoDev        | 1800801955     | Yes     |
 #	| RE962-DRWT   | Left       | Right       | Device A| Device B | Device C | Device D | Temp       | Yes      | No         | 2000803066 | NoDev    | 2000803069     | Yes     |
 #	| LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1700800900 | NoDev    | 2000800436     | Yes     |
 #	| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1600804918 | NoDev    | 1600804970     | Yes     |
@@ -411,7 +411,7 @@ Examples:
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo | ScenarioTitle |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |1700800900| capture|  
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       | 2000803066 | capture |  
-	| RE962-DRW | 2026335112     | Yes     | Right       | Left       | 2049043374 |  capture |
+	| RE962-DRW | 1800801955     | Yes     | Right       | Left       | 2026335116 |  capture |
 	#| RT962-DRW | 2000800247     | Yes     | Right       | Left       | 2000800247 | | capture |
 	#| LT988-DW | 1600806099     | Yes     | Right       | Left       | 1600806098 |  | capture |
 	#| RT961-DRWC  | 2000801965     | Yes     | Right       | Left       | 2000801965 | | capture | 
@@ -438,7 +438,7 @@ Examples:
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo | ScenarioTitle |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |1700800900| service records|  
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       | 2000803066 | service records |  
-	| RE962-DRW | 2026335112    | Yes     | Right       | Left       | 2049043374 |  service records |
+	| RE962-DRW | 1800801955    | Yes     | Right       | Left       | 2026335116 |  service records |
 	#| RT962-DRW | 2000800247     | Yes     | Right       | Left       | 2000800247 | | service records |
 	#| LT988-DW | 1600806099     | Yes     | Right       | Left       | 1600806098 |  | service records |
 	#| RT961-DRWC  | 2000801965     | Yes     | Right       | Left       | 2000801965 | | service records | 
@@ -463,7 +463,7 @@ Examples:
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo | ScenarioTitle |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |1700800900| restore|  
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       | 2000803066 | restore |  
-	| RE962-DRW | 2026335112     | Yes     | Right       | Left       | 2049043374 |  restore |
+	| RE962-DRW | 1800801955     | Yes     | Right       | Left       | 2026335116 |  restore |
 	#| RT962-DRW | 2000800247     | Yes     | Right       | Left       | 2000800247 | | restore |
 	#| LT988-DW | 1600806099     | Yes     | Right       | Left       | 1600806098 |  | restore |
 	#| RT961-DRWC  | 2000801965     | Yes     | Right       | Left       | 2000801965 | | restore | 
@@ -487,7 +487,7 @@ Examples:
 	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo | ScenarioTitle |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |1700800900| service records|  
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left       | 2000803066 | service records |  
-	 | RE962-DRW | 2026335112    | Yes     | Right       | Left       | 2049043374 |  service records |
+	 | RE962-DRW | 1800801955    | Yes     | Right       | Left       | 2026335116 |  service records |
 	#| RT962-DRW | 2000800247     | Yes     | Right       | Left       | 2000800247 | | service records |
 	#| LT988-DW | 1600806099     | Yes     | Right       | Left       | 1600806098 |  | service records |
 	#| RT961-DRWC  | 2000801965     | Yes     | Right       | Left       | 2000801965 | | service records | 
