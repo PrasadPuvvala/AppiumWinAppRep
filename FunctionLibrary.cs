@@ -2432,17 +2432,18 @@ namespace AppiumWinApp
                 File2 = null;
             }
             System.IO.FileInfo anyfile1 = new System.IO.FileInfo(File);
-            if(File2!= null)
+            anyfile1.Delete();
+            if (File2!= null)
             {
                 System.IO.DirectoryInfo anyfile = new DirectoryInfo(File2);
                 anyfile.Delete();
             }           
-            anyfile1.Delete();
+            
            
 
 
-            var Sandclose = session.FindElementByAccessibilityId("PART_Close");
-            Sandclose.Click();
+            //var Sandclose = session.FindElementByAccessibilityId("PART_Close");
+            //Sandclose.Click();
 
         }
 

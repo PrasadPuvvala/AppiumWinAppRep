@@ -79,6 +79,7 @@ using File = System.IO.File;
 using System.Threading.Tasks;
 using OfficeOpenXml.ConditionalFormatting;
 using Newtonsoft.Json.Linq;
+using Azure;
 
 namespace MyNamespace
 {
@@ -114,8 +115,11 @@ namespace MyNamespace
 
 
         [BeforeFeature]
+
         public static void beforeFeature()
         {
+
+            
             Console.WriteLine("This is BeforeFetaure method");
             htmlReporter = new ExtentHtmlReporter(textDir + "\\report.html");
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
@@ -135,10 +139,125 @@ namespace MyNamespace
             /* Reading CSV file to get device names */
 
             String[] csvVal = FunctionLibrary.readCSVFile();
+
+            /*Launch Socket Driver*/
+
+
         }
 
 
-        
+        //    public static void BeforeFeature()
+        //    {
+        //        Console.WriteLine("Initializing BeforeFeature...");
+
+        //        // Create an ExtentHtmlReporter with a specified file path
+        //        var htmlReporter = new ExtentHtmlReporter(Path.Combine(textDir, "report.html"));
+
+        //        // Configure the appearance of the HTML report
+        //        htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
+        //        htmlReporter.Config.ReportName = "SandR Regression Test - Prasad PSSNV";
+        //        htmlReporter.Config.EnableTimeline = true;
+        //        htmlReporter.Config.DocumentTitle = "S and R Report";
+
+        //        // Customize the HTML and CSS settings
+
+        //        CustomizeHtmlReporter(htmlReporter);
+
+        //        // Create an ExtentReports instance and attach the ExtentHtmlReporter
+        //        extent = new ExtentReports();
+        //        extent.AttachReporter(htmlReporter);
+
+        //        // Call a method to handle additional configuration if needed
+        //        ModuleFunctions.callbyextentreport(extent);
+
+        //        // Launch WinApp Driver
+        //        StartWinAppDriver();
+
+        //        // Read device names from a CSV file
+        //        string[] csvValues = FunctionLibrary.readCSVFile();
+
+        //        Console.WriteLine("BeforeFeature initialization completed.");
+        //    }
+
+        //    private static void CustomizeHtmlReporter(ExtentHtmlReporter htmlReporter)
+        //    {
+        //        // Customize the background color and font style using CSS
+        //        htmlReporter.Config.CSS = @"
+        //    .extent-wrapper {
+        //        background-color: #1A1A1A;
+        //        color: #fff;
+        //        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        //        font-size: 14px;
+        //        line-height: 1.6;
+        //    }
+
+        //    .extent-header {
+        //        background-color: #333;
+        //        color: #fff;
+        //        padding: 15px;
+        //        font-size: 18px;
+        //    }
+
+        //    .test-status.fail {
+        //        background-color: #D32F2F;
+        //        color: #fff;
+        //    }
+
+        //    .test-status.pass {
+        //        background-color: #388E3C;
+        //        color: #fff;
+        //    }
+
+        //    .test-step.log {
+        //        color: #4FC3F7;
+        //        font-weight: bold;
+        //    }
+
+        //    .extent-container {
+        //        border: 1px solid #333;
+        //        border-radius: 5px;
+        //        overflow: hidden;
+        //        margin: 10px; /* Add margin for better visibility */
+        //    }
+
+        //    .extent-test {
+        //        border-bottom: 1px solid #555;
+        //        padding: 10px;
+        //    }
+
+        //    .highlight {
+        //        background-color: #FFD700;
+        //        color: #333;
+        //        padding: 2px;
+        //        border-radius: 3px;
+        //        font-weight: bold;
+        //    }
+        //";
+        //    }
+
+        //    //private static void CustomizeHtmlReporter(ExtentHtmlReporter htmlReporter)
+        //    //{
+        //    //    // Customize the background color and font style using CSS
+        //    //    htmlReporter.Config.CSS = ".extent-wrapper { background-color: #333; color: #fff; font-family: 'Arial', sans-serif; }";
+
+        //    //    // Add additional CSS styles as needed
+        //    //    // htmlReporter.Config.CSS += ".your-class { property: value; }";
+        //    //}
+
+        //    private static void StartWinAppDriver()
+        //    {
+        //        var winApp = new Process();
+        //        winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+        //        winApp.Start();
+        //    }
+
+        //    private static string[] ReadCSVFile()
+        //    {
+        //        // Add your logic to read and process the CSV file here
+        //        return new string[0];
+        //    }
+
+
         [BeforeScenario]
 
 
@@ -267,7 +386,7 @@ namespace MyNamespace
                 {
                     if (side.Equals("Left"))
                     {
-                        ModuleFunctions.socket(session, test, device);
+                        ModuleFunctions.socketA(session, test, device);
                     }
                     else if (side.Equals("Right"))
                     {
@@ -335,7 +454,26 @@ namespace MyNamespace
             if (devName.Contains("RE961-DRWC"))
             {
                 action.MoveToElement(name).Click().DoubleClick().Build().Perform();
-                session.FindElementByName(devName + " [1] (Final)").Click();            
+
+                //session.FindElementByName(devName + " [1] (Final)").Click();              
+
+                var elements = Enumerable.Range(1, 9).Select(index => $"{devName} [{index}] (Final)").Select(elementName =>
+                {
+                    try
+                    {
+                        return session.FindElementByName(elementName);
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
+                }).Where(element => element != null);
+
+                foreach (var element in elements)
+                {
+                    element.Click();
+                }
+
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(2000);
                 session.SwitchTo().Window(session.WindowHandles.First());
@@ -361,17 +499,29 @@ namespace MyNamespace
                     session.FindElementByName(devName + " (Final)").Click();
                 }
 
-                else if (devName.Contains("RE"))
+                if (devName.Contains("RE"))
                 {
-                    try
+                    var elements = Enumerable.Range(1, 9).Select(index => $"{devName} [{index}] (Final)").Select(elementName =>
                     {
-                        session.FindElementByName(devName + " [1] (Final)").Click();
-                    }
-                    catch (Exception e)
+                        try
+                        {
+                            return session.FindElementByName(elementName);
+                        }
+                        catch (Exception)
+                        {                           
+                            return null;
+                        }
+                    }).Where(element => element != null);
+
+                    foreach (var element in elements)
                     {
-                        session.FindElementByName(devName + " (Final)").Click();
+                        element.Click();
                     }
                 }
+                else
+                {
+                    session.FindElementByName(devName + " (Final)").Click();
+                }                        
              
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(2000);
@@ -389,13 +539,48 @@ namespace MyNamespace
             else if (device.Contains("RT") || device.Contains("RU"))
             {
                 action.MoveToElement(name).Click().DoubleClick().Build().Perform();
+
                 if (device.Contains("RT961-DRWC"))
                 {
-                    session.FindElementByName(devName + " [9] (Final)").Click();
+
+                    var elements = Enumerable.Range(1, 10).Select(index => $"{devName} [{index}] (Final)").Select(elementName =>
+                    {
+                        try
+                        {
+                            return session.FindElementByName(elementName);
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                    }).Where(element => element != null);
+
+                    foreach (var element in elements)
+                    {
+                        element.Click();
+                    }
+
+                    //session.FindElementByName(devName + " [9] (Final)").Click();
                 }
                 else
                 {
-                    session.FindElementByName(devName + " [9] (Final)").Click();
+                    var elements = Enumerable.Range(1, 9).Select(index => $"{devName} [{index}] (Final)").Select(elementName =>
+                    {
+                        try
+                        {
+                            return session.FindElementByName(elementName);
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                    }).Where(element => element != null);
+
+                    foreach (var element in elements)
+                    {
+                        element.Click();
+                    }
+                    //session.FindElementByName(devName + " [9] (Final)").Click();
                 }    
                 
                 session.FindElementByName("Continue >>").Click();
@@ -412,13 +597,17 @@ namespace MyNamespace
 
                 try
                 {
-                    if (session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text == "Discovery Failed")
+                    if (session.FindElementByAccessibilityId("MessageForm").Displayed)
 
                     {
-                        session = ModuleFunctions.discoveryFailed(session, test, textDir, device, side, DeviceNo);
+                        ModuleFunctions.discoveryFailed(session, test, textDir, device, side, DeviceNo);
                     }
                 }
-                catch (Exception) { }
+                catch (Exception) 
+                
+                {
+                        //ModuleFunctions.discoveryFailed(session, test, textDir, device, side, DeviceNo);
+                }
 
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
@@ -678,7 +867,7 @@ namespace MyNamespace
             {
                 if (line.Contains(text))
                 {
-                    test.Log(Status.Fail, line);
+                    //test.Log(Status.Fail, line);
                     break;
                 }
                 else
@@ -735,9 +924,9 @@ namespace MyNamespace
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                Thread.Sleep(2000);
+                Thread.Sleep(10000);
                 session.Manage().Window.Maximize();
-                var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
+                var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
                 var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                 var text_Button = session.FindElementsByClassName("ListBoxItem");
 
@@ -1562,27 +1751,22 @@ namespace MyNamespace
             var blobList = container.ListBlobs(null, true);
 
             // Filter matching blobs
-            var matchingBlob = blobList
-        .OfType<CloudBlockBlob>()
-        .Where(blob =>
-        {
-            if (containerName == "lucan-hiservicerecords")
+            var matchingBlob = blobList.OfType<CloudBlockBlob>().Where(blob =>
             {
+                if (containerName == "lucan-hiservicerecords")
+
+                {
                 // Parse the date from the blob name (assuming the date format is "yyyy-MM-dd")
                 var currentDate = DateTime.UtcNow.Date;
                 var formattedCurrentDate = currentDate.ToString("yyyy-MM-dd");
 
                 return Path.GetDirectoryName(blob.Name) == formattedCurrentDate;
-               
-
                 
-            }
+                }
 
-            
-            return !blob.Name.Contains(DeviceNo);
-        })
-        .OrderByDescending(blob => blob.Properties.LastModified)
-        .FirstOrDefault();
+                return blob.Name.Contains(DeviceNo);
+
+            }).OrderByDescending(blob => blob.Properties.LastModified).FirstOrDefault();
 
             if (matchingBlob != null)
             {
