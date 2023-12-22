@@ -73,7 +73,7 @@ namespace AppiumWinApp.StepDefinitions
                     System.IO.File.Delete(@"C:\Device A.xml");
                 }
             }
-            catch (Exception e) { }
+             catch (Exception e) { }
 
             try
             {
@@ -262,6 +262,18 @@ namespace AppiumWinApp.StepDefinitions
          *  Navigates to System settings - Communication device
          *  Changes the Interface Channel side **/
 
+        [Given(@"Lauch socket Driver ""([^""]*)""")]
+        public void GivenLauchSocketDriver(string device)
+        {
+            if (device.Contains("RT") || device.Contains("RU"))
+            {
+                ModuleFunctions.socket(session, test, device);
+            }
+
+        }
+
+
+
 
         [Given(@"\[Change channel side in FDTS(.*)]")]
         public void WhenChangeChannelSideInFDTS(string side)
@@ -346,6 +358,28 @@ namespace AppiumWinApp.StepDefinitions
                         session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceLeftSlNo);
                     }
 
+
+                    do
+                    {
+                        try
+                        {
+                            session.SwitchTo().Window(session.WindowHandles.First());
+
+                            if (session.FindElementByName("Discover").Text == "Discover")
+                            {
+                                session.SwitchTo().Window(session.WindowHandles.First());
+                                session.FindElementByName("Search").Click();
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                    } while (!session.FindElementByName("Disconnect").Displayed);
+
+
                     lib.functionWaitForName(session, "Search"); 
                     test.Log(Status.Pass, "Clicked on Search"); 
                     session = lib.waitForElement(session, "Model Name"); 
@@ -354,6 +388,8 @@ namespace AppiumWinApp.StepDefinitions
                 catch (Exception ex)
                 { }
             }
+
+
 
             session.FindElementByName("Settings").Click();
             Thread.Sleep(8000);

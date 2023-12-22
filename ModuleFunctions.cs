@@ -36,6 +36,7 @@ using AventStack.ExtentReports.Model;
 using Microsoft.Identity.Client.Extensions.Msal;
 using sun.security.x509;
 using javax.swing.plaf;
+using javax.swing;
 
 namespace AppiumWinApp
 {
@@ -1419,58 +1420,89 @@ namespace AppiumWinApp
                 session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
                 FunctionLibrary lib = new FunctionLibrary();
                 Actions actions = new Actions(session);
+
                 Thread.Sleep(5000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(8000);
+                Thread.Sleep(5000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(8000);
+                Thread.Sleep(6000);
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
 
                 try
                 {
+                    //do
+                    //{
 
-                    do
+                    var dataGrid = session.FindElementByClassName("DataGrid");
+
+                    // Find all DataGridCell elements within the DataGrid
+                    var dataGridCells = session.FindElementsByClassName("DataGridCell");
+                    Thread.Sleep(6000);
+
+                    ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
+
+                    // Iterate through DataGridCell elements
+                    foreach (var element in data)
                     {
-                        var non = session.FindElementByClassName("DataGrid");
-                        var h = session.FindElementsByClassName("DataGridCell");
-                        ReadOnlyCollection<AppiumWebElement> boxs = (ReadOnlyCollection<AppiumWebElement>)non.FindElementsByClassName("DataGridCell");
-
-                        /** Identifying and selection of HI Serial Number **/
-
-
-                        foreach (var element in boxs)
+                        if (element.Text == DeviceNo)
                         {
-                            if (element.Text == DeviceNo)
-                            {
-                                element.Click();
-                                break;
-                            }
+                            element.Click();
+                            break;
                         }
-                    } while (session.FindElementByName("_Read from").Displayed);
-                }
-                catch                
+                    }
+
+                //} while (session.FindElementByName("Connect").Enabled) ;
+
+
+
+                //do
+                //{
+                //    var non = session.FindElementByClassName("DataGrid");
+                //    var h = session.FindElementsByClassName("DataGridCell");
+                //    ReadOnlyCollection<AppiumWebElement> boxs = (ReadOnlyCollection<AppiumWebElement>)non.FindElementsByClassName("DataGridCell");
+
+                //    /** Identifying and selection of HI Serial Number **/
+
+
+                //    foreach (var element in boxs)
+                //    {
+                //        if (element.Text == DeviceNo)
+                //        {
+                //            element.Click();
+                //            break;
+                //        }
+                //    }
+                //} while (session.FindElementByName("_Read from").Displayed);
+            }
+                catch
                 {
-                    do
+                    //do
+                    //{
+                        var dataGrid = session.FindElementByClassName("DataGrid");
+
+                    // Find all DataGridCell elements within the DataGrid
+                    var dataGridCells = session.FindElementsByClassName("DataGridCell");
+
+                    Thread.Sleep(6000);
+
+                    ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
+
+                    // Iterate through DataGridCell elements
+                    foreach (var element in data)
                     {
-                        var non = session.FindElementByClassName("DataGrid");
-                        var h = session.FindElementsByClassName("DataGridCell");
-                        ReadOnlyCollection<AppiumWebElement> boxs = (ReadOnlyCollection<AppiumWebElement>)non.FindElementsByClassName("DataGridCell");
-
-                        /** Identifying and selection of HI Serial Number **/
-
-
-                        foreach (var element in boxs)
+                        if (element.Text == DeviceNo)
                         {
-                            if (element.Text == DeviceNo)
-                            {
-                                element.Click();
-                                break;
-                            }
+                            element.Click();
+                            break;
                         }
-                    } while (session.FindElementByName("_Read from").Displayed);
-                }                
+                    }
+
+                //} while (session.FindElementByName("Connect").Enabled) ;
+            }
+
                 lib.functionWaitForName(session,"Connect");
+
                 lib.waitUntilElementExists(session, "File", 0);
                 Thread.Sleep(4000);
                 var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
@@ -2048,7 +2080,7 @@ namespace AppiumWinApp
 
             return session;
         
-    }
+        }
 
 
 
@@ -2057,14 +2089,13 @@ namespace AppiumWinApp
          * it tries again to get disover untill device get
          * detects to FDTS */
 
-
-        public static WindowsDriver<WindowsElement> discoveryFailed(WindowsDriver<WindowsElement> session, ExtentTest test, string textDir, string device, string side, string DeviceNo)
+        public static void discoveryFailed(WindowsDriver<WindowsElement> session, ExtentTest test, string textDir, string device, string side, string DeviceNo)
 
         {
             test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
                 do
                 {
-                    Console.WriteLine("Window name is" +session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text);
+                    //Console.WriteLine("Window name is" +session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text);
 
                         if (device.Contains("RT") || device.Contains("RU"))
 
@@ -2163,14 +2194,13 @@ namespace AppiumWinApp
                     Thread.Sleep(30000);
                     session.SwitchTo().Window(session.WindowHandles.First());
                     session.SwitchTo().ActiveElement();
-                } while (session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text == "Discovery Failed");
-
-            return session;
+                } while (session.FindElementByAccessibilityId("MessageForm").Displayed);
+            
         }  
 
-        } /**End of ModuleFunctions*/ 
+    } /**End of ModuleFunctions*/ 
     
-    } //End of name space
+} //End of name space
 
 
 
