@@ -380,9 +380,12 @@ namespace AppiumWinApp.StepDefinitions
                     } while (!session.FindElementByName("Disconnect").Displayed);
 
 
-                    lib.functionWaitForName(session, "Search"); 
-                    test.Log(Status.Pass, "Clicked on Search"); 
+                    //lib.functionWaitForName(session, "Search"); 
+
+                    //test.Log(Status.Pass, "Clicked on Search"); 
+
                     session = lib.waitForElement(session, "Model Name"); 
+
                     test.Log(Status.Pass, "Dook2 Dev");
                 }
                 catch (Exception ex)
