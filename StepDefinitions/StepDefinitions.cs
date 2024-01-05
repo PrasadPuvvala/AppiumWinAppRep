@@ -609,8 +609,16 @@ namespace MyNamespace
                         //ModuleFunctions.discoveryFailed(session, test, textDir, device, side, DeviceNo);
                 }
 
-                session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                Thread.Sleep(8000);
+
+                try
+                {
+
+                    session.SwitchTo().Window(session.WindowHandles.First());
+                    session.SwitchTo().ActiveElement();
+
+                }
+                catch { }
 
                 var allWindowHandles = session.WindowHandles;
 
@@ -916,54 +924,123 @@ namespace MyNamespace
                 }
                 catch (Exception ex) { }
 
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
-                Thread.Sleep(2000);
-                DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                Thread.Sleep(10000);
-                session.Manage().Window.Maximize();
-                var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
-                var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
-                var text_Button = session.FindElementsByClassName("ListBoxItem");
-
-                test.Log(Status.Pass, "FSW is launched successfully");
-
-                int counter = 0;
-                string PatientName = null;
-                string PatientDescription = null;
-                foreach (var element in text_Button)
+                try
                 {
-                    if (counter == 3)
+
+
+                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                    Thread.Sleep(2000);
+                    DesiredCapabilities appCapabilities = new DesiredCapabilities();
+                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+                    session.Manage().Window.Maximize();
+                    var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
+                    var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
+                    var text_Button = session.FindElementsByClassName("ListBoxItem");
+
+                    test.Log(Status.Pass, "FSW is launched successfully");
+
+                    int counter = 0;
+                    string PatientName = null;
+                    string PatientDescription = null;
+                    foreach (var element in text_Button)
                     {
-                        PatientName = element.GetAttribute("AutomationId");
-                        PatientDescription = element.GetAttribute("Name");
-                        break;
+                        if (counter == 3)
+                        {
+                            PatientName = element.GetAttribute("AutomationId");
+                            PatientDescription = element.GetAttribute("Name");
+                            break;
+                        }
+                        counter = counter + 1;
                     }
-                    counter = counter + 1;
+
+
+
+                    lib.clickOnAutomationId(session, PatientDescription, PatientName);
+
+                    /** Clicks on Fit patient button **/
+
+                    Thread.Sleep(8000);
+                    lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
+                    test.Pass("Patient is clicked");
+                    Thread.Sleep(10000);
+                    session.Close();
+                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                    appCapabilities = new DesiredCapabilities();
+                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    Thread.Sleep(5000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+
+                }
+                catch (Exception ex) 
+                
+                {
+
+                    lib.processKill("SmartFitSA");
+
+                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                    Thread.Sleep(2000);
+                    DesiredCapabilities appCapabilities = new DesiredCapabilities();
+                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+                    session.Manage().Window.Maximize();
+                    var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
+                    var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
+                    var text_Button = session.FindElementsByClassName("ListBoxItem");
+
+                    test.Log(Status.Pass, "FSW is launched successfully");
+
+                    int counter = 0;
+                    string PatientName = null;
+                    string PatientDescription = null;
+                    foreach (var element in text_Button)
+                    {
+                        if (counter == 3)
+                        {
+                            PatientName = element.GetAttribute("AutomationId");
+                            PatientDescription = element.GetAttribute("Name");
+                            break;
+                        }
+                        counter = counter + 1;
+                    }
+
+
+
+                    lib.clickOnAutomationId(session, PatientDescription, PatientName);
+
+                    /** Clicks on Fit patient button **/
+
+                    Thread.Sleep(8000);
+                    lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
+                    test.Pass("Patient is clicked");
+                    Thread.Sleep(10000);
+                    session.Close();
+                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                    appCapabilities = new DesiredCapabilities();
+                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    Thread.Sleep(5000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    Thread.Sleep(10000);
+
                 }
 
-                lib.clickOnAutomationId(session, PatientDescription, PatientName);
+                finally {  }
 
-                /** Clicks on Fit patient button **/
-
-                Thread.Sleep(8000);
-                lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
-                test.Pass("Patient is clicked");
-                Thread.Sleep(10000);
-                session.Close();
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
-                appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                Thread.Sleep(10000);
 
                 /** Clicks on back button **/
 

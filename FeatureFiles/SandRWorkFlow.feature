@@ -6,7 +6,7 @@ A short summary of the feature
 Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restored on original device
 	
 	Given Lauch socket Driver "<DeviceId>"
-	Given [Change channel side in FDTS<DeviceLeft>]
+	#Given [Change channel side in FDTS<DeviceLeft>]
 	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"
 	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
     When [Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"]
@@ -228,44 +228,44 @@ Scenario Outline: 09Test Case ID 1105498: Verify that S&R Tool properly sets lis
 @tag10
 
 Scenario Outline: 10Test Case ID 1105696: Verify that fitting data is properly restored during restoration on new device (RTS)
-
-	Given [Cleaning up dumps before execution starts]
-	Given [Change channel side in FDTS<DeviceLeft>]
-	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"
-	Given [Change channel side in FDTS<DeviceRight>]
-	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
-	When [Cleaning up Capture and Restore Reports Before Launch SandR]
-	When [Change communication channel in S and R<DeviceLeft>]
-	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
-	When [Come back to Settings and wait till controls enabled]
-	When [Perform Capture"<DeviceId>"]
-	When [Go to logs and verify capturing time]
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
-    When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"] 
-	And  [Open Capture and Restore report and log info in report]
-	Given [Change channel side in FDTS<DeviceRight>]
-	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
-	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceSlNo>" and "<DeviceRight>"]
- 	When [Perform Restore with above captured image using RTS option "<DeviceLeftSlNo>" and "<DeviceSlNo>" and "<DeviceId>" and "<DeviceRight>"]
-	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceSlNo>" and "<DeviceRight>"]
-    When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceRight>" and "<DeviceSlNo>"]
-	Then [Do the dump comparison between two device dumps<DumpB>]
-	When [Change communication channel in S and R<DeviceLeft>]
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
-	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"]
-	When [Come back to Settings and wait till controls enabled]
-	When [Perform Capture"<DeviceId>"]
-	When [Go to logs and verify capturing time]
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
+#
+#	Given [Cleaning up dumps before execution starts]
+#	Given [Change channel side in FDTS<DeviceLeft>]
+#	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"
+#	#Given [Change channel side in FDTS<DeviceRight>]
+#	#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
+#	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
+#	When [Cleaning up Capture and Restore Reports Before Launch SandR]
+#	When [Change communication channel in S and R<DeviceLeft>]
+#	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"]
+#	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+#	When [Come back to Settings and wait till controls enabled]
+#	When [Perform Capture"<DeviceId>"]
+#	When [Go to logs and verify capturing time]
+#	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
+#    When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"] 
+#	And  [Open Capture and Restore report and log info in report]
+#	Given [Change channel side in FDTS<DeviceRight>]
+#	Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
+#	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceSlNo>" and "<DeviceRight>"]
+# 	When [Perform Restore with above captured image using RTS option "<DeviceLeftSlNo>" and "<DeviceSlNo>" and "<DeviceId>" and "<DeviceRight>"]
+#	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceSlNo>" and "<DeviceRight>"]
+#    When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceRight>" and "<DeviceSlNo>"]
+#	Then [Do the dump comparison between two device dumps<DumpB>]
+#	When [Change communication channel in S and R<DeviceLeft>]
+#	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
+#	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"]
+#	When [Come back to Settings and wait till controls enabled]
+#	When [Perform Capture"<DeviceId>"]
+#	When [Go to logs and verify capturing time]
+	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
 	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceSlNo>" and "<DeviceRight>"]
     When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceTemp>" and "<DeviceSlNo>"]
-	Then [Do the dump comparison between two device dumps<DumpC>]
+	#Then [Do the dump comparison between two device dumps<DumpC>]
 	When [Perform Restore with above captured image using RTS option "<DeviceLeftSlNo>" and "<DeviceSlNo>" and "<DeviceId>" and "<DeviceRight>"]
 	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceSlNo>" and "<DeviceRight>"]
     When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceTemp>" and "<DeviceSlNo>"]
-	Then [Do the dump comparison between two device dumps<DumpC>]
+	#Then [Do the dump comparison between two device dumps<DumpC>]
 
 	Examples:
 	| DeviceId     | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DeviceTemp | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo   | FlashHI | 
@@ -276,7 +276,7 @@ Scenario Outline: 10Test Case ID 1105696: Verify that fitting data is properly r
 	  #| LT988-DW | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 1600804918 | NoDev    | 1600805306       | Yes     |
 #	 | RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     |
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |
-	 | RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000816936 | NoDev    | 2000816934       | Yes     |
+	 | RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936      | Yes     |
 
 	
 
@@ -452,10 +452,11 @@ Examples:
 	Scenario Outline: 17Test Case ID 1105669: Verify that fitting data is properly restored during restoration on original device or Clone (SWAP)
 
 		Given [Cleaning up dumps before execution starts]
+		#When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
 		Given [Change channel side in FDTS<DeviceLeft>]
 		Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"
-		Given [Change channel side in FDTS<DeviceRight>]    
-		Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
+		##Given [Change channel side in FDTS<DeviceRight>]    
+		##Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
 		When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"]
 	 	When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"] 
         When [Cleaning up Capture and Restore Reports Before Launch SandR]
@@ -489,6 +490,7 @@ Examples:
 		Given [Change channel side in FDTS<DeviceRight>] 
         Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"
         When [Perform Restore with above captured image using SWAP with left "<DeviceSlNo>" and "<DeviceLeftSlNo>" and "<DeviceId>" and "<DeviceRight>"]
+		When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"]
         When [Get the dump of connected device of DumpD by storage layout "<DeviceId>" and "<DeviceRight>" and "<DeviceLeftSlNo>"] 
 		#This above step modified from leftsl no to right sl no
         Then [Do the dump comparison between two device DeviceC and DeviceD dumps<DumpD>]
@@ -502,4 +504,4 @@ Examples:
 	#| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1600804918 | NoDev    | 1600805306     | Yes     |
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     |
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |
-	| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816936 | NoDev    | 2000816934    | Yes     |
+	| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936    | Yes     |

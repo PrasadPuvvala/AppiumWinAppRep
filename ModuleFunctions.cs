@@ -823,7 +823,7 @@ namespace AppiumWinApp
 
                 if (device.Contains("RT962-DRW"))
                 {
-                    session.Keyboard.SendKeys("b");
+                    session.Keyboard.SendKeys("B");
                     Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(8000);
@@ -980,7 +980,7 @@ namespace AppiumWinApp
             {
                 if (device.Contains("RT962-DRW"))
                 {
-                    session.Keyboard.SendKeys("a");
+                    session.Keyboard.SendKeys("A");
                     Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(8000);
@@ -997,7 +997,7 @@ namespace AppiumWinApp
                 else if(device.Contains("RT") && device.Contains("C"))
                 {
 
-                    session.Keyboard.SendKeys("a");
+                    session.Keyboard.SendKeys("A");
                     Thread.Sleep(1000);
                     
                     session.Keyboard.SendKeys(Keys.Enter);
@@ -1425,25 +1425,88 @@ namespace AppiumWinApp
                 session.FindElementByAccessibilityId("FINDICON").Click();
                 Thread.Sleep(5000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(6000);
+                Thread.Sleep(30000);
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
 
+
+
                 try
                 {
+                    //WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromSeconds(30));
+
+                   
                     //do
                     //{
+
+                        var dataGrid =  session.FindElementByClassName("DataGrid");
+                        ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
+
+                        // Iterate through DataGridCell elements
+                        foreach (var element in dataGridCells)
+                        {
+                            if (element.Text == DeviceNo)
+                            {
+                                element.Click();
+                                break;
+                            }
+                        }
+
+                        // Retry if the element is not found immediately
+                        //wait.Until(driver => dataGrid.FindElementsByClassName("DataGridCell").Count > 0);
+
+                        
+
+                    //} while (session.FindElementByName("Connect").Enabled);
+                }
+                catch (Exception ex)
+                {
+                    //WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromSeconds(30));
+
+                    // Handle exceptions, log, or take a screenshot if needed
+                    Console.WriteLine($"Exception: {ex.Message}");
+                    // You can add more specific exception handling based on your requirements
+                    try
+                    {
+                        session.CloseApp();
+
+                    }
+                    catch (Exception e) { Console.WriteLine(ex.Message); }
+
+                    if (side.Equals("Left"))
+                    {
+                        Thread.Sleep(4000);
+
+                        if (device.Contains("RT") || device.Contains("C"))
+                        {
+
+                            ModuleFunctions.socketA(session, test, device);
+                        }
+                        else if(side.Equals("Right"))
+                        {
+                            ModuleFunctions.socketB(session, test, device);
+                        }
+                    }
+
+                    Thread.Sleep(5000);
+                    computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
+                    lib = new FunctionLibrary();
+                    actions = new Actions(session);
+
+                    Thread.Sleep(5000);
+                    session.FindElementByAccessibilityId("FINDICON").Click();
+                    Thread.Sleep(5000);
+                    session.FindElementByAccessibilityId("FINDICON").Click();
+                    Thread.Sleep(30000);
+                    session.SwitchTo().Window(session.WindowHandles.First());
+                    session.SwitchTo().ActiveElement();
 
                     var dataGrid = session.FindElementByClassName("DataGrid");
-
-                    // Find all DataGridCell elements within the DataGrid
-                    var dataGridCells = session.FindElementsByClassName("DataGridCell");
-                    Thread.Sleep(6000);
-
-                    ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
+                    ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
 
                     // Iterate through DataGridCell elements
-                    foreach (var element in data)
+                    foreach (var element in dataGridCells)
                     {
                         if (element.Text == DeviceNo)
                         {
@@ -1451,55 +1514,60 @@ namespace AppiumWinApp
                             break;
                         }
                     }
-
-                //} while (session.FindElementByName("Connect").Enabled) ;
-
+                }
 
 
-                //do
-                //{
-                //    var non = session.FindElementByClassName("DataGrid");
-                //    var h = session.FindElementsByClassName("DataGridCell");
-                //    ReadOnlyCollection<AppiumWebElement> boxs = (ReadOnlyCollection<AppiumWebElement>)non.FindElementsByClassName("DataGridCell");
+                session.SwitchTo().Window(session.WindowHandles[0]);
 
-                //    /** Identifying and selection of HI Serial Number **/
-
-
-                //    foreach (var element in boxs)
+                //try
                 //    {
-                //        if (element.Text == DeviceNo)
+                //        //do
+                //        //{
+
+                //        var dataGrid = session.FindElementByClassName("DataGrid");
+
+                //        // Find all DataGridCell elements within the DataGrid
+                //        var dataGridCells = session.FindElementsByClassName("DataGridCell");
+                //        Thread.Sleep(6000);
+
+                //        ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
+
+                //        // Iterate through DataGridCell elements
+                //        foreach (var element in data)
                 //        {
-                //            element.Click();
-                //            break;
+                //            if (element.Text == DeviceNo)
+                //            {
+                //                element.Click();
+                //                break;
+                //            }
                 //        }
+
                 //    }
-                //} while (session.FindElementByName("_Read from").Displayed);
-            }
-                catch
-                {
-                    //do
-                    //{
-                        var dataGrid = session.FindElementByClassName("DataGrid");
+                //    catch
+                //    {
+                //        //do
+                //        //{
+                //            var dataGrid = session.FindElementByClassName("DataGrid");
 
-                    // Find all DataGridCell elements within the DataGrid
-                    var dataGridCells = session.FindElementsByClassName("DataGridCell");
+                //        // Find all DataGridCell elements within the DataGrid
+                //        var dataGridCells = session.FindElementsByClassName("DataGridCell");
 
-                    Thread.Sleep(6000);
+                //        Thread.Sleep(6000);
 
-                    ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
+                //        ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
 
-                    // Iterate through DataGridCell elements
-                    foreach (var element in data)
-                    {
-                        if (element.Text == DeviceNo)
-                        {
-                            element.Click();
-                            break;
-                        }
-                    }
+                //        // Iterate through DataGridCell elements
+                //        foreach (var element in data)
+                //        {
+                //            if (element.Text == DeviceNo)
+                //            {
+                //                element.Click();
+                //                break;
+                //            }
+                //        }
 
                 //} while (session.FindElementByName("Connect").Enabled) ;
-            }
+                //}
 
                 lib.functionWaitForName(session,"Connect");
 
