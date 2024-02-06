@@ -80,12 +80,19 @@ using System.Threading.Tasks;
 using OfficeOpenXml.ConditionalFormatting;
 using Newtonsoft.Json.Linq;
 using Azure;
+using System.Configuration;
+using System.Xml.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace MyNamespace
 {
     [Binding]
     public class StepDefinitions
     {
+
+        public static appconfigsettings config;
+        static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
+        + Path.DirectorySeparatorChar + "appconfig.json";
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
         private readonly ScenarioContext _scenarioContext;
         public static WindowsDriver<WindowsElement> session;
@@ -119,7 +126,12 @@ namespace MyNamespace
         public static void beforeFeature()
         {
 
-            
+
+            config = new appconfigsettings();
+            ConfigurationBuilder builder = new ConfigurationBuilder();
+            builder.AddJsonFile(configsettingpath);
+            IConfigurationRoot configuration = builder.Build();
+            configuration.Bind(config);
             Console.WriteLine("This is BeforeFetaure method");
             htmlReporter = new ExtentHtmlReporter(textDir + "\\report.html");
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
@@ -132,9 +144,10 @@ namespace MyNamespace
 
             /*Launch WinApp Driver*/
 
-            Process winApp = new Process();
-            winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
-            winApp.Start();
+
+            //Process winApp = new Process();
+            //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+            //winApp.Start();
 
             /* Reading CSV file to get device names */
 
@@ -257,15 +270,16 @@ namespace MyNamespace
         //        return new string[0];
         //    }
 
+        private static Process winappdriverprocess;
 
         [BeforeScenario]
-
-
 
         public static void BeforeScenario()
 
         {
 
+           
+            //startWinappdriver();
 
             // Read the scenario title to run from the configuration file //
             List<string> scenariosToRun = ReadScenariosToRunFromConfig();
@@ -315,6 +329,7 @@ namespace MyNamespace
 
         }
 
+
         private static List<string> ReadScenariosToRunFromConfig()
 
         {
@@ -351,6 +366,163 @@ namespace MyNamespace
             }
         }
 
+        //public static void startWinappdriver()
+        //{
+
+        //    ProcessStartInfo startInfo = new ProcessStartInfo(textDir + "\\LaunchWinApp.bat");
+        //    startInfo.UseShellExecute = true;
+        //    startInfo.Verb = "runas";
+        //    winappdriverprocess = Process.Start(startInfo);
+
+        //}
+
+        //public void stopWinappdriver()
+        //{
+        //    if (winappdriverprocess != null && !winappdriverprocess.HasExited)
+        //    {
+        //        winappdriverprocess.Kill();
+        //        winappdriverprocess.WaitForExit();
+        //    }
+
+        //}
+
+
+
+
+        [AfterScenario]
+
+        [Then(@"\[done]")]
+        public void ThenDone()
+        {
+
+            //stopWinappdriver();
+
+            //Console.WriteLine("This is Done method");
+            //var scenarioContext = ScenarioContext.Current;
+            //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+            //var testcaseId = scenarioContext.Get<string>("TestCaseID");
+
+            //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
+
+
+            //foreach (var xmlFile in xmlFiles)
+            //{
+            //    XDocument xmlDoc = XDocument.Load(xmlFile);
+
+
+            //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
+            //    {
+            //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
+
+            //        if (elementTestCaseID == testcaseId)
+            //        {
+
+            //            var elementTestStatus = testResultSetElement.Element("TestStatus");
+            //            if (elementTestStatus != null)
+            //            {
+            //                elementTestStatus.Value = testStatus;
+            //            }
+            //        }
+            //    }
+
+            //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
+            //}
+
+
+
+            //{
+
+            //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+
+            //    string xmlFolderPath = Path.Combine(projectPath, "XML");
+
+            //    string keyToUpdate = "WorkFlowsXMLsPath";
+            //    string valueToUpdate = xmlFolderPath;
+
+            //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
+
+            //    foreach (var configFile in configFiles)
+            //    {
+            //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
+            //    }
+            //}
+
+            //static void UpdateAppSettingValue(string configFilePath, string key, string value)
+            //{
+            //    try
+            //    {
+            //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+            //        {
+            //            ExeConfigFilename = configFilePath
+            //        };
+            //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+
+            //        if (config.AppSettings.Settings[key] != null)
+            //        {
+            //            config.AppSettings.Settings[key].Value = value;
+            //            config.Save(ConfigurationSaveMode.Modified);
+            //            ConfigurationManager.RefreshSection("appSettings");
+
+            //            string updatedValue = ConfigurationManager.AppSettings[key];
+            //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+            //    }
+            //}
+
+            //try
+
+            //{
+            //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
+
+            //    if (System.IO.File.Exists(agentPath))
+            //    {
+            //        ProcessStartInfo startInfo = new ProcessStartInfo
+            //        {
+            //            FileName = agentPath,
+            //            UseShellExecute = false,
+            //            RedirectStandardOutput = true,
+            //            RedirectStandardError = true,
+            //            CreateNoWindow = true
+            //        };
+
+            //        Process process = new Process
+            //        {
+            //            StartInfo = startInfo
+            //        };
+
+            //        process.Start();
+            //        process.WaitForExit(); // Optionally wait for the process to complete
+
+            //        string standardOutput = process.StandardOutput.ReadToEnd();
+            //        string standardError = process.StandardError.ReadToEnd();
+
+            //        Console.WriteLine("Standard Output:");
+            //        Console.WriteLine(standardOutput);
+
+            //        Console.WriteLine("Standard Error:");
+            //        Console.WriteLine(standardError);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("TFS agent executable not found at the specified path.");
+            //    }
+            //}
+
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("An error occurred: " + ex.Message);
+            //}
+
+        }
+
 
 
         [AfterFeature]
@@ -382,7 +554,7 @@ namespace MyNamespace
 
             try
             {
-                if (device.Contains("RT") || device.Contains("RU"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
                 {
                     if (side.Equals("Left"))
                     {
@@ -419,6 +591,7 @@ namespace MyNamespace
             DesiredCapabilities appCapabilities = new DesiredCapabilities();
             appCapabilities.SetCapability("app", ApplicationPath);
             appCapabilities.SetCapability("deviceName", "WindowsPC");
+            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
@@ -536,7 +709,7 @@ namespace MyNamespace
                 Thread.Sleep(2000);
             }
 
-            else if (device.Contains("RT") || device.Contains("RU"))
+            else if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 action.MoveToElement(name).Click().DoubleClick().Build().Perform();
 
@@ -650,7 +823,7 @@ namespace MyNamespace
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
                     session.SwitchTo().ActiveElement();
-                    if (device.Contains("RT") && device.Contains("C"))
+                    if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
                     {
                         session.SwitchTo().ActiveElement();
                         lib.waitUntilElementExists(session, "testParameter-Multiple-BatteryType", 1);
@@ -903,7 +1076,7 @@ namespace MyNamespace
             string devName = device;
             FunctionLibrary lib = new FunctionLibrary();
 
-            if (devName.Contains("RT") || devName.Contains("RU"))
+            if (devName.Contains("RT") || devName.Contains("RU") || devName.Contains("NX"))
             {
                 Console.WriteLine("This is When method");
                 test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -921,6 +1094,14 @@ namespace MyNamespace
                         ModuleFunctions.socketB(session, test, device);
                         Thread.Sleep(2000);
                     }
+
+
+                    else if( side.Equals("Cdevice"))
+                    {
+                        ModuleFunctions.socketC(session, test, device);
+                        Thread.Sleep(2000);
+
+                    }
                 }
                 catch (Exception ex) { }
 
@@ -933,10 +1114,11 @@ namespace MyNamespace
                     DesiredCapabilities appCapabilities = new DesiredCapabilities();
                     appCapabilities.SetCapability("app", ApplicationPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
+                    //Thread.Sleep(10000);
                     session.Manage().Window.Maximize();
                     var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
                     var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
@@ -973,24 +1155,131 @@ namespace MyNamespace
                     appCapabilities = new DesiredCapabilities();
                     appCapabilities.SetCapability("app", ApplicationPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     Thread.Sleep(5000);
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
+                    Thread.Sleep(5000);
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
+                    Thread.Sleep(5000);
+                    lib.clickOnAutomationName(session, "Assign Instruments");
+                    session.FindElementByName("Back").Click();
+                    Thread.Sleep(5000);
+                    session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
+                    Thread.Sleep(2000);
+
+                    /** Select Noah link Wireless now, then click Connect.  **/
+
+                    session.FindElementByName("Noahlink Wireless").Click();
+                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                    Thread.Sleep(8000);
+
+                    try
+                    {
+                        if (session.FindElementByName("Unassign").Enabled)
+                        {
+                            lib.clickOnAutomationName(session, "Assign Instruments");
+                            Thread.Sleep(5000);
+                            var SN = session.FindElementsByClassName("ListBoxItem");
+                            Thread.Sleep(10000);
+
+                            /** The left side is assigned **/
+
+                            foreach (WindowsElement value in SN)
+
+                            {
+                                string S = value.Text;
+                                if (S.Contains(DeviceNo))
+                                {
+                                    value.Text.Contains("Assign Left");
+                                    //value.Click();
+                                    value.FindElementByName("Assign Left").Click();
+
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        lib.clickOnAutomationName(session, "Assign Instruments");
+                        Thread.Sleep(5000);
+                        var SN = session.FindElementsByClassName("ListBoxItem");
+                        Thread.Sleep(5000);
+                         
+                        /** The left side is assigned **/
+
+                        foreach (WindowsElement value in SN)
+                        {
+                            string S = value.Text;
+                            if (S.Contains(DeviceNo))
+                            {
+                                value.Text.Contains("Assign Left");
+                                //value.Click();
+                                //value.FindElementByClassName("Button").Click();
+                                value.FindElementByName("Assign Left").Click();
+
+                            }
+                        }
+                        Thread.Sleep(5000);
+                    }
+
+                    /** Clicks on Continue buttion **/
+
+                    lib.clickOnAutomationName(session, "Continue");
+                    Thread.Sleep(4000);
+
+
+                    try
+                    {
+                        lib.clickOnAutomationName(session, "Continue");
+                    }
+                    catch { }
+
 
                 }
+
                 catch (Exception ex) 
                 
                 {
 
+                    try
+                    {
+                        session.FindElementByAccessibilityId("WindowAutomationIds.CloseAction");
+                        Thread.Sleep(5000);
+                        lib.processKill("SmartFitSA");
+
+                    }
+
+                    catch
+
+                    {
                     lib.processKill("SmartFitSA");
+                    }
+                    
+
+
+                    try
+                    {
+                        if (side.Equals("Left"))
+                        {
+                            ModuleFunctions.socketA(session, test, device);
+                            Thread.Sleep(2000);
+                        }
+
+                        else if (side.Equals("Right"))
+                        {
+                            ModuleFunctions.socketB(session, test, device);
+                            Thread.Sleep(2000);
+                        }
+                    }
+                    catch (Exception) { }
+
 
                     ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                     Thread.Sleep(2000);
                     DesiredCapabilities appCapabilities = new DesiredCapabilities();
                     appCapabilities.SetCapability("app", ApplicationPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
@@ -1031,43 +1320,57 @@ namespace MyNamespace
                     appCapabilities = new DesiredCapabilities();
                     appCapabilities.SetCapability("app", ApplicationPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
+                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     Thread.Sleep(5000);
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
                     session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
 
-                }
+                    session.FindElementByName("Back").Click();
+                    Thread.Sleep(5000);
+                    session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
+                    Thread.Sleep(2000);
 
-                finally {  }
+                    /** Select Noah link Wireless now, then click Connect.  **/
 
+                    session.FindElementByName("Noahlink Wireless").Click();
+                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                    Thread.Sleep(8000);
 
-                /** Clicks on back button **/
+                    try
+                    {
+                        if (session.FindElementByName("Unassign").Enabled)
+                        {
+                            lib.clickOnAutomationName(session, "Assign Instruments");
+                            Thread.Sleep(5000);
+                            var SN = session.FindElementsByClassName("ListBoxItem");
+                            Thread.Sleep(5000);
 
-                session.FindElementByName("Back").Click();
-                Thread.Sleep(5000);
-                session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
-                Thread.Sleep(2000);
+                            /** The left side is assigned **/
 
-                /** Select Noah link Wireless now, then click Connect.  **/
+                            foreach (WindowsElement value in SN)
 
-                session.FindElementByName("Noahlink Wireless").Click();
-                lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
-                Thread.Sleep(8000);
-
-                try
-                {
-                    if(session.FindElementByName("Unassign").Enabled)
+                            {
+                                string S = value.Text;
+                                if (S.Contains(DeviceNo))
+                                {
+                                    value.Text.Contains("Assign Left");
+                                    value.Click();
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
                     {
                         lib.clickOnAutomationName(session, "Assign Instruments");
                         Thread.Sleep(5000);
                         var SN = session.FindElementsByClassName("ListBoxItem");
-                        Thread.Sleep(10000);
+                        Thread.Sleep(5000);
 
                         /** The left side is assigned **/
 
                         foreach (WindowsElement value in SN)
-
                         {
                             string S = value.Text;
                             if (S.Contains(DeviceNo))
@@ -1076,40 +1379,94 @@ namespace MyNamespace
                                 value.Click();
                             }
                         }
+                        Thread.Sleep(10000);
                     }
-                }
-                catch (Exception e) 
-                {
-                    lib.clickOnAutomationName(session, "Assign Instruments");
-                    Thread.Sleep(5000);
-                    var SN = session.FindElementsByClassName("ListBoxItem");
-                    Thread.Sleep(10000);
 
-                    /** The left side is assigned **/
+                    /** Clicks on Continue buttion **/
 
-                    foreach (WindowsElement value in SN)
-                    {
-                        string S = value.Text;
-                        if (S.Contains(DeviceNo))
-                        {
-                            value.Text.Contains("Assign Left");
-                            value.Click();
-                        }
-                    }
-                    Thread.Sleep(10000);
-                }
-
-                /** Clicks on Continue buttion **/
-
-                lib.clickOnAutomationName(session, "Continue");
-                Thread.Sleep(4000);
-
-
-                try
-                {
                     lib.clickOnAutomationName(session, "Continue");
+                    Thread.Sleep(4000);
+
+
+                    try
+                    {
+                        lib.clickOnAutomationName(session, "Continue");
+                    }
+                    catch { }
+
                 }
-                catch { }
+
+                finally {  }
+
+
+                /** Clicks on back button **/
+
+                //session.FindElementByName("Back").Click();
+                //Thread.Sleep(5000);
+                //session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
+                //Thread.Sleep(2000);
+
+                ///** Select Noah link Wireless now, then click Connect.  **/
+
+                //session.FindElementByName("Noahlink Wireless").Click();
+                //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                //Thread.Sleep(8000);
+
+                //try
+                //{
+                //    if(session.FindElementByName("Unassign").Enabled)
+                //    {
+                //        lib.clickOnAutomationName(session, "Assign Instruments");
+                //        Thread.Sleep(5000);
+                //        var SN = session.FindElementsByClassName("ListBoxItem");
+                //        Thread.Sleep(10000);
+
+                //        /** The left side is assigned **/
+
+                //        foreach (WindowsElement value in SN)
+
+                //        {
+                //            string S = value.Text;
+                //            if (S.Contains(DeviceNo))
+                //            {
+                //                value.Text.Contains("Assign Left");
+                //                value.Click();
+                //            }
+                //        }
+                //    }
+                //}
+                //catch (Exception e) 
+                //{
+                //    lib.clickOnAutomationName(session, "Assign Instruments");
+                //    Thread.Sleep(5000);
+                //    var SN = session.FindElementsByClassName("ListBoxItem");
+                //    Thread.Sleep(10000);
+
+                //    /** The left side is assigned **/
+
+                //    foreach (WindowsElement value in SN)
+                //    {
+                //        string S = value.Text;
+                //        if (S.Contains(DeviceNo))
+                //        {
+                //            value.Text.Contains("Assign Left");
+                //            value.Click();
+                //        }
+                //    }
+                //    Thread.Sleep(10000);
+                //}
+
+                ///** Clicks on Continue buttion **/
+
+                //lib.clickOnAutomationName(session, "Continue");
+                //Thread.Sleep(4000);
+
+
+                //try
+                //{
+                //    lib.clickOnAutomationName(session, "Continue");
+                //}
+                //catch { }
 
             }
 
@@ -1123,6 +1480,7 @@ namespace MyNamespace
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
                 appCapabilities.SetCapability("app", ApplicationPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
+                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
@@ -1165,6 +1523,7 @@ namespace MyNamespace
                 appCapabilities = new DesiredCapabilities();
                 appCapabilities.SetCapability("app", ApplicationPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
+                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 Thread.Sleep(5000);
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
@@ -1198,6 +1557,7 @@ namespace MyNamespace
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
                 appCapabilities.SetCapability("app", ApplicationPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
+                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
@@ -1238,6 +1598,7 @@ namespace MyNamespace
                 appCapabilities = new DesiredCapabilities();
                 appCapabilities.SetCapability("app", ApplicationPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
+                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 Thread.Sleep(5000);
                 session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
@@ -1499,7 +1860,7 @@ namespace MyNamespace
 
             try
             {
-                if (device.Contains("RT") || device.Contains("RU"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
                 {                 
                     ModuleFunctions.socketA(session, test, device);
                                    
@@ -1527,7 +1888,7 @@ namespace MyNamespace
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 /** Clciks on "Discover" button **/
 
@@ -1626,7 +1987,7 @@ namespace MyNamespace
             string Dooku3PBTE = "[7].42.1.1 (Dooku3)";
             string Dooku3Rechargeable = "[7].42.1.1 (Dooku3)";
 
-            if (device.Contains("RT962-DRW") || device.Contains("RT961-DRWC") || device.Contains("RU961-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC"))
+            if (device.Contains("RT962-DRW") || device.Contains("RT961-DRWC") || device.Contains("RU961-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC") || device.Contains("NX"))
             {
                 session.FindElementByName("Device Info").Click();
                 Thread.Sleep(2000);
@@ -1935,7 +2296,7 @@ namespace MyNamespace
 
             try
             {
-                if (device.Contains("RT") || device.Contains("RU"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
                 {
                     ModuleFunctions.socketA(session, test, device);
                 }
@@ -2099,7 +2460,7 @@ namespace MyNamespace
         {
             test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-            if(device.Contains("RT") || device.Contains("RU"))
+            if(device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 ModuleFunctions.socketA(session, test, device);
             }
@@ -2127,7 +2488,7 @@ namespace MyNamespace
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 session.FindElementByName("Discover").Click();
 
@@ -2250,7 +2611,7 @@ namespace MyNamespace
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            if(device.Contains("RT") || device.Contains("RU"))
+            if(device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
 
             {
                 ModuleFunctions.socketA(session, test, device);
@@ -2690,7 +3051,7 @@ namespace MyNamespace
         public void WhenVerifyStorageLayoutScenarioByChangingDateAndConfirmCloudIcon(string device, string side, string DeviceNo)
 
         {
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
 
             {
                 try
@@ -2704,8 +3065,20 @@ namespace MyNamespace
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                 test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
+                if (device.Contains("RT"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.WorkingDirectory.Dooku2);
+                }
+                else if (device.Contains("RU"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.WorkingDirectory.Dooku3);
 
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
+                }
+                else
+                {
+                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.WorkingDirectory.Megnesium);
+                }
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
 
                 FunctionLibrary lib = new FunctionLibrary();
 
@@ -2808,7 +3181,9 @@ namespace MyNamespace
                     test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
                     FunctionLibrary lib = new FunctionLibrary();
                     InputSimulator sim = new InputSimulator();
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");                 
+
+                    session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.WorkingDirectory.Palpatine6);
+                    // session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");                 
                     lib.waitUntilElementExists(session, "Channel", 0);
                     var ext = session.FindElements(WorkFlowPageFactory.channel);
                     ext[0].Click();

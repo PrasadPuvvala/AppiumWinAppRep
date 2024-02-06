@@ -96,7 +96,7 @@ namespace AppiumWinApp.StepDefinitions
             FunctionLibrary lib = new FunctionLibrary();
 
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 if (side.Equals("Left"))
 
@@ -135,7 +135,7 @@ namespace AppiumWinApp.StepDefinitions
             test.Log(Status.Pass, "S&R Tool launched successfully");
 
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 session.FindElementByName("Discover").Click();
 
@@ -274,7 +274,7 @@ namespace AppiumWinApp.StepDefinitions
         {
             FunctionLibrary lib = new FunctionLibrary();
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 if (side.Equals("Left"))
 
@@ -312,7 +312,7 @@ namespace AppiumWinApp.StepDefinitions
 
             test.Log(Status.Pass, "S&R Tool launched successfully");
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 session.FindElementByName("Discover").Click();
 
@@ -450,7 +450,7 @@ namespace AppiumWinApp.StepDefinitions
 
             if (side.Equals("Left"))
             {
-                if (device.Contains("RT") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
                 {
                     ModuleFunctions.socketA(session, test, device);
                 }
@@ -462,7 +462,7 @@ namespace AppiumWinApp.StepDefinitions
             else if (side.Equals("Right"))
             {
 
-                if (device.Contains("RT") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
                 {
                     ModuleFunctions.socketB(session, test, device);
                 }
@@ -485,7 +485,7 @@ namespace AppiumWinApp.StepDefinitions
 
             if (side.Equals("Right"))
             {
-                if (device.Contains("RT") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
                 {
                     ModuleFunctions.socketB(session, test, device);
                 }
