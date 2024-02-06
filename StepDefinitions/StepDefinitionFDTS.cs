@@ -210,7 +210,7 @@ namespace AppiumWinApp.StepDefinitions
             {
                Thread.Sleep(4000);
 
-                if (device.Contains("RT") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
                 {
 
                     ModuleFunctions.socketA(session, test, device);
@@ -225,12 +225,27 @@ namespace AppiumWinApp.StepDefinitions
               
                 Thread.Sleep(4000);
 
-                if (device.Contains("RT") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
                 {
                     ModuleFunctions.socketB(session, test, device);
                 }
                 ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo);
                 test.Log(Status.Pass, " Dump image taken for Device B ");
+
+            }
+
+            else if (side.Equals("Cdevice"))
+            {
+
+
+                Thread.Sleep(4000);
+
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                {
+                    ModuleFunctions.socketC(session, test, device);
+                }
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo);
+                test.Log(Status.Pass, " Dump image taken for Device C ");
 
             }
             else
@@ -244,7 +259,7 @@ namespace AppiumWinApp.StepDefinitions
                 }
                 catch (Exception e) { }
 
-                if (device.Contains("RT") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
                 {
 
                     ModuleFunctions.socketB(session, test, device);
@@ -265,7 +280,7 @@ namespace AppiumWinApp.StepDefinitions
         [Given(@"Lauch socket Driver ""([^""]*)""")]
         public void GivenLauchSocketDriver(string device)
         {
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 ModuleFunctions.socket(session, test, device);
             }
@@ -303,7 +318,7 @@ namespace AppiumWinApp.StepDefinitions
             test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 if (side.Equals("Left"))
                 {
@@ -314,6 +329,12 @@ namespace AppiumWinApp.StepDefinitions
 
                 {
                     ModuleFunctions.socketB(session, test, device);
+                }
+
+                else if (side.Equals("Cdevice"))
+
+                {
+                    ModuleFunctions.socketC(session, test, device);
                 }
             }
 
@@ -338,7 +359,7 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 session.FindElementByName("Discover").Click();
                 test.Log(Status.Pass, "Clicked on Discover.");
@@ -357,7 +378,10 @@ namespace AppiumWinApp.StepDefinitions
                     {
                         session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceLeftSlNo);
                     }
-
+                    else if (side.Equals("Cdevice"))
+                    {
+                        session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(deviceSlNo);
+                    }
 
                     do
                     {
@@ -481,6 +505,28 @@ namespace AppiumWinApp.StepDefinitions
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();
             Thread.Sleep(1000);
+
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            {
+                if (side.Equals("Left"))
+                {
+                    ModuleFunctions.socketA(session, test, device);
+                }
+
+                else if (side.Equals("Right"))
+
+                {
+                    ModuleFunctions.socketB(session, test, device);
+                }
+
+                else if (side.Equals("Cdevice"))
+
+                {
+                    ModuleFunctions.socketC(session, test, device);
+                }
+            }
+
+
         }
 
         /** Compares the dump image files **/
@@ -508,7 +554,7 @@ namespace AppiumWinApp.StepDefinitions
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                     ModuleFunctions.socketA(session, test, device);
                     Thread.Sleep(3000);                
@@ -927,11 +973,16 @@ namespace AppiumWinApp.StepDefinitions
         }
 
 
-        //[AfterScenario]
+        [AfterScenario]
 
         [Then(@"\[done]")]
         public void ThenDone()
         {
+
+            //Process winApp = new Process();
+            //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+            //winApp.Kill();
+
             Console.WriteLine("This is Done method");
             var scenarioContext = ScenarioContext.Current;
             var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";

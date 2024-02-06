@@ -49,7 +49,9 @@ namespace AppiumWinApp
         private static ExtentTest test;
         public static ExtentReports extent1;
         public static string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-
+        public static appconfigsettings config;
+        static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
+        + Path.DirectorySeparatorChar + "appconfig.json";
 
         /** Application launchhing **/
         public static WindowsDriver<WindowsElement> sessionInitialize(string name, string path)
@@ -60,6 +62,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("platformName", "Windows");
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", path);
+            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
             Thread.Sleep(8000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
@@ -76,6 +79,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("platformName", "Windows");
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", path);
+            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
             Thread.Sleep(8000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
@@ -91,6 +95,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("platformName", "Windows");
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", dir);
+            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
             return session;
@@ -103,6 +108,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("app", ApplicationPath);
             appCapabilities.SetCapability("platformName", "Windows");
             appCapabilities.SetCapability("deviceName", "WindowsPC");
+            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(4000);
             return session;
@@ -255,7 +261,7 @@ namespace AppiumWinApp
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU")|| device.Contains("NX"))
 
             {
                 try
@@ -269,7 +275,22 @@ namespace AppiumWinApp
                 Thread.Sleep(2000);
 
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");           
+
+                if (device.Contains("RT"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku2, config.WorkingDirectory.Dooku2);
+
+                }
+                else if (device.Contains("RU"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku3, config.WorkingDirectory.Dooku3);
+                }
+                else if (device.Contains("NX"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.algo.Megnesium, config.WorkingDirectory.Megnesium);
+                }
+
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");           
                 Actions actions = new Actions(session);
                 test.Log(Status.Pass, "Algo test lab is launched successfully.");
                 Thread.Sleep(2000);
@@ -368,11 +389,13 @@ namespace AppiumWinApp
             {
                 if (device.Contains("LT"))
                 {
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\AlgoLabtest.Palpatine.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
+                    session = ModuleFunctions.sessionInitialize(config.algo.Palpatine6, config.WorkingDirectory.Palpatine6);
+                    //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\AlgoLabtest.Palpatine.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
                 }
                 else
                 {
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku1, config.WorkingDirectory.Dooku1);
+                    //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
 
                 }
                 test.Log(Status.Pass, "Algo test lab is launched successfully.");
@@ -697,7 +720,7 @@ namespace AppiumWinApp
                     Thread.Sleep(3000);
                 }
 
-                else if(device.Contains("RT") && device.Contains("C"))
+                else if(device.Contains("RT")|| device.Contains("NX") && device.Contains("C"))
 
                 {
                     session.Keyboard.SendKeys("3");
@@ -709,7 +732,8 @@ namespace AppiumWinApp
                     session.Keyboard.SendKeys("a");
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(5000);
-                }                
+                }   
+                
             }
 
             catch (Exception e)
@@ -760,7 +784,7 @@ namespace AppiumWinApp
                             session.Keyboard.SendKeys("A");
                             session.Keyboard.SendKeys(Keys.Enter);
                         }
-                        else if (device.Contains("RT") && device.Contains("C"))
+                        else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
 
                         {
                             session.Keyboard.SendKeys("3");
@@ -837,24 +861,24 @@ namespace AppiumWinApp
                     Thread.Sleep(8000);
                 }
 
-                else if (device.Contains("RT") && device.Contains("C"))
+                else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
                 {
-                    session.Keyboard.SendKeys("b");
-                    Thread.Sleep(1000);
+                    session.Keyboard.SendKeys("B");
+                    Thread.Sleep(2000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     session.Keyboard.SendKeys("a");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     session.Keyboard.SendKeys("A");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(4000);
+                    Thread.Sleep(8000);
                     session.Keyboard.SendKeys("a");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(8000);
                 }
             }
 
@@ -910,7 +934,7 @@ namespace AppiumWinApp
                             Thread.Sleep(8000);
                         }
 
-                        else if (device.Contains("RT") && device.Contains("C"))
+                        else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
                         {
                             session.Keyboard.SendKeys("b");
                             Thread.Sleep(1000);
@@ -994,26 +1018,23 @@ namespace AppiumWinApp
                     Thread.Sleep(8000);
                 }
 
-                else if(device.Contains("RT") && device.Contains("C"))
+                else if(device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
                 {
 
                     session.Keyboard.SendKeys("A");
-                    Thread.Sleep(1000);
-                    
+                    Thread.Sleep(2000);                   
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(1000);
-                    session.Keyboard.SendKeys("b");
-                    Thread.Sleep(1000);
-                    session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(1000);
-                    session.Keyboard.SendKeys("B");
-                    Thread.Sleep(1000);
-                    session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(4000);
-                    session.Keyboard.SendKeys("b");
                     Thread.Sleep(2000);
+                    //session.Keyboard.SendKeys("b");
+                    //Thread.Sleep(2000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
+                    session.Keyboard.SendKeys("B");                   
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("b");                   
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(2000);
 
                 }
             }
@@ -1069,6 +1090,165 @@ namespace AppiumWinApp
                             Thread.Sleep(8000);
                         }
 
+                        else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                        {
+                            session.Keyboard.SendKeys("a");
+                            Thread.Sleep(1000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(1000);
+                            session.Keyboard.SendKeys("b");
+                            Thread.Sleep(1000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(1000);
+                            session.Keyboard.SendKeys("B");
+                            Thread.Sleep(1000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(4000);
+                            session.Keyboard.SendKeys("b");
+                            Thread.Sleep(2000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(1000);
+                        }
+                    }
+                    catch (Exception) { }
+                }
+            }
+        }
+
+
+
+        public static void socketC(WindowsDriver<WindowsElement> session, ExtentTest test, string device)
+
+        {
+            FunctionLibrary lib = new FunctionLibrary();
+            Thread.Sleep(10000);
+            DesiredCapabilities desktopCapabilities = new DesiredCapabilities();
+            desktopCapabilities.SetCapability("platformName", "Windows");
+            desktopCapabilities.SetCapability("app", "Root");
+            desktopCapabilities.SetCapability("deviceName", "WindowsPC");
+            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+            WindowsElement applicationWindow = null;
+
+            var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
+
+            foreach (var window in openWindows)
+            {
+
+                if (window.GetAttribute("Name").StartsWith("WinAppDriver"))
+                { }
+
+                else
+                {
+                    applicationWindow = window;
+                    break;
+                }
+            }
+
+            var topLevelWindowHandle = applicationWindow.GetAttribute("NativeWindowHandle");
+            topLevelWindowHandle = int.Parse(topLevelWindowHandle).ToString("X");
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.SetCapability("deviceName", "WindowsPC");
+            capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
+            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+
+            Thread.Sleep(2000);
+
+            try
+            {
+                if (device.Contains("RT962-DRW"))
+                {
+                    session.Keyboard.SendKeys("A");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("b");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("B");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                }
+
+                else if (device.Contains("RT") && device.Contains("C"))
+                {
+
+                    session.Keyboard.SendKeys("A");
+                    Thread.Sleep(2000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(2000);
+                    //session.Keyboard.SendKeys("b");
+                    //Thread.Sleep(2000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(2000);
+                    session.Keyboard.SendKeys("B");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("C");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("c");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+
+                }
+            }
+
+            catch (Exception e)
+            {
+                if (e.GetType().ToString() == "System.InvalidOperationException")
+                {
+                    desktopCapabilities = new DesiredCapabilities();
+                    desktopCapabilities.SetCapability("platformName", "Windows");
+                    desktopCapabilities.SetCapability("app", "Root");
+                    desktopCapabilities.SetCapability("deviceName", "WindowsPC");
+                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+                    applicationWindow = null;
+                    openWindows = session.FindElementsByClassName("ConsoleWindowClass");
+
+                    foreach (var window in openWindows)
+                    {
+                        if (window.GetAttribute("Name").StartsWith("WinAppDriver"))
+                        {
+
+                        }
+                        else
+                        {
+                            applicationWindow = window;
+                            break;
+                        }
+                    }
+
+                    topLevelWindowHandle = applicationWindow.GetAttribute("NativeWindowHandle");
+                    topLevelWindowHandle = int.Parse(topLevelWindowHandle).ToString("X");
+                    capabilities = new DesiredCapabilities();
+                    capabilities.SetCapability("deviceName", "WindowsPC");
+                    capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
+                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+                    Thread.Sleep(2000);
+
+                    try
+                    {
+                        if (device.Contains("RT") && device.Contains("RU"))
+                        {
+                            session.Keyboard.SendKeys("a");
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys("b");
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys("B");
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(8000);
+                        }
+
                         else if (device.Contains("RT") && device.Contains("C"))
                         {
                             session.Keyboard.SendKeys("a");
@@ -1093,6 +1273,7 @@ namespace AppiumWinApp
                 }
             }
         }
+
 
 
         /* Passing Commands for SocketBox for Right Side Device B */
@@ -1242,12 +1423,26 @@ namespace AppiumWinApp
         {
             FunctionLibrary lib = new FunctionLibrary();
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 ModuleFunctions.socketA(session, test, device);
                 Thread.Sleep(2000);
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");               
+                if (device.Contains("RT"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku2, config.WorkingDirectory.Dooku2);
+                }
+                else if(device.Contains("RU"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku3, config.WorkingDirectory.Dooku3);
+
+                }
+                else if (device.Contains("NX"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.algo.Megnesium, config.WorkingDirectory.Megnesium);
+                }
+               
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");               
                 Actions actions = new Actions(session);
                 test.Log(Status.Pass, "Algo test lab is launched successfully.");
                 Thread.Sleep(2000);
@@ -1290,12 +1485,16 @@ namespace AppiumWinApp
 
             if (device.Contains("LT"))
             {
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\AlgoLabtest.Palpatine.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
+
+                session = ModuleFunctions.sessionInitialize(config.algo.Palpatine6, config.WorkingDirectory.Palpatine6);
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\AlgoLabtest.Palpatine.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
             }
             
             else if(device.Contains("RE"))
             {
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
+
+                session = ModuleFunctions.sessionInitialize(config.algo.Dooku1, config.WorkingDirectory.Dooku1);
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
 
             }
             test.Log(Status.Pass, "Algo test lab is launched successfully.");
@@ -1413,19 +1612,33 @@ namespace AppiumWinApp
 
             /** To Connect the device( RT or RU) to Stroragelayout viewr **/
 
-            if (device.Contains("RT") || device.Contains("RU"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 Thread.Sleep(5000);
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
+
+                if (device.Contains("RT"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.WorkingDirectory.Dooku2);
+                }
+                else if (device.Contains("RU"))
+                {
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.WorkingDirectory.Dooku3);
+
+                }
+                else
+                {
+                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.WorkingDirectory.Megnesium);
+                }
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
                 FunctionLibrary lib = new FunctionLibrary();
                 Actions actions = new Actions(session);
 
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(30000);
+                Thread.Sleep(15000);
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
 
@@ -1477,7 +1690,7 @@ namespace AppiumWinApp
                     {
                         Thread.Sleep(4000);
 
-                        if (device.Contains("RT") || device.Contains("C"))
+                        if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
                         {
 
                             ModuleFunctions.socketA(session, test, device);
@@ -1490,7 +1703,22 @@ namespace AppiumWinApp
 
                     Thread.Sleep(5000);
                     computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
+                   
+                    if (device.Contains("RT"))
+                    {
+                        session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.WorkingDirectory.Dooku2);
+                    }
+                    else if (device.Contains("RU"))
+                    {
+                        session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.WorkingDirectory.Dooku3);
+
+                    }
+                    else
+                    {
+                        session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.WorkingDirectory.Megnesium);
+                    }
+
+                    //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
                     lib = new FunctionLibrary();
                     actions = new Actions(session);
 
@@ -1498,7 +1726,7 @@ namespace AppiumWinApp
                     session.FindElementByAccessibilityId("FINDICON").Click();
                     Thread.Sleep(5000);
                     session.FindElementByAccessibilityId("FINDICON").Click();
-                    Thread.Sleep(30000);
+                    Thread.Sleep(15000);
                     session.SwitchTo().Window(session.WindowHandles.First());
                     session.SwitchTo().ActiveElement();
 
@@ -1713,7 +1941,9 @@ namespace AppiumWinApp
             if (device.Contains("LT"))
             {
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
+                session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.WorkingDirectory.Palpatine6);
+
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
                 FunctionLibrary lib = new FunctionLibrary();
                 lib.waitUntilElementExists(session, "Channel", 0);
                 var ext = session.FindElements(WorkFlowPageFactory.channel);
@@ -1795,7 +2025,7 @@ namespace AppiumWinApp
                 
                 /** selecting file menu and read **/
 
-            ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                ext = session.FindElements(WorkFlowPageFactory.fileMenu);
                 ext[0].Click();
 
                 /** selecting read option **/
@@ -1864,7 +2094,9 @@ namespace AppiumWinApp
                 InputSimulator sim = new InputSimulator();
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                 string storageLayOutDate = "WindowsForms10.Window.8.app.0.2804c64_r9_ad1";
-                session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
+
+                session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.WorkingDirectory.Dooku1);
+                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
                 Thread.Sleep(8000);
                 Actions actions = new Actions(session);           
                 Thread.Sleep(4000);
@@ -2030,7 +2262,9 @@ namespace AppiumWinApp
             InputSimulator sim = new InputSimulator();
             string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
             string storageLayOutDate = "WindowsForms10.Window.8.app.0.2804c64_r9_ad1";
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
+
+            session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.WorkingDirectory.Dooku1);
+            //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
             Thread.Sleep(8000);
             Actions actions = new Actions(session);
 
@@ -2165,7 +2399,7 @@ namespace AppiumWinApp
                 {
                     //Console.WriteLine("Window name is" +session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text);
 
-                        if (device.Contains("RT") || device.Contains("RU"))
+                        if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
 
                         {
                             session.FindElementByName("Stop").Click();
@@ -2237,7 +2471,7 @@ namespace AppiumWinApp
                         Name.Click();
                         Actions action = new Actions(session);
 
-                        if (device.Contains("RT") || device.Contains("RU"))
+                        if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
                         {
                             action.MoveToElement(Name).Click().DoubleClick().Build().Perform();
                             if (device.Contains("RT961-DRWC"))
