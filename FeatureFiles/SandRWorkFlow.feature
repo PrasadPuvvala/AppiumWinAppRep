@@ -35,7 +35,7 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left       |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left       |
 	#| RT961-DRWC | 2000816934     | Yes     | Right       | Left       |	
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |
 
 @tag2
 Scenario Outline: 02Test Case ID 1103972: Verify device information is shown correctly
@@ -58,7 +58,7 @@ Scenario Outline: 02Test Case ID 1103972: Verify device information is shown cor
 	 #| LT988-DW | 1700800149     | Yes     | Right       | Left       |
 	#| RT961-DRWC | 2000816934     | Yes     | Right       | Left       | 
 	# | NX960S-DRWC | 2300807477     | Yes     | Right       | Left       |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |
 
 
 
@@ -82,7 +82,7 @@ Scenario Outline: 03Test Case ID 1105474: Verify capture operation is performed 
     #| LT988-DW | 1700800149     | Yes     | Right       | Left       |
     #| RT961-DRWC | 2000816934     | Yes     | Right       | Left       | 
     #| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |
 
 
 @tag4
@@ -108,7 +108,7 @@ Scenario Outline: 04Test Case ID 1103482: Verify supported PC configuration
     #| LT988-DW | 1700800149     | Yes     | Right       | Left       |
     #| RT961-DRWC | 2000816934     | Yes     | Right       | Left       | 
 	#|NX960S-DRWC | 2300807477     | Yes     | Right       | Left       |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |
 
 
 
@@ -128,7 +128,7 @@ Scenario Outline: 05Test Case ID 1103833: Verify channel can be changed while S&
     #| LT988-DW | 1700800149     | Yes     | Right       | Left       |
 	#| RT961-DRWC | 2000816934     | Yes     | Right       | Left       |
 	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |
 	
 	
 	
@@ -161,7 +161,7 @@ Scenario Outline: 06Test Case ID 1104002: Verify HI capture/restoration report
    #| LT988-DW | 1700800149     | Yes     | Right       | Left       |
     #| RT961-DRWC | 2000816934     | Yes     | Right       | Left       |
 	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |
 
 
 
@@ -217,7 +217,7 @@ Scenario Outline: 07Test Case ID 1105498: Verify that S&R Tool properly sets lis
 				  #| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066 |
 				 #| RT961-DRWC  | 2000816934     | Yes     | Right       | Left       | 2000816936 | 
 				  #| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803297 |
-			      | NX977-DWC | 2426512941     | Yes     | Right       | Left      |   2426512940 |
+			      | NX977-DWC | 2300806645     | Yes     | Right       | Left      |   2300806615 |
 
 @tag09
 
@@ -250,7 +250,7 @@ Scenario Outline: 09Test case ID 1629628: Verify that firmware is upgraded if co
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     |
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816936 | NoDev    | 2000816934     | Yes     |
-	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2426512940 | NoDev    | 2426512941     | Yes     |
+	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645     | Yes     |
 
 @tag10
 
@@ -282,7 +282,7 @@ Scenario Outline: 10Test Case ID 1629629: Verify that firmware is downgraded if 
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     |
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816936 | NoDev    | 2000816934     | Yes     |
-	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2426512940 | NoDev    | 2426512941     | Yes     |
+	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645     | Yes     |
 
 	@tag11
 	
@@ -311,7 +311,7 @@ Examples:
 	#| RT961-DRWC  | 2000816934     | Yes     | Right       | Left       | 2000816936  | capture | 
 	#| NX977-DWC | 2426512940     | Yes     | Right       | Left       | 2426512941 | capture       |
 	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803297 |capture       |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |2426512940      |capture       |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |2300806615      |capture       |
 
 
 		@tag12
@@ -342,7 +342,7 @@ Examples:
 	 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269  | service records |
 	 #| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066   | service records |
 	#| RT961-DRWC  | 2000816934     | Yes     | Right       | Left       | 2000816936  | service records | 
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       | 2426512940 | service records  |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | service records  |
 	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803297 |service records  |
 
 	
@@ -376,7 +376,7 @@ Examples:
 	#| RT961-DRWC  | 2000816934     | Yes     | Right       | Left       | 2000816936 | restore | 
 	#| NX977-DWC | 2426512940     | Yes     | Right       | Left       | 2426512941 | restore  |
 	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803297 |restore  |
-	| NX977-DWC | 2426512941     | Yes     | Right       | Left       |2426512940      |restore    |
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       |2300806615      |restore    |
 	
 
 		
@@ -403,7 +403,7 @@ Examples:
 	#| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269  | service records |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066   | service records |
 	#| RT961-DRWC  | 2000816934     | Yes     | Right       | Left       | 2000816936 | service records | 
-	 | NX977-DWC | 2426512941     | Yes     | Right       | Left       | 2426512940 | service records  |
+	 | NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | service records  |
 
 
 
@@ -463,7 +463,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 #	 | RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     | Cdevice  | Cdevice   |
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Cdevice  | Cdevice   |
 	 #| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000816936 | NoDev    | 2000816934     | Yes     | 2000816933  | Cdevice   |
-	 | NX977-DWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2426512940 | NoDev    | 2426512941     | Yes     | 2000816933  | Cdevice   |
+	 | NX977-DWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645     | Yes     | 2000816933  | Cdevice   |
 
 
 
@@ -524,7 +524,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     |
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816929 | NoDev    | 2000816933    | Yes     |
-	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2426512940 | NoDev    | 2426512941    | Yes     |
+	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645    | Yes     |
 
 
 	@tag17
@@ -547,4 +547,4 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
     #| LT988-DW     | 1700800149     | Yes     | Right       | Left       | 1700800066 |
 	#| RT961-DRWC   | 2000816934     | Yes     | Right       | Left       | 2000816936 |
 	#|NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803297  |
-	| NX977-DWC | 2426512940     | Yes     | Right       | Left       | 2426512941 | 
+	| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | 
