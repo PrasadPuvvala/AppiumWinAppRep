@@ -83,6 +83,7 @@ using Azure;
 using System.Configuration;
 using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
+using com.sun.tools.@internal.xjc.reader;
 
 namespace MyNamespace
 {
@@ -141,6 +142,7 @@ namespace MyNamespace
             extent = new ExtentReports();
             extent.AttachReporter(htmlReporter);
             ModuleFunctions.callbyextentreport(extent);
+            ModuleFunctions.callbyAlgoTestLabVariables(config);
 
             /*Launch WinApp Driver*/
 
@@ -277,8 +279,11 @@ namespace MyNamespace
         public static void BeforeScenario()
 
         {
+            string test1 = ScenarioContext.Current.ScenarioInfo.Title;
 
-           
+            test = extent.CreateTest(test1.ToString());
+
+
             //startWinappdriver();
 
             // Read the scenario title to run from the configuration file //
@@ -304,7 +309,7 @@ namespace MyNamespace
 
             Console.WriteLine("Starting " + ScenarioContext.Current.ScenarioInfo.Title);
 
-            string test1 = ScenarioContext.Current.ScenarioInfo.Title;
+            string test2 = ScenarioContext.Current.ScenarioInfo.Title;
             string pattern = @"Case ID (\d+)";
 
             Match match = Regex.Match(test1, pattern);
@@ -521,9 +526,26 @@ namespace MyNamespace
             //    Console.WriteLine("An error occurred: " + ex.Message);
             //}
 
+            processKill("SmartFit");
+            processKill("SmartFitSA");
+            processKill("Camelot.WorkflowRuntime");
+            processKill("Camelot.SystemInfobar");
+            processKill("Lucan.App.UI");
+            processKill("StorageLayoutViewer");
         }
 
-
+        public void processKill(string name)
+        {
+            Process[] processCollection = Process.GetProcesses();
+            foreach (Process proc in processCollection)
+            {
+                Console.WriteLine(proc);
+                if (proc.ProcessName == name)
+                {
+                    proc.Kill();
+                }
+            }
+        }
 
         [AfterFeature]
         public static void afterFeature()
@@ -1172,55 +1194,208 @@ namespace MyNamespace
                     session.FindElementByName("Noahlink Wireless").Click();
                     lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
                     Thread.Sleep(8000);
-
+                    
                     try
-                    {
-                        if (session.FindElementByName("Unassign").Enabled)
-                        {
-                            lib.clickOnAutomationName(session, "Assign Instruments");
-                            Thread.Sleep(5000);
-                            var SN = session.FindElementsByClassName("ListBoxItem");
-                            Thread.Sleep(10000);
 
-                            /** The left side is assigned **/
+                    {
+
+                        if (session.FindElementByName("Unassign").Enabled)
+
+                        {
+
+                            lib.clickOnAutomationName(session, "Assign Instruments");
+
+                            Thread.Sleep(5000); // Initial wait before searching
+
+                            var SN = session.FindElementsByClassName("ListBoxItem");
+
+                            // Check if DeviceNo is already discovered
 
                             foreach (WindowsElement value in SN)
 
                             {
+
                                 string S = value.Text;
-                                if (S.Contains(DeviceNo))
+
+                                if (S.Contains(DeviceNo) && S.Contains("Assign Left"))
+
                                 {
-                                    value.Text.Contains("Assign Left");
-                                    //value.Click();
+
+                                    value.Click();
+
                                     value.FindElementByName("Assign Left").Click();
 
+                                    break;
+
                                 }
+
                             }
+
                         }
+
                     }
+
                     catch (Exception e)
-                    {
-                        lib.clickOnAutomationName(session, "Assign Instruments");
-                        Thread.Sleep(5000);
-                        var SN = session.FindElementsByClassName("ListBoxItem");
-                        Thread.Sleep(5000);
-                         
-                        /** The left side is assigned **/
 
-                        foreach (WindowsElement value in SN)
+                    {
+                        bool deviceFound = false;
+
+                        if (!deviceFound)
+
                         {
-                            string S = value.Text;
-                            if (S.Contains(DeviceNo))
+
+                            // Loop until the search button is enabled or timeout occurs
+
+                            DateTime startTime = DateTime.Now;
+
+                            while (!session.FindElementByAccessibilityId("SearchButton").Enabled &&
+
+                                   (DateTime.Now - startTime).TotalSeconds < 40) // Wait for button to become enabled for 30 seconds
+
                             {
-                                value.Text.Contains("Assign Left");
-                                //value.Click();
-                                //value.FindElementByClassName("Button").Click();
-                                value.FindElementByName("Assign Left").Click();
+
+                                Thread.Sleep(1000); // Wait for 1 second before checking again
 
                             }
+
+                            // Check if the button is enabled
+
+                            if (session.FindElementByAccessibilityId("SearchButton").Enabled)
+
+                            {
+
+                                session.FindElementByAccessibilityId("SearchButton").Click();
+
+                                Thread.Sleep(5000); // Wait after clicking search button
+
+                                var List = session.FindElementsByClassName("ListBoxItem");
+
+                                // Loop until the device is found or timeout occurs
+
+                                startTime = DateTime.Now;
+
+                                while (!deviceFound && (DateTime.Now - startTime).TotalSeconds < 30) // Adjust timeout as needed
+
+                                {
+
+                                    foreach (WindowsElement value in List)
+
+                                    {
+
+                                        string S = value.Text;
+
+                                        if (S.Contains(DeviceNo))
+
+                                        {
+
+                                            // Ensure it contains "Assign Left"
+
+                                            if (S.Contains("Assign Left"))
+
+                                            {
+
+                                                value.Click();
+
+                                                deviceFound = true;
+
+                                                break;
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                    // If device not found yet, click on the search button again
+
+                                    if (!deviceFound)
+
+                                    {
+
+                                        session.FindElementByAccessibilityId("SearchButton").Click();
+
+                                        Thread.Sleep(5000);
+
+                                        List = session.FindElementsByClassName("ListBoxItem");
+
+                                    }
+
+                                }
+
+                            }
+
+                            else
+
+                            {
+
+                                // Handle case where search button is not enabled within timeout
+
+                                Console.WriteLine("Search button not enabled within timeout.");
+
+                            }
+
                         }
-                        Thread.Sleep(5000);
+
+                        if (!deviceFound)
+
+                        {
+
+                            // Handle timeout or device not found
+
+                            Console.WriteLine("Device not found within timeout.");
+
+                        }
+
                     }
+
+                    //try
+                    //{
+                    //    if (session.FindElementByName("Unassign").Enabled)
+                    //    {
+                    //        lib.clickOnAutomationName(session, "Assign Instruments");
+                    //        Thread.Sleep(5000);
+                    //        var SN = session.FindElementsByClassName("ListBoxItem");
+                    //        Thread.Sleep(10000);
+
+                    //        /** The left side is assigned **/
+
+                    //        foreach (WindowsElement value in SN)
+
+                    //        {
+                    //            string S = value.Text;
+                    //            if (S.Contains(DeviceNo))
+                    //            {
+                    //                value.Text.Contains("Assign Left");
+                    //                //value.Click();
+                    //                value.FindElementByName("Assign Left").Click();
+
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    lib.clickOnAutomationName(session, "Assign Instruments");
+                    //    Thread.Sleep(5000);
+                    //    var SN = session.FindElementsByClassName("ListBoxItem");
+                    //    Thread.Sleep(5000);
+
+                    //    /** The left side is assigned **/
+
+                    //    foreach (WindowsElement value in SN)
+                    //    {
+                    //        string S = value.Text;
+                    //        if (S.Contains(DeviceNo))
+                    //        {
+                    //            value.Text.Contains("Assign Left");
+                    //            //value.Click();
+                    //            //value.FindElementByClassName("Button").Click();
+                    //            value.FindElementByName("Assign Left").Click();
+
+                    //        }
+                    //    }
+                    //    Thread.Sleep(5000);
+                    //}
 
                     /** Clicks on Continue buttion **/
 
@@ -3067,16 +3242,16 @@ namespace MyNamespace
 
                 if (device.Contains("RT"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.WorkingDirectory.Dooku2);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
                 }
                 else if (device.Contains("RU"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.WorkingDirectory.Dooku3);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
 
                 }
                 else
                 {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.WorkingDirectory.Megnesium);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
                 }
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
 
@@ -3182,7 +3357,7 @@ namespace MyNamespace
                     FunctionLibrary lib = new FunctionLibrary();
                     InputSimulator sim = new InputSimulator();
 
-                    session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.WorkingDirectory.Palpatine6);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.workingdirectory.Palpatine6);
                     // session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");                 
                     lib.waitUntilElementExists(session, "Channel", 0);
                     var ext = session.FindElements(WorkFlowPageFactory.channel);

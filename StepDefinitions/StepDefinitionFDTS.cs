@@ -73,7 +73,7 @@ namespace AppiumWinApp.StepDefinitions
                     System.IO.File.Delete(@"C:\Device A.xml");
                 }
             }
-             catch (Exception e) { }
+            catch (Exception e) { }
 
             try
             {
@@ -138,7 +138,7 @@ namespace AppiumWinApp.StepDefinitions
             test.Log(Status.Pass, "S&R Tool launched successfully");
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
-           
+
             /** Navigation to settings tab **/
 
             session.FindElementByName("Settings").Click();
@@ -187,11 +187,11 @@ namespace AppiumWinApp.StepDefinitions
 
                 } while ((ele[2].GetAttribute("IsEnabled").ToString()) == "False");
             }
-            catch(Exception e) { }
-           
+            catch (Exception e) { }
+
             session.FindElementByName("Services").Click();
             session.CloseApp();
-            test.Log(Status.Pass, "Communication channel chanted to "+ side);
+            test.Log(Status.Pass, "Communication channel chanted to " + side);
 
         }
 
@@ -208,7 +208,7 @@ namespace AppiumWinApp.StepDefinitions
 
             if (side.Equals("Left"))
             {
-               Thread.Sleep(4000);
+                Thread.Sleep(4000);
 
                 if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
                 {
@@ -222,7 +222,7 @@ namespace AppiumWinApp.StepDefinitions
             else if (side.Equals("Right"))
             {
 
-              
+
                 Thread.Sleep(4000);
 
                 if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
@@ -293,7 +293,7 @@ namespace AppiumWinApp.StepDefinitions
         [Given(@"\[Change channel side in FDTS(.*)]")]
         public void WhenChangeChannelSideInFDTS(string side)
         {
-            
+
             test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** Selecting Device side in System Settings **/
@@ -301,7 +301,7 @@ namespace AppiumWinApp.StepDefinitions
             SystemPageFactory.launchSystemSettings(side, extent);
 
 
-            test.Log(Status.Pass, "Channel changed to side: "+side);
+            test.Log(Status.Pass, "Channel changed to side: " + side);
 
         }
 
@@ -408,7 +408,7 @@ namespace AppiumWinApp.StepDefinitions
 
                     //test.Log(Status.Pass, "Clicked on Search"); 
 
-                    session = lib.waitForElement(session, "Model Name"); 
+                    session = lib.waitForElement(session, "Model Name");
 
                     test.Log(Status.Pass, "Dook2 Dev");
                 }
@@ -435,7 +435,7 @@ namespace AppiumWinApp.StepDefinitions
 
             Thread.Sleep(4000);
             WindowsElement RightSide = session.FindElementByName("Right");
-            RightSide.Click();          
+            RightSide.Click();
             Thread.Sleep(5000);
 
             /** Identifying checkbox **/
@@ -452,7 +452,7 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByName("Services").Click();
             Thread.Sleep(2000);
             var res = session.FindElementsByClassName("Button");
-            res[14].Click();          
+            res[14].Click();
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
 
             lib.clickOnElementWithIdonly(session, "PasswordBox");
@@ -480,19 +480,19 @@ namespace AppiumWinApp.StepDefinitions
             Thread.Sleep(2000);
             session = lib.functionWaitForId(session, "buttonFind");
 
-             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
-           
+            WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
+
             ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
             session = lib.waitForElement(session, "SELECT");
             test.Log(Status.Pass, "Restore is successful.");
 
 
-          
+
 
             try
             {
                 session = lib.functionWaitForId(session, "radioButtonRestoreAfterRTS");
-                session = lib.functionWaitForName(session, "RESTORE"); 
+                session = lib.functionWaitForName(session, "RESTORE");
             }
             catch (Exception e)
             {
@@ -556,83 +556,83 @@ namespace AppiumWinApp.StepDefinitions
 
             if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
-                    ModuleFunctions.socketA(session, test, device);
-                    Thread.Sleep(3000);                
-                    Console.WriteLine("This is When method");
-                    test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                ModuleFunctions.socketA(session, test, device);
+                Thread.Sleep(3000);
+                Console.WriteLine("This is When method");
+                test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
-                    Thread.Sleep(2000);
-                    DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", ApplicationPath);
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                    Thread.Sleep(2000);
-                    session.Manage().Window.Maximize();
-                    var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
-                    var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
+                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                Thread.Sleep(2000);
+                DesiredCapabilities appCapabilities = new DesiredCapabilities();
+                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("deviceName", "WindowsPC");
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                Thread.Sleep(10000);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                Thread.Sleep(2000);
+                session.Manage().Window.Maximize();
+                var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
+                var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
 
-                    var text_Button = session.FindElementsByClassName("ListBoxItem");
+                var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-                    test.Log(Status.Pass, "FSW is launched successfully");
-                    int counter = 0;
-                    string PatientName = null;
-                    string PatientDescription = null;
-                    foreach (var element in text_Button)
+                test.Log(Status.Pass, "FSW is launched successfully");
+                int counter = 0;
+                string PatientName = null;
+                string PatientDescription = null;
+                foreach (var element in text_Button)
+                {
+                    if (counter == 3)
                     {
-                        if (counter == 3)
-                        {
-                            PatientName = element.GetAttribute("AutomationId");
-                            PatientDescription = element.GetAttribute("Name");
-                            break;
-                        }
-
-                        counter = counter + 1;
+                        PatientName = element.GetAttribute("AutomationId");
+                        PatientDescription = element.GetAttribute("Name");
+                        break;
                     }
 
-                    lib.clickOnAutomationId(session, PatientDescription, PatientName);
+                    counter = counter + 1;
+                }
 
-                    /** Clicks on "Fit patient" **/
+                lib.clickOnAutomationId(session, PatientDescription, PatientName);
 
-                    Thread.Sleep(8000);
-                    lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
-                    test.Pass("Patient is clicked");
+                /** Clicks on "Fit patient" **/
 
-                    Thread.Sleep(10000);
+                Thread.Sleep(8000);
+                lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
+                test.Pass("Patient is clicked");
 
-                    session.Close();
+                Thread.Sleep(10000);
 
-                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                session.Close();
 
-                    appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", ApplicationPath);
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    Thread.Sleep(5000);
+                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
 
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                appCapabilities = new DesiredCapabilities();
+                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("deviceName", "WindowsPC");
+                Thread.Sleep(5000);
 
-                    Thread.Sleep(10000);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                Thread.Sleep(10000);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
-                    session.FindElementByName("Back").Click();
+                Thread.Sleep(10000);
 
-                    Thread.Sleep(5000);
+                session.FindElementByName("Back").Click();
 
-                    session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
+                Thread.Sleep(5000);
 
-                    Thread.Sleep(2000);
+                session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
 
-                    session.FindElementByName("Noahlink Wireless").Click();
+                Thread.Sleep(2000);
+
+                session.FindElementByName("Noahlink Wireless").Click();
 
 
-                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
 
-                    Thread.Sleep(8000);
+                Thread.Sleep(8000);
 
-                    Thread.Sleep(10000);
+                Thread.Sleep(10000);
 
                 try
                 {
@@ -673,8 +673,8 @@ namespace AppiumWinApp.StepDefinitions
 
                         if (S.Contains(DeviceNo))
                         {
-                           value.Text.Contains("Assign Left");
-                           value.Click();
+                            value.Text.Contains("Assign Left");
+                            value.Click();
 
                         }
                     }
@@ -776,7 +776,7 @@ namespace AppiumWinApp.StepDefinitions
 
                     session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
 
-                    Thread.Sleep(2000); 
+                    Thread.Sleep(2000);
                     session.FindElementByName("Speedlink").Click();
 
 
@@ -820,7 +820,7 @@ namespace AppiumWinApp.StepDefinitions
 
                     buttonCount = buttonCount + 1;
 
-                    
+
 
                 } while (session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Enabled);
             }
@@ -844,7 +844,7 @@ namespace AppiumWinApp.StepDefinitions
                 {
                     lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
 
-                 
+
 
                     /** To add the Program Outdoor and music **/
 
@@ -859,10 +859,10 @@ namespace AppiumWinApp.StepDefinitions
                     lib.functionWaitForName(session, "Music");
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 { }
 
-               
+
 
                 /** Click on Skip button and save the data **/
 
@@ -870,7 +870,7 @@ namespace AppiumWinApp.StepDefinitions
                 {
                     Thread.Sleep(10000);
                     lib.clickOnElementWithIdonly(session, "FittingAutomationIds.SaveAction");
-                   
+
                     try
                     {
                         Thread.Sleep(2000);
@@ -922,7 +922,7 @@ namespace AppiumWinApp.StepDefinitions
             //Thread.Sleep(2000);
             //session.SwitchTo().Window(session.WindowHandles.First());
             lib.AzureFileCompare(session, test);
-            
+
         }
 
 
@@ -983,132 +983,154 @@ namespace AppiumWinApp.StepDefinitions
             //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
             //winApp.Kill();
 
-            Console.WriteLine("This is Done method");
-            var scenarioContext = ScenarioContext.Current;
-            var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
-            var testcaseId = scenarioContext.Get<string>("TestCaseID");
+            //Console.WriteLine("This is Done method");
+            //var scenarioContext = ScenarioContext.Current;
+            //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+            //var testcaseId = scenarioContext.Get<string>("TestCaseID");
 
-            var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
-
-
-            foreach (var xmlFile in xmlFiles)
-            {
-                XDocument xmlDoc = XDocument.Load(xmlFile);
+            //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
 
 
-                foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
-                {
-                    var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
-
-                    if (elementTestCaseID == testcaseId)
-                    {
-
-                        var elementTestStatus = testResultSetElement.Element("TestStatus");
-                        if (elementTestStatus != null)
-                        {
-                            elementTestStatus.Value = testStatus;
-                        }
-                    }
-                }
-
-                xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
-            }
+            //foreach (var xmlFile in xmlFiles)
+            //{
+            //    XDocument xmlDoc = XDocument.Load(xmlFile);
 
 
+            //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
+            //    {
+            //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
 
-            {
+            //        if (elementTestCaseID == testcaseId)
+            //        {
 
-                string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+            //            var elementTestStatus = testResultSetElement.Element("TestStatus");
+            //            if (elementTestStatus != null)
+            //            {
+            //                elementTestStatus.Value = testStatus;
+            //            }
+            //        }
+            //    }
 
-                string xmlFolderPath = Path.Combine(projectPath, "XML");
+            //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
+            //}
 
-                string keyToUpdate = "WorkFlowsXMLsPath";
-                string valueToUpdate = xmlFolderPath;
 
-                string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
 
-                foreach (var configFile in configFiles)
-                {
-                    UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
-                }
-            }
+            //{
 
-            static void UpdateAppSettingValue(string configFilePath, string key, string value)
-            {
-                try
-                {
-                    ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
-                    {
-                        ExeConfigFilename = configFilePath
-                    };
-                    Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+            //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
 
-                    if (config.AppSettings.Settings[key] != null)
-                    {
-                        config.AppSettings.Settings[key].Value = value;
-                        config.Save(ConfigurationSaveMode.Modified);
-                        ConfigurationManager.RefreshSection("appSettings");
+            //    string xmlFolderPath = Path.Combine(projectPath, "XML");
 
-                        string updatedValue = ConfigurationManager.AppSettings[key];
-                        Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Key {key} not found in {configFilePath}.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
-                }
-            }
+            //    string keyToUpdate = "WorkFlowsXMLsPath";
+            //    string valueToUpdate = xmlFolderPath;
 
-            try
+            //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
 
-            {
-                string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
+            //    foreach (var configFile in configFiles)
+            //    {
+            //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
+            //    }
+            //}
 
-                if (System.IO.File.Exists(agentPath))
-                {
-                    ProcessStartInfo startInfo = new ProcessStartInfo
-                    {
-                        FileName = agentPath,
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        CreateNoWindow = true
-                    };
+            //static void UpdateAppSettingValue(string configFilePath, string key, string value)
+            //{
+            //    try
+            //    {
+            //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+            //        {
+            //            ExeConfigFilename = configFilePath
+            //        };
+            //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
 
-                    Process process = new Process
-                    {
-                        StartInfo = startInfo
-                    };
+            //        if (config.AppSettings.Settings[key] != null)
+            //        {
+            //            config.AppSettings.Settings[key].Value = value;
+            //            config.Save(ConfigurationSaveMode.Modified);
+            //            ConfigurationManager.RefreshSection("appSettings");
 
-                    process.Start();
-                    process.WaitForExit(); // Optionally wait for the process to complete
+            //            string updatedValue = ConfigurationManager.AppSettings[key];
+            //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+            //    }
+            //}
 
-                    string standardOutput = process.StandardOutput.ReadToEnd();
-                    string standardError = process.StandardError.ReadToEnd();
+            //try
 
-                    Console.WriteLine("Standard Output:");
-                    Console.WriteLine(standardOutput);
+            //{
+            //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
 
-                    Console.WriteLine("Standard Error:");
-                    Console.WriteLine(standardError);
-                }
-                else
-                {
-                    Console.WriteLine("TFS agent executable not found at the specified path.");
-                }
-            }
+            //    if (System.IO.File.Exists(agentPath))
+            //    {
+            //        ProcessStartInfo startInfo = new ProcessStartInfo
+            //        {
+            //            FileName = agentPath,
+            //            UseShellExecute = false,
+            //            RedirectStandardOutput = true,
+            //            RedirectStandardError = true,
+            //            CreateNoWindow = true
+            //        };
 
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred: " + ex.Message);
-            }
+            //        Process process = new Process
+            //        {
+            //            StartInfo = startInfo
+            //        };
+
+            //        process.Start();
+            //        process.WaitForExit(); // Optionally wait for the process to complete
+
+            //        string standardOutput = process.StandardOutput.ReadToEnd();
+            //        string standardError = process.StandardError.ReadToEnd();
+
+            //        Console.WriteLine("Standard Output:");
+            //        Console.WriteLine(standardOutput);
+
+            //        Console.WriteLine("Standard Error:");
+            //        Console.WriteLine(standardError);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("TFS agent executable not found at the specified path.");
+            //    }
+            //}
+
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("An error occurred: " + ex.Message);
+            //}
+
+            //}
+            processKill("SmartFit");
+            processKill("SmartFitSA");
+            processKill("Camelot.WorkflowRuntime");
+            processKill("Camelot.SystemInfobar");
+            processKill("Lucan.App.UI");
+            processKill("StorageLayoutViewer");
+
 
         }
 
 
+        public void processKill(string name)
+        {
+            Process[] processCollection = Process.GetProcesses();
+            foreach (Process proc in processCollection)
+            {
+                Console.WriteLine(proc);
+                if (proc.ProcessName == name)
+                {
+                    proc.Kill();
+                }
+            }
+        }
     }
 }
+

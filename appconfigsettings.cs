@@ -8,7 +8,7 @@ namespace AppiumWinApp
     {
         public Algo algo { get; set; }
         public SLV slv { get; set; }
-        public SLV WorkingDirectory { get; set; }
+        public  WorkingDirectory workingdirectory { get; set; }
     }
 
     public class Algo
@@ -18,7 +18,6 @@ namespace AppiumWinApp
         public string Dooku1 { get; set; } = String.Empty;
         public string Dooku2 { get; set; } = String.Empty;
         public string Dooku3 { get; set; } = String.Empty;
-
         public string Megnesium { get; set; } = String.Empty;
 
     }
@@ -29,7 +28,6 @@ namespace AppiumWinApp
         public string Dooku1 { get; set; } = String.Empty;
         public string Dooku2 { get; set; } = String.Empty;
         public string Dooku3 { get; set; } = String.Empty;
-
         public string Megnesium { get; set; } = String.Empty;
 
     }
@@ -40,7 +38,6 @@ namespace AppiumWinApp
         public string Dooku1 { get; set; } = String.Empty;
         public string Dooku2 { get; set; } = String.Empty;
         public string Dooku3 { get; set; } = String.Empty;
-
         public string Megnesium { get; set; } = String.Empty;
     }
 
