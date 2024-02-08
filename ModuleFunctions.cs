@@ -37,6 +37,7 @@ using Microsoft.Identity.Client.Extensions.Msal;
 using sun.security.x509;
 using javax.swing.plaf;
 using javax.swing;
+using Microsoft.Extensions.Configuration;
 
 namespace AppiumWinApp
 {
@@ -50,8 +51,7 @@ namespace AppiumWinApp
         public static ExtentReports extent1;
         public static string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
         public static appconfigsettings config;
-        static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
-        + Path.DirectorySeparatorChar + "appconfig.json";
+
 
         /** Application launchhing **/
         public static WindowsDriver<WindowsElement> sessionInitialize(string name, string path)
@@ -86,8 +86,8 @@ namespace AppiumWinApp
             return session;
         }
 
-        /**  FDTS Application launching from Bat files  **/
-        public static WindowsDriver<WindowsElement> launchApp(string name, string dir)
+            /**  FDTS Application launching from Bat files  **/
+            public static WindowsDriver<WindowsElement> launchApp(string name, string dir)
         {
             string ApplicationPath = name;
             DesiredCapabilities appCapabilities = new DesiredCapabilities();
@@ -278,16 +278,18 @@ namespace AppiumWinApp
 
                 if (device.Contains("RT"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku2, config.WorkingDirectory.Dooku2);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku2, config.workingdirectory.Dooku2);
 
                 }
+
                 else if (device.Contains("RU"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku3, config.WorkingDirectory.Dooku3);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku3, config.workingdirectory.Dooku3);
                 }
-                else if (device.Contains("NX"))
+
+                else
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Megnesium, config.WorkingDirectory.Megnesium);
+                   session = ModuleFunctions.sessionInitialize(config.algo.Megnesium, config.workingdirectory.Megnesium);
                 }
 
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");           
@@ -389,12 +391,12 @@ namespace AppiumWinApp
             {
                 if (device.Contains("LT"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Palpatine6, config.WorkingDirectory.Palpatine6);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Palpatine6, config.workingdirectory.Palpatine6);
                     //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\AlgoLabtest.Palpatine.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
                 }
                 else
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku1, config.WorkingDirectory.Dooku1);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku1, config.workingdirectory.Dooku1);
                     //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
 
                 }
@@ -1430,16 +1432,16 @@ namespace AppiumWinApp
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                 if (device.Contains("RT"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku2, config.WorkingDirectory.Dooku2);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku2, config.workingdirectory.Dooku2);
                 }
                 else if(device.Contains("RU"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku3, config.WorkingDirectory.Dooku3);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Dooku3, config.workingdirectory.Dooku3);
 
                 }
                 else if (device.Contains("NX"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.algo.Megnesium, config.WorkingDirectory.Megnesium);
+                    session = ModuleFunctions.sessionInitialize(config.algo.Megnesium, config.workingdirectory.Megnesium);
                 }
                
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");               
@@ -1486,14 +1488,14 @@ namespace AppiumWinApp
             if (device.Contains("LT"))
             {
 
-                session = ModuleFunctions.sessionInitialize(config.algo.Palpatine6, config.WorkingDirectory.Palpatine6);
+                session = ModuleFunctions.sessionInitialize(config.algo.Palpatine6, config.workingdirectory.Palpatine6);
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\AlgoLabtest.Palpatine.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
             }
             
             else if(device.Contains("RE"))
             {
 
-                session = ModuleFunctions.sessionInitialize(config.algo.Dooku1, config.WorkingDirectory.Dooku1);
+                session = ModuleFunctions.sessionInitialize(config.algo.Dooku1, config.workingdirectory.Dooku1);
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
 
             }
@@ -1619,16 +1621,16 @@ namespace AppiumWinApp
 
                 if (device.Contains("RT"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.WorkingDirectory.Dooku2);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
                 }
                 else if (device.Contains("RU"))
                 {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.WorkingDirectory.Dooku3);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
 
                 }
                 else
                 {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.WorkingDirectory.Megnesium);
+                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
                 }
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
                 FunctionLibrary lib = new FunctionLibrary();
@@ -1706,16 +1708,16 @@ namespace AppiumWinApp
                    
                     if (device.Contains("RT"))
                     {
-                        session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.WorkingDirectory.Dooku2);
+                        session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
                     }
                     else if (device.Contains("RU"))
                     {
-                        session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.WorkingDirectory.Dooku3);
+                        session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
 
                     }
                     else
                     {
-                        session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.WorkingDirectory.Megnesium);
+                        session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
                     }
 
                     //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
@@ -1941,7 +1943,7 @@ namespace AppiumWinApp
             if (device.Contains("LT"))
             {
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.WorkingDirectory.Palpatine6);
+                session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.workingdirectory.Palpatine6);
 
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
                 FunctionLibrary lib = new FunctionLibrary();
@@ -2095,7 +2097,7 @@ namespace AppiumWinApp
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                 string storageLayOutDate = "WindowsForms10.Window.8.app.0.2804c64_r9_ad1";
 
-                session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.WorkingDirectory.Dooku1);
+                session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.workingdirectory.Dooku1);
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
                 Thread.Sleep(8000);
                 Actions actions = new Actions(session);           
@@ -2248,6 +2250,13 @@ namespace AppiumWinApp
             return extent;
         }
 
+        /*This is to initiate config variable*/
+
+        public static appconfigsettings callbyAlgoTestLabVariables(appconfigsettings config1)
+        {
+            config = config1;
+            return config;
+        }
 
         /** This is to modify the values in Miniidentification
          * and Production test data in storagelayout to get 
@@ -2263,7 +2272,7 @@ namespace AppiumWinApp
             string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
             string storageLayOutDate = "WindowsForms10.Window.8.app.0.2804c64_r9_ad1";
 
-            session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.WorkingDirectory.Dooku1);
+            session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.workingdirectory.Dooku1);
             //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
             Thread.Sleep(8000);
             Actions actions = new Actions(session);
