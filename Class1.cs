@@ -5,6 +5,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
+using TechTalk.SpecFlow;
 //using RelevantCodes.ExtentReports;
 
 
@@ -49,6 +50,7 @@ namespace AppiumWinApp
         [Test]
         public void PassingTest()
         {
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             test = extent.CreateTest("Passing test");
 
             // driver.Navigate().GoToUrl("http://www.google.com");
@@ -56,7 +58,7 @@ namespace AppiumWinApp
             try
             {
                 Assert.IsTrue(true);
-                test.Log(Status.Pass, "Test executed");
+                stepName.Log(Status.Pass, "Test executed");
                 test.Pass("Assertion passed");
             }
             catch (AssertionException)

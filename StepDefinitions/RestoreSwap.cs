@@ -39,6 +39,8 @@ namespace AppiumWinApp.StepDefinitions
     public class RestoreSwap
     {
         private readonly ScenarioContext _scenarioContext;
+        private readonly FeatureContext _featureContext;
+        private static appconfigsettings config;
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
@@ -54,10 +56,11 @@ namespace AppiumWinApp.StepDefinitions
         string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
         String user_name = Environment.UserName;
 
-        public RestoreSwap(ScenarioContext scenarioContext)
+        public RestoreSwap(ScenarioContext scenarioContext, FeatureContext featureContext)
         {
             _scenarioContext = scenarioContext;
             extent = ModuleFunctions.extent;
+            _featureContext = featureContext;
         }
 
 
@@ -68,8 +71,10 @@ namespace AppiumWinApp.StepDefinitions
         [When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceLeftOfDumpBByStorageLayoutAnd(string device, string side, string DeviceNo)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+          
             if (side.Equals("Left"))
             {
                 if (device.Contains("RT") || device.Contains("C"))
@@ -77,8 +82,8 @@ namespace AppiumWinApp.StepDefinitions
                     ModuleFunctions.socketA(session, test, device);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo);
-                test.Log(Status.Pass, " Dump image taken for Device B");
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device B", side, DeviceNo);
+                stepName.Log(Status.Pass, " Dump image taken for Device B");
 
             }
         }
@@ -93,8 +98,10 @@ namespace AppiumWinApp.StepDefinitions
         public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPOption(string deviceSlNo, string DeviceLeftSlNo, string device, string side)
         
         {
+            config = (appconfigsettings)_featureContext["config"];
             FunctionLibrary lib = new FunctionLibrary();
 
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
             if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
@@ -112,34 +119,34 @@ namespace AppiumWinApp.StepDefinitions
                 }
             }
 
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
 
-
-            try
-            {
-                session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            //try
+            //{
+            //    session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //}
 
 
             Thread.Sleep(8000);
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             Thread.Sleep(2000);
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            test.Log(Status.Pass, "S&R Tool launched successfully");
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
 
 
             if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 session.FindElementByName("Discover").Click();
 
-                test.Log(Status.Pass, "Clicked on Discover.");
+                stepName.Log(Status.Pass, "Clicked on Discover.");
 
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
@@ -178,11 +185,11 @@ namespace AppiumWinApp.StepDefinitions
                 } while (!session.FindElementByName("Disconnect").Displayed);
 
               
-                    test.Log(Status.Pass, "Clicked on Search");
+                    stepName.Log(Status.Pass, "Clicked on Search");
 
                     session = lib.waitForElement(session, "Model Name");
 
-                    test.Log(Status.Pass, "Dook2 Dev");
+                    stepName.Log(Status.Pass, "Dook2 Dev");
 
             }
 
@@ -239,9 +246,9 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByAccessibilityId("textBoxSerialNumber").SendKeys(DeviceLeftSlNo);
             session = lib.functionWaitForId(session, "buttonFind");
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
-            ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            test.Log(Status.Pass, "Restore is successful.");
+            stepName.Log(Status.Pass, "Restore is successful.");
        
 
             try
@@ -254,9 +261,9 @@ namespace AppiumWinApp.StepDefinitions
 
             }
 
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
-            test.Log(Status.Pass, "Restore is successful.");
+            stepName.Log(Status.Pass, "Restore is successful.");
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();
             Thread.Sleep(1000);
@@ -274,6 +281,8 @@ namespace AppiumWinApp.StepDefinitions
         {
             FunctionLibrary lib = new FunctionLibrary();
 
+            config = (appconfigsettings)_featureContext["config"];
+
             if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 if (side.Equals("Left"))
@@ -289,7 +298,8 @@ namespace AppiumWinApp.StepDefinitions
             }
 
 
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
 
 
@@ -305,18 +315,18 @@ namespace AppiumWinApp.StepDefinitions
 
 
             Thread.Sleep(8000);
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             Thread.Sleep(2000);         
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            test.Log(Status.Pass, "S&R Tool launched successfully");
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
 
             if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 session.FindElementByName("Discover").Click();
 
-                test.Log(Status.Pass, "Clicked on Discover.");
+                stepName.Log(Status.Pass, "Clicked on Discover.");
 
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
@@ -355,11 +365,11 @@ namespace AppiumWinApp.StepDefinitions
                 } while (!session.FindElementByName("Disconnect").Displayed);
 
 
-                test.Log(Status.Pass, "Clicked on Search");
+                stepName.Log(Status.Pass, "Clicked on Search");
 
                 session = lib.waitForElement(session, "Model Name");
 
-                test.Log(Status.Pass, "Dook2 Dev");
+                stepName.Log(Status.Pass, "Dook2 Dev");
             }
 
             session.FindElementByName("Device Info").Click();
@@ -415,9 +425,9 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByAccessibilityId("textBoxSerialNumber").SendKeys(DeviceLeftSlNo);
             session = lib.functionWaitForId(session, "buttonFind");
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
-            ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            test.Log(Status.Pass, "Restore is successful.");
+            stepName.Log(Status.Pass, "Restore is successful.");
 
 
             try
@@ -429,10 +439,10 @@ namespace AppiumWinApp.StepDefinitions
             {
             }
 
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
             session = lib.waitForElement(session, "OK");
-            test.Log(Status.Pass, "Restore is successful.");         
+            stepName.Log(Status.Pass, "Restore is successful.");         
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();          
         }
@@ -446,29 +456,30 @@ namespace AppiumWinApp.StepDefinitions
         [When(@"\[Get the dump of connected device of left DumpC by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceOfLeftDumpCByStorageLayout(string device, string side, string DeviceNo)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (side.Equals("Left"))
             {
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
                 {
                     ModuleFunctions.socketA(session, test, device);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo);
-                test.Log(Status.Pass, " Dump image taken for Device C");
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device C", side, DeviceNo);
+                stepName.Log(Status.Pass, " Dump image taken for Device C");
 
             }
             else if (side.Equals("Right"))
             {
 
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
                 {
                     ModuleFunctions.socketB(session, test, device);
                 }
 
                 ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo);
-                test.Log(Status.Pass, " Dump image taken for Device B ");
+                stepName.Log(Status.Pass, " Dump image taken for Device B ");
             }
 
         }
@@ -481,17 +492,18 @@ namespace AppiumWinApp.StepDefinitions
         [When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceOfDumpDByStorageLayout(string device, string side, string DeviceNo)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (side.Equals("Right"))
             {
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
                 {
                     ModuleFunctions.socketB(session, test, device);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device D", side, DeviceNo);
-                test.Log(Status.Pass, " Dump image taken for Device D ");
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device D", side, DeviceNo);
+                stepName.Log(Status.Pass, " Dump image taken for Device D ");
 
             }
 
@@ -502,7 +514,10 @@ namespace AppiumWinApp.StepDefinitions
         [Then(@"\[Do the dump comparison between two device DeviceC and DeviceD dumps(.*)]")]
         public void ThenDoTheDumpComparisonBetweenTwoDeviceDeviceCAndDeviceDDumps(string side)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             lib.dumpCompare1(side, test);
         }

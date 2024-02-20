@@ -117,7 +117,7 @@ namespace AppiumWinApp
 
         /** Continue buttons click operation in fsw Connection flow **/
         
-        public static WindowsDriver<WindowsElement> getControlsOfParentWindow(WindowsDriver<WindowsElement> session, string name, ExtentTest test)
+        public static WindowsDriver<WindowsElement> getControlsOfParentWindow(WindowsDriver<WindowsElement> session, string name, ExtentTest stepName)
         {
             var childTable = session.FindElementsByXPath("//*[@ClassName='" + name + "']//Text[@ClassName='TextBlock']");
             int counter = 0;
@@ -125,7 +125,7 @@ namespace AppiumWinApp
             {
                 if (counter == 1)
                 {
-                    test.Log(Status.Pass, "Continue is clicked in the screen +" + child.GetAttribute("Name"));
+                    stepName.Log(Status.Pass, "Continue is clicked in the screen +" + child.GetAttribute("Name"));
 
                 }
 
@@ -140,6 +140,9 @@ namespace AppiumWinApp
 
         public static void verifyIfReportsExisted(ExtentTest test)
         {
+
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
             string dir = "C:\\CaptureBase\\Reports";
             string filename = null;
 
@@ -158,8 +161,8 @@ namespace AppiumWinApp
                 {
                     case "capture report":
 
-                        test.Log(Status.Pass, "!!!!****Capture report generated****!!!!");
-                        test.Log(Status.Pass, "File Name :" + filename);
+                        stepName.Log(Status.Pass, "!!!!****Capture report generated****!!!!");
+                        stepName.Log(Status.Pass, "File Name :" + filename);
                         var pdf = PdfDocument.FromFile(filename, "password");
                         string AllText = pdf.ExtractAllText();
                         IEnumerable<System.Drawing.Image> AllImages = pdf.ExtractAllImages();
@@ -186,7 +189,7 @@ namespace AppiumWinApp
 
                             foreach (String s in lableNames)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
                             }
                             //This is to write lable values in the report
                             String[] spearator1 = { " " };
@@ -195,7 +198,7 @@ namespace AppiumWinApp
                                StringSplitOptions.RemoveEmptyEntries);
                             foreach (String s in reportValues)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
 
                             }
 
@@ -204,8 +207,8 @@ namespace AppiumWinApp
 
                     case "restoration report":
 
-                        test.Log(Status.Pass, "!!!!****Restoration report generated****!!!!");
-                        test.Log(Status.Pass, "File Name +" + filename);
+                        stepName.Log(Status.Pass, "!!!!****Restoration report generated****!!!!");
+                        stepName.Log(Status.Pass, "File Name +" + filename);
                         // Extracting Image and Text content from Pdf Documents
 
                         // open a 128 bit encrypted PDF
@@ -234,7 +237,7 @@ namespace AppiumWinApp
                             String[] lableNames = strlist[0].Split("\r\n");
                             foreach (String s in lableNames)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
                             }
                             //This is to write lable values in the report
                             String[] spearator1 = { " " };
@@ -242,7 +245,7 @@ namespace AppiumWinApp
                                StringSplitOptions.RemoveEmptyEntries);
                             foreach (String s in reportValues)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
 
                             }
 
@@ -256,7 +259,7 @@ namespace AppiumWinApp
 
         /* AlgoLabTest Alter Value */
 
-        public static void altTestLab(WindowsDriver<WindowsElement> session, ExtentTest test, string device, string DeviceNo)
+        public static void altTestLab(WindowsDriver<WindowsElement> session, ExtentTest stepName, string device, string DeviceNo)
         {
 
             FunctionLibrary lib = new FunctionLibrary();
@@ -294,10 +297,10 @@ namespace AppiumWinApp
 
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");           
                 Actions actions = new Actions(session);
-                test.Log(Status.Pass, "Algo test lab is launched successfully.");
+                stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                 Thread.Sleep(2000);
                 session.FindElementByName("ADL").Click();
-                test.Log(Status.Pass, "Moved to ADL page successfully.");
+                stepName.Log(Status.Pass, "Moved to ADL page successfully.");
                 Thread.Sleep(2000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
                 Thread.Sleep(2000);
@@ -340,7 +343,7 @@ namespace AppiumWinApp
                 session.FindElementByAccessibilityId("textBox1_5").Clear();
                 Thread.Sleep(2000);
                 session.FindElementByAccessibilityId("textBox1_5").SendKeys("1");
-                test.Log(Status.Pass, "Altered value is 1");
+                stepName.Log(Status.Pass, "Altered value is 1");
                 /* Save changes in Fitting tab*/
                 lib.clickOnAutomationName(session, "Fitting");
                 Thread.Sleep(4000);               
@@ -364,13 +367,13 @@ namespace AppiumWinApp
                     if ((session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000" || (session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1")
                     {
                         Console.WriteLine("Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-                        test.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                        stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
                         Assert.Pass();
                         session.CloseApp();
                     }
                     else
                     {
-                        test.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                        stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
 
                         Assert.Fail();
 
@@ -400,10 +403,10 @@ namespace AppiumWinApp
                     //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
 
                 }
-                test.Log(Status.Pass, "Algo test lab is launched successfully.");
+                stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                 Thread.Sleep(2000);
                 session.FindElementByName("ADL").Click();
-                test.Log(Status.Pass, "Moved to ADL page successfully.");
+                stepName.Log(Status.Pass, "Moved to ADL page successfully.");
 
                 /*Select Speedlink from the interface selection pop up*/
 
@@ -420,18 +423,18 @@ namespace AppiumWinApp
                         {
                             Console.WriteLine("Indexvalue is" + counter + ":" + item.GetAttribute("HelpText"));
                             counter = counter + 1;                          
-                            test.Log(Status.Info, "Interfaces Available for selection: " + item.GetAttribute("HelpText"));
+                            stepName.Log(Status.Info, "Interfaces Available for selection: " + item.GetAttribute("HelpText"));
                         }
                         Console.WriteLine(interfaceButton.ToString());
                         Thread.Sleep(2000);
                         interfaceButton[12].Click();
-                        test.Log(Status.Info, "Speedlink is selected");
+                        stepName.Log(Status.Info, "Speedlink is selected");
                     }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
-                    test.Log(Status.Pass, "Selected Interface is Speedlink");
+                    stepName.Log(Status.Pass, "Selected Interface is Speedlink");
                 }
 
                 /*Getting all button from ADL screen*/
@@ -484,7 +487,7 @@ namespace AppiumWinApp
                 session.FindElementByAccessibilityId("textBox1_5").Clear();
                 Thread.Sleep(2000);
                 session.FindElementByAccessibilityId("textBox1_5").SendKeys("1");
-                test.Log(Status.Pass, "Altered value is 1");
+                stepName.Log(Status.Pass, "Altered value is 1");
 
                 /* Save changes in Fitting tab*/
 
@@ -625,7 +628,7 @@ namespace AppiumWinApp
                     {
 
                         Console.WriteLine("Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-                        test.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                        stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
 
                         Assert.Pass();
                         session.CloseApp();
@@ -633,7 +636,7 @@ namespace AppiumWinApp
                     }
                     else
                     {
-                        test.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                        stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
 
                         Assert.Fail();
 
@@ -722,7 +725,7 @@ namespace AppiumWinApp
                     Thread.Sleep(3000);
                 }
 
-                else if(device.Contains("RT")|| device.Contains("NX") && device.Contains("C"))
+                else if(device.Contains("RT")|| device.Contains("NX")|| device.Contains("RU") && device.Contains("C"))
 
                 {
                     session.Keyboard.SendKeys("3");
@@ -786,7 +789,7 @@ namespace AppiumWinApp
                             session.Keyboard.SendKeys("A");
                             session.Keyboard.SendKeys(Keys.Enter);
                         }
-                        else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                        else if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") && device.Contains("C"))
 
                         {
                             session.Keyboard.SendKeys("3");
@@ -863,24 +866,27 @@ namespace AppiumWinApp
                     Thread.Sleep(8000);
                 }
 
-                else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                else if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") && device.Contains("C"))
                 {
-                    session.Keyboard.SendKeys("B");
-                    Thread.Sleep(2000);
+                    //session.Keyboard.SendKeys("B");
+                    //Thread.Sleep(2000);
+                    //session.Keyboard.SendKeys(Keys.Enter);
+                    //Thread.Sleep(2000);
+                    session.Keyboard.SendKeys("A");
+                    Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(2000);
                     session.Keyboard.SendKeys("a");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(2000);
                     session.Keyboard.SendKeys("A");
                     Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(8000);
+                    Thread.Sleep(2000);
                     session.Keyboard.SendKeys("a");
-                    Thread.Sleep(8000);
+                    Thread.Sleep(4000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(8000);
                 }
             }
 
@@ -920,7 +926,7 @@ namespace AppiumWinApp
                     try
                     {
 
-                        if (device.Contains("RT") && device.Contains("RU"))
+                        if (device.Contains("RT"))
                         {
                             session.Keyboard.SendKeys("b");
                             Thread.Sleep(8000);
@@ -936,24 +942,27 @@ namespace AppiumWinApp
                             Thread.Sleep(8000);
                         }
 
-                        else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                        else if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") && device.Contains("C"))
                         {
-                            session.Keyboard.SendKeys("b");
-                            Thread.Sleep(1000);
-                            session.Keyboard.SendKeys(Keys.Enter);
-                            Thread.Sleep(1000);
-                            session.Keyboard.SendKeys("a");
-                            Thread.Sleep(1000);
-                            session.Keyboard.SendKeys(Keys.Enter);
-                            Thread.Sleep(1000);
+                            //session.Keyboard.SendKeys("B");
+                            //Thread.Sleep(2000);
+                            //session.Keyboard.SendKeys(Keys.Enter);
+                            //Thread.Sleep(2000);
                             session.Keyboard.SendKeys("A");
-                            Thread.Sleep(2000);
+                            Thread.Sleep(8000);
                             session.Keyboard.SendKeys(Keys.Enter);
-                            Thread.Sleep(4000);
+                            Thread.Sleep(2000);
                             session.Keyboard.SendKeys("a");
-                            Thread.Sleep(2000);
+                            Thread.Sleep(8000);
                             session.Keyboard.SendKeys(Keys.Enter);
-                            Thread.Sleep(1000);
+                            Thread.Sleep(2000);
+                            session.Keyboard.SendKeys("A");
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(2000);
+                            session.Keyboard.SendKeys("a");
+                            Thread.Sleep(4000);
+                            session.Keyboard.SendKeys(Keys.Enter);
                         }
                     }
                     catch (Exception) { }
@@ -1020,13 +1029,13 @@ namespace AppiumWinApp
                     Thread.Sleep(8000);
                 }
 
-                else if(device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                else if(device.Contains("RT") || device.Contains("NX") || device.Contains("RU") && device.Contains("C"))
                 {
 
-                    session.Keyboard.SendKeys("A");
-                    Thread.Sleep(2000);                   
-                    session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(2000);
+                    //session.Keyboard.SendKeys("A");
+                    //Thread.Sleep(2000);                   
+                    //session.Keyboard.SendKeys(Keys.Enter);
+                    //Thread.Sleep(2000);
                     //session.Keyboard.SendKeys("b");
                     //Thread.Sleep(2000);
                     session.Keyboard.SendKeys(Keys.Enter);
@@ -1037,6 +1046,11 @@ namespace AppiumWinApp
                     session.Keyboard.SendKeys("b");                   
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(2000);
+                    session.Keyboard.SendKeys("B");
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("b");
+                    session.Keyboard.SendKeys(Keys.Enter);
 
                 }
             }
@@ -1076,7 +1090,7 @@ namespace AppiumWinApp
                     
                     try
                     {
-                        if (device.Contains("RT") && device.Contains("RU"))
+                        if (device.Contains("RT"))
                         {
                             session.Keyboard.SendKeys("a");
                             Thread.Sleep(8000);
@@ -1092,7 +1106,7 @@ namespace AppiumWinApp
                             Thread.Sleep(8000);
                         }
 
-                        else if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                        else if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") && device.Contains("C"))
                         {
                             session.Keyboard.SendKeys("a");
                             Thread.Sleep(1000);
@@ -1110,6 +1124,11 @@ namespace AppiumWinApp
                             Thread.Sleep(2000);
                             session.Keyboard.SendKeys(Keys.Enter);
                             Thread.Sleep(1000);
+                            session.Keyboard.SendKeys("B");
+                            session.Keyboard.SendKeys(Keys.Enter);
+                            Thread.Sleep(8000);
+                            session.Keyboard.SendKeys("b");
+                            session.Keyboard.SendKeys(Keys.Enter);
                         }
                     }
                     catch (Exception) { }
@@ -1421,7 +1440,7 @@ namespace AppiumWinApp
 
         /* Verifying ADL values in AlgoLabTest */
 
-        public static void checkADLValue(WindowsDriver<WindowsElement> session, ExtentTest test, string device, string DeviceNo)
+        public static void checkADLValue(WindowsDriver<WindowsElement> session, ExtentTest stepName, string device, string DeviceNo)
         {
             FunctionLibrary lib = new FunctionLibrary();
 
@@ -1446,10 +1465,10 @@ namespace AppiumWinApp
                
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\AlgoLabtest.Dooku", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");               
                 Actions actions = new Actions(session);
-                test.Log(Status.Pass, "Algo test lab is launched successfully.");
+                stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                 Thread.Sleep(2000);
                 session.FindElementByName("ADL").Click();
-                test.Log(Status.Pass, "Moved to ADL page successfully.");
+                stepName.Log(Status.Pass, "Moved to ADL page successfully.");
                 Thread.Sleep(5000);
                 session.FindElementByAccessibilityId("FINDICON").Click();
                 Thread.Sleep(2000);
@@ -1499,10 +1518,10 @@ namespace AppiumWinApp
                 //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\AlgoLabtest.Dooku.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
 
             }
-            test.Log(Status.Pass, "Algo test lab is launched successfully.");
+            stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
             Thread.Sleep(2000);
             session.FindElementByName("ADL").Click();
-            test.Log(Status.Pass, "Moved to ADL page successfully.");
+            stepName.Log(Status.Pass, "Moved to ADL page successfully.");
             
             /*Select Speedlink from the interface selection pop up*/
 
@@ -1519,19 +1538,19 @@ namespace AppiumWinApp
                     {
                         Console.WriteLine("Indexvalue is" + counter + ":" + item.GetAttribute("HelpText"));
                         counter = counter + 1;                     
-                        test.Log(Status.Info, "Interfaces Available for selection: " + item.GetAttribute("HelpText"));
+                        stepName.Log(Status.Info, "Interfaces Available for selection: " + item.GetAttribute("HelpText"));
                     }
                     Console.WriteLine(interfaceButton.ToString());
                     Thread.Sleep(2000);
                     interfaceButton[12].Click();
-                    test.Log(Status.Info, "Speedlink is selected");
+                    stepName.Log(Status.Info, "Speedlink is selected");
                 }
             }
 
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-                test.Log(Status.Pass, "Selected Interface is Speedlink");
+                stepName.Log(Status.Pass, "Selected Interface is Speedlink");
             }
 
             /*Getting all button from ADL screen*/
@@ -1586,13 +1605,13 @@ namespace AppiumWinApp
                 if ((session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000")
                 {
                     Console.WriteLine("Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-                    test.Log(Status.Fail, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                    stepName.Log(Status.Fail, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
                     Assert.Pass();
                     session.CloseApp();
                 }
                 else
                 {
-                    test.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                    stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
                     session.CloseApp();
                 }
             }
@@ -1607,7 +1626,7 @@ namespace AppiumWinApp
         /*This is to take the dump the device image from storage layout*/
 
 
-        public static void takeDeviceDumpImage(WindowsDriver<WindowsElement> session, ExtentTest test, string device, String fileName, String side, string DeviceNo)
+        public static void takeDeviceDumpImage(WindowsDriver<WindowsElement> session, ExtentTest stepName, string device, String fileName, String side, string DeviceNo)
 
         {
             Console.WriteLine("test");
@@ -2023,7 +2042,7 @@ namespace AppiumWinApp
                 }
 
                 session.Keyboard.PressKey(Keys.Enter);
-                test.Log(Status.Pass, side + ": is selected"); 
+                stepName.Log(Status.Pass, side + ": is selected"); 
                 
                 /** selecting file menu and read **/
 
@@ -2250,6 +2269,7 @@ namespace AppiumWinApp
             return extent;
         }
 
+      
         /*This is to initiate config variable*/
 
         public static appconfigsettings callbyAlgoTestLabVariables(appconfigsettings config1)
@@ -2266,7 +2286,8 @@ namespace AppiumWinApp
         public static WindowsDriver<WindowsElement> storagelayoutD1(WindowsDriver<WindowsElement> session, ExtentTest test, string deivce, string side)
 
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             InputSimulator sim = new InputSimulator();
             string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
@@ -2337,13 +2358,13 @@ namespace AppiumWinApp
             session.FindElementByName("Apply selection").Click();
             Thread.Sleep(2000);
             var txt = session.FindElementsByName("0f8e00:0004a ProductionTestData");
-            test.Log(Status.Pass, "0f8e00:0004a ProductionTestData " + "is selected");
+            stepName.Log(Status.Pass, "0f8e00:0004a ProductionTestData " + "is selected");
 
             foreach (var item in txt)
             {
                 Console.WriteLine(item.GetAttribute("Name"));
                 item.Click();
-                test.Log(Status.Pass, "0f8e00:0004a ProductionTestData " + "is selected");
+                stepName.Log(Status.Pass, "0f8e00:0004a ProductionTestData " + "is selected");
 
             }
 
@@ -2386,7 +2407,7 @@ namespace AppiumWinApp
 
             catch (Exception e)
             {
-                test.Pass("Writing Presets is done successfully.");
+                stepName.Pass("Writing Presets is done successfully.");
             }
 
             return session;
@@ -2403,8 +2424,9 @@ namespace AppiumWinApp
         public static void discoveryFailed(WindowsDriver<WindowsElement> session, ExtentTest test, string textDir, string device, string side, string DeviceNo)
 
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                do
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            do
                 {
                     //Console.WriteLine("Window name is" +session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text);
 
@@ -2441,7 +2463,8 @@ namespace AppiumWinApp
                             Console.WriteLine(e);
                         }
 
-                        test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                       // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
                         session = ModuleFunctions.sessionInitialize1("C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
                         string ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe";
                         Thread.Sleep(2000);
@@ -2452,7 +2475,7 @@ namespace AppiumWinApp
                         Thread.Sleep(8000);
                         session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
-                        test.Log(Status.Pass, "Test Work Flow launched successfully");
+                        stepName.Log(Status.Pass, "Test Work Flow launched successfully");
 
 
                      /** To delete camlotlog files If it is exists in the alocated path **/
@@ -2489,7 +2512,22 @@ namespace AppiumWinApp
                             }
                             else
                             {
-                                session.FindElementByName(devName + " [9] (Final)").Click();
+                                    var elements = Enumerable.Range(1, 9).Select(index => $"{devName} [{index}] (Final)").Select(elementName =>
+                                    {
+                                        try
+                                        {
+                                            return session.FindElementByName(elementName);
+                                        }
+                                        catch (Exception)
+                                        {
+                                            return null;
+                                        }
+                                    }).Where(element => element != null);
+
+                                    foreach (var element in elements)
+                                    {
+                                        element.Click();
+                                    }
                             }
 
                             session.FindElementByName("Continue >>").Click();

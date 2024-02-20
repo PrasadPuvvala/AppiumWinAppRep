@@ -1,89 +1,37 @@
 ﻿using AppiumWinApp;
 using AppiumWinApp.PageFactory;
+using AppiumWinApp.StepDefinitions;
 using AventStack.ExtentReports;
-using AventStack.ExtentReports.Model;
 using AventStack.ExtentReports.Reporter;
-using AventStack.ExtentReports.Reporter.Configuration;
-using com.sun.org.apache.xml.@internal.resolver.helpers;
-using com.sun.org.glassfish.external.statistics.annotations;
-using com.sun.xml.@internal.bind.v2.model.core;
-using com.sun.xml.@internal.ws.api.server;
-using IronPdf;
-using java.awt;
-using java.awt;
-using java.io;
-using java.util;
-using javax.print.attribute.standard;
-using javax.swing;
-using jdk.nashorn.@internal.ir.annotations;
-using Microsoft.Build.Tasks;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 //using java.io;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using NUnit.Framework;
-using OfficeOpenXml.Drawing.Slicer.Style;
-using OpenQA.Selenium;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.iOS;
-using OpenQA.Selenium.Appium.iOS;
 using OpenQA.Selenium.Appium.Windows;
-using OpenQA.Selenium.Appium.Windows;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium.Support.UI;
-using org.w3c.dom.css;
-using RazorEngine.Compilation.ImpromptuInterface.Optimization;
-using sun.management.counter;
-using sun.tools.java;
-using System;
-using System;
 using System;
 using System.Collections.Generic;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
 //using Console = System.Console;
 using System.IO;
 using System.Linq;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading;
-using System.Windows;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow;
-using TestStack.BDDfy.Reporters.Html;
-using WindowsInput;
 using WindowsInput;
 using WindowsInput.Native;
-using WindowsInput.Native;
-using Xamarin.Forms;
 using Xamarin.Forms;
 using Console = System.Console;
 using Environment = System.Environment;
 using File = System.IO.File;
-using System.Threading.Tasks;
-using OfficeOpenXml.ConditionalFormatting;
-using Newtonsoft.Json.Linq;
-using Azure;
-using System.Configuration;
-using System.Xml.Linq;
-using Microsoft.Extensions.Configuration;
-using com.sun.tools.@internal.xjc.reader;
 
 namespace MyNamespace
 {
@@ -122,6 +70,7 @@ namespace MyNamespace
         }
 
 
+
         [BeforeFeature]
 
         public static void beforeFeature()
@@ -133,6 +82,9 @@ namespace MyNamespace
             builder.AddJsonFile(configsettingpath);
             IConfigurationRoot configuration = builder.Build();
             configuration.Bind(config);
+
+            FeatureContext.Current["config"] = config;
+
             Console.WriteLine("This is BeforeFetaure method");
             htmlReporter = new ExtentHtmlReporter(textDir + "\\report.html");
             htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
@@ -144,12 +96,6 @@ namespace MyNamespace
             ModuleFunctions.callbyextentreport(extent);
             ModuleFunctions.callbyAlgoTestLabVariables(config);
 
-            /*Launch WinApp Driver*/
-
-
-            //Process winApp = new Process();
-            //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
-            //winApp.Start();
 
             /* Reading CSV file to get device names */
 
@@ -279,10 +225,22 @@ namespace MyNamespace
         public static void BeforeScenario()
 
         {
+            /*Launch WinApp Driver*/
+
+
+            //Process winApp = new Process();
+            //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+            //winApp.Start();
+
+            ProcessStartInfo psi = new ProcessStartInfo(config.TestEnvironment.WinAppDriverPath);
+            psi.UseShellExecute = true;
+            psi.Verb = "runas"; // run as administrator
+            Process.Start(psi);
+
             string test1 = ScenarioContext.Current.ScenarioInfo.Title;
 
             test = extent.CreateTest(test1.ToString());
-
+            ScenarioContext.Current["extentTest"] = test;
 
             //startWinappdriver();
 
@@ -312,7 +270,7 @@ namespace MyNamespace
             string test2 = ScenarioContext.Current.ScenarioInfo.Title;
             string pattern = @"Case ID (\d+)";
 
-            Match match = Regex.Match(test1, pattern);
+            Match match = Regex.Match(test2, pattern);
             string testcaseID = "";
 
             if (match.Success)
@@ -398,6 +356,7 @@ namespace MyNamespace
 
         [Then(@"\[done]")]
         public void ThenDone()
+
         {
 
             //stopWinappdriver();
@@ -532,6 +491,7 @@ namespace MyNamespace
             processKill("Camelot.SystemInfobar");
             processKill("Lucan.App.UI");
             processKill("StorageLayoutViewer");
+            processKill("WinAppDriver.exe");
         }
 
         public void processKill(string name)
@@ -561,9 +521,9 @@ namespace MyNamespace
         }
 
 
-            /** This is used for launching the FDTS
-              * Passes the HI Serial number
-              * perfrom Flashing and close the FDTS **/
+        /** This is used for launching the FDTS
+          * Passes the HI Serial number
+          * perfrom Flashing and close the FDTS **/
 
 
         [Given(@"Launch FDTS WorkFlow And Flash Device ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""")]
@@ -571,7 +531,7 @@ namespace MyNamespace
         {
             Console.WriteLine("This is Given method");
 
-
+             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             /** Socket Launching to pass commands for D2 and D3 **/
 
             try
@@ -593,32 +553,34 @@ namespace MyNamespace
 
             /** FDTS Launching **/
 
-            try
-            {
-                session = ModuleFunctions.launchApp(textDir + "\\LaunchFDTS.bat", textDir);
+            //try
+            //{
+            //    session = ModuleFunctions.launchApp(textDir + "\\LaunchFDTS.bat", textDir);
 
-            }
-            catch (Exception e)
-            {
+            //}
+            //catch (Exception e)
+            //{
 
-                Console.WriteLine(e);
-            }
+            //    Console.WriteLine(e);
+            //}
 
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             FunctionLibrary lib = new FunctionLibrary();
-            ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe";
-            session = ModuleFunctions.sessionInitialize1("C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
+
+            //ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe";
+
+            session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
             Thread.Sleep(2000);
             DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
+            appCapabilities.SetCapability("app", config.ApplicationPath.FDTSAppPath);
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
             Thread.Sleep(8000);
-            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
 
-            test.Log(Status.Pass, "Test Work Flow launched successfully");
+            stepName.Log(Status.Pass, "Test Work Flow launched successfully");
 
             try
             {
@@ -833,19 +795,19 @@ namespace MyNamespace
 
                 if (computer_name.Equals("FSWIRAY80") && computer_name.Equals("FSWIRAY112"))
                 {
-                    session = ModuleFunctions.sessionInitialize1("C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
+                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
                 }
 
                 else
                 {
-                    session = ModuleFunctions.sessionInitialize1("C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
+                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
                 }
 
                 try
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
                     session.SwitchTo().ActiveElement();
-                    if (device.Contains("RT") || device.Contains("NX") && device.Contains("C"))
+                    if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") && device.Contains("C"))
                     {
                         session.SwitchTo().ActiveElement();
                         lib.waitUntilElementExists(session, "testParameter-Multiple-BatteryType", 1);
@@ -931,7 +893,7 @@ namespace MyNamespace
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(2000);
 
-                test.Log(Status.Pass, "Flashing is started for Device" + devName);
+                stepName.Log(Status.Pass, "Flashing is started for Device" + devName);
 
                 /** To handle Optimizeed window and Click on Continue **/
 
@@ -995,8 +957,8 @@ namespace MyNamespace
                     {
                         session = FunctionLibrary.clickOnCloseTestFlow(session, "Test Execution");
                         session = lib.waitForElementToBeClickable(session, "Close");
-                        test.Pass("Succesfully Flashed");
-                        test.Info("Device: " + devName + " flashed");
+                    stepName.Pass("Succesfully Flashed");
+                    stepName.Info("Device: " + devName + " flashed");
                     }                 
                }
 
@@ -1005,7 +967,7 @@ namespace MyNamespace
                 if (computer_name.Equals("UKBRAHPF2M76W6 || FSWIRAY112"))
 
                 {
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Camelot\\TestRuntimePC\\Camelot.TestRuntimePC.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\TestRuntimePC");
+                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.TestRuntimePC, config.workingdirectory.TestRuntime);
                     session = lib.waitForElementToBeClickable(session, "Close");
                 }
 
@@ -1013,12 +975,12 @@ namespace MyNamespace
 
                 if (computer_name.Equals("FSWIRAY80 || FSWIRAY112 || UKBRAHPF2M76W6"))
                 {
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
+                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
                 }
 
                 else
                 {
-                    session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
+                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
                 }
             }
             catch (Exception e) { }
@@ -1070,12 +1032,12 @@ namespace MyNamespace
             {
                 if (line.Contains(text))
                 {
-                    //test.Log(Status.Fail, line);
+                    //stepName.Log(Status.Fail, line);
                     break;
                 }
                 else
                 {
-                    test.Log(Status.Pass, "No Errors found in the log file while flashing");
+                    stepName.Log(Status.Pass, "No Errors found in the log file while flashing");
                 }
                 counter++;
             }
@@ -1097,11 +1059,13 @@ namespace MyNamespace
         {
             string devName = device;
             FunctionLibrary lib = new FunctionLibrary();
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (devName.Contains("RT") || devName.Contains("RU") || devName.Contains("NX"))
             {
                 Console.WriteLine("This is When method");
-                test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
 
                 try
                 {
@@ -1118,7 +1082,7 @@ namespace MyNamespace
                     }
 
 
-                    else if( side.Equals("Cdevice"))
+                    else if (side.Equals("Cdevice"))
                     {
                         ModuleFunctions.socketC(session, test, device);
                         Thread.Sleep(2000);
@@ -1131,22 +1095,22 @@ namespace MyNamespace
                 {
 
 
-                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                    //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                     Thread.Sleep(2000);
                     DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
                     appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     //Thread.Sleep(10000);
                     session.Manage().Window.Maximize();
                     var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
                     var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                     var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-                    test.Log(Status.Pass, "FSW is launched successfully");
+                    stepName.Log(Status.Pass, "FSW is launched successfully");
 
                     int counter = 0;
                     string PatientName = null;
@@ -1170,18 +1134,18 @@ namespace MyNamespace
 
                     Thread.Sleep(8000);
                     lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
-                    test.Pass("Patient is clicked");
+                    stepName.Pass("Patient is clicked");
                     Thread.Sleep(10000);
                     session.Close();
-                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                    //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
                     appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
                     appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(5000);
                     lib.clickOnAutomationName(session, "Assign Instruments");
                     session.FindElementByName("Back").Click();
@@ -1193,8 +1157,10 @@ namespace MyNamespace
 
                     session.FindElementByName("Noahlink Wireless").Click();
                     lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
-                    Thread.Sleep(8000);
-                    
+
+
+                    Thread.Sleep(13000);
+
                     try
 
                     {
@@ -1220,8 +1186,9 @@ namespace MyNamespace
                                 if (S.Contains(DeviceNo) && S.Contains("Assign Left"))
 
                                 {
+                                    value.Text.Contains("Assign Left");
 
-                                    value.Click();
+                                    // value.Click();
 
                                     value.FindElementByName("Assign Left").Click();
 
@@ -1235,7 +1202,7 @@ namespace MyNamespace
 
                     }
 
-                    catch (Exception e)
+                    catch (Exception)
 
                     {
                         bool deviceFound = false;
@@ -1291,11 +1258,10 @@ namespace MyNamespace
                                             // Ensure it contains "Assign Left"
 
                                             if (S.Contains("Assign Left"))
-
                                             {
 
                                                 value.Click();
-
+                                                value.FindElementByName("Assign Left").Click();
                                                 deviceFound = true;
 
                                                 break;
@@ -1412,8 +1378,8 @@ namespace MyNamespace
 
                 }
 
-                catch (Exception ex) 
-                
+                catch (Exception)
+
                 {
 
                     try
@@ -1427,9 +1393,9 @@ namespace MyNamespace
                     catch
 
                     {
-                    lib.processKill("SmartFitSA");
+                        lib.processKill("SmartFitSA");
                     }
-                    
+
 
 
                     try
@@ -1449,22 +1415,22 @@ namespace MyNamespace
                     catch (Exception) { }
 
 
-                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                    //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                     Thread.Sleep(2000);
                     DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
                     appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
                     session.Manage().Window.Maximize();
                     var wait = new WebDriverWait(session, TimeSpan.FromSeconds(60));
                     var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                     var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-                    test.Log(Status.Pass, "FSW is launched successfully");
+                    stepName.Log(Status.Pass, "FSW is launched successfully");
 
                     int counter = 0;
                     string PatientName = null;
@@ -1488,18 +1454,18 @@ namespace MyNamespace
 
                     Thread.Sleep(8000);
                     lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
-                    test.Pass("Patient is clicked");
+                    stepName.Pass("Patient is clicked");
                     Thread.Sleep(10000);
                     session.Close();
-                    ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                    //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
                     appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", ApplicationPath);
+                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
                     appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
 
                     session.FindElementByName("Back").Click();
@@ -1536,7 +1502,7 @@ namespace MyNamespace
                             }
                         }
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         lib.clickOnAutomationName(session, "Assign Instruments");
                         Thread.Sleep(5000);
@@ -1571,7 +1537,7 @@ namespace MyNamespace
 
                 }
 
-                finally {  }
+                finally { }
 
 
                 /** Clicks on back button **/
@@ -1649,23 +1615,24 @@ namespace MyNamespace
             if (devName.Contains("RE961-DRWC"))
             {
                 Console.WriteLine("This is When method");
-                test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
                 appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
                 var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                 var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-                test.Log(Status.Pass, "FSW is launched successfully");
+                stepName.Log(Status.Pass, "FSW is launched successfully");
 
                 int counter = 0;
                 string PatientName = null;
@@ -1689,20 +1656,20 @@ namespace MyNamespace
                 Thread.Sleep(8000);
                 lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
 
-                test.Pass("Patient is clicked");
+                stepName.Pass("Patient is clicked");
 
                 Thread.Sleep(10000);
                 session.Close();
 
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
                 appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
                 appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
 
                 /**   clicks the back button, selects the Speed Link and then clicks "connect" **/
@@ -1716,7 +1683,7 @@ namespace MyNamespace
                     session.FindElementByName("Speedlink").Click();
                     lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
                 }
-                catch(Exception)
+                catch (Exception)
                 { }
             }
 
@@ -1724,25 +1691,26 @@ namespace MyNamespace
             else if (devName.Contains("LT") || devName.Contains("RE"))
             {
                 Console.WriteLine("This is When method");
-                
-                test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
+                stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
                 appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
                 var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                 var text_Button = session.FindElementsByClassName("ListBoxItem");
-                
-                test.Log(Status.Pass, "FSW is launched successfully");
+
+                stepName.Log(Status.Pass, "FSW is launched successfully");
 
                 int counter = 0;
                 string PatientName = null;
@@ -1766,31 +1734,31 @@ namespace MyNamespace
                 Thread.Sleep(8000);
 
                 lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
-                test.Pass("Patient is clicked");
+                stepName.Pass("Patient is clicked");
                 Thread.Sleep(10000);
                 session.Close();
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
                 appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
                 appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
 
                 try
 
                 {
                     lib.clickOnElementWithIdonly(session, "ConnectionAutomationIds.ConnectAction");
-                    test.Pass("Connect button is clicked");
+                    stepName.Pass("Connect button is clicked");
                 }
 
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine(e.Message);
-                    test.Fail(e.Message);
+
+
                 }
 
                 Thread.Sleep(10000);
@@ -1807,13 +1775,13 @@ namespace MyNamespace
                     session.FindElementByName("Speedlink").Click();
                     lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
                 }
-                catch(Exception)
+                catch (Exception)
                 { }
 
             }
 
             Thread.Sleep(10000);
-        
+
             int buttonCount = 0;
             try
             {
@@ -1827,7 +1795,7 @@ namespace MyNamespace
                     if (buttonCount >= 1)
                     {
                         session.SwitchTo().ActiveElement();
-                        session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", test);
+                        session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
                         try
                         {
                             session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Click();
@@ -1836,17 +1804,17 @@ namespace MyNamespace
                         }
                         catch
                         {
-                            
+
                         }
 
                     }
 
-                    buttonCount = buttonCount + 1;                  
+                    buttonCount = buttonCount + 1;
 
                 } while (session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Enabled);
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
                 Thread.Sleep(4000);
 
@@ -1856,12 +1824,12 @@ namespace MyNamespace
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+
                 }
 
                 try
                 {
-                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");                   
+                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");
 
                     int increment = 0;
                     int stepIncrement = 0;
@@ -1888,7 +1856,7 @@ namespace MyNamespace
                         {
                         }
 
-                        test.Pass("Reset is successfully done");
+                        stepName.Pass("Reset is successfully done");
                         Thread.Sleep(2000);
                         lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
 
@@ -1923,7 +1891,7 @@ namespace MyNamespace
                         {
                         }
 
-                        test.Pass("Reset is successfully done");
+                        stepName.Pass("Reset is successfully done");
 
                         Thread.Sleep(2000);
                         lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
@@ -1942,83 +1910,83 @@ namespace MyNamespace
                     do
                     {
                         lib.functionWaitForId(session, "FittingAutomationIds.GainAutomationIds.AdjustmentItemsAutomationIds.Increase");
-                        
+
                         increment = increment + 1;
-                        test.Pass("Increment Gain is clicked for :" + increment + " times");
+                        stepName.Pass("Increment Gain is clicked for :" + increment + " times");
                         Thread.Sleep(2000);
                     } while (increment <= stepIncrement);
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine(ex);
                 }
 
-                try
-                {
-                    Thread.Sleep(10000);
-                    lib.clickOnElementWithIdonly(session, "FittingAutomationIds.SaveAction");
-
-                    /** Clicks on "Skip" Button **/
 
                     try
                     {
-                        Thread.Sleep(2000);
-                        lib.clickOnElementWithIdonly(session, "SkipButton");
+                        Thread.Sleep(10000);
+                        lib.clickOnElementWithIdonly(session, "FittingAutomationIds.SaveAction");
+
+                        /** Clicks on "Skip" Button **/
+
+                        try
+                        {
+                            Thread.Sleep(2000);
+                            lib.clickOnElementWithIdonly(session, "SkipButton");
+                        }
+                        catch (Exception )
+                        {
+                            lib.clickOnElementWithIdonly(session, "PART_Cancel");
+                        }
+
+                        stepName.Pass("Save is successfully done and Close the FSW");
+
                     }
-                    catch (Exception e1)
+                    catch (Exception skip)
+
                     {
-                        lib.clickOnElementWithIdonly(session, "PART_Cancel");
+                        Console.WriteLine(skip);
                     }
 
-                    test.Pass("Save is successfully done and Close the FSW");
+                    lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
 
-                }
-                catch (Exception skip)
+                    /** Exit the FSW **/
 
-                {
-                    Console.WriteLine(skip);
-                }
+                    stepName.Pass("Click on FSW Exit button");
 
-                lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+                    Thread.Sleep(8000);
 
-                /** Exit the FSW **/
+                    lib.processKill("SmartFitSA");
 
-                test.Pass("Click on FSW Exit button");
-
-                Thread.Sleep(8000);
-
-                lib.processKill("SmartFitSA");
-
+                
             }
         }
-
         /** Used to clear exisisting 'capture' and 'restore' reports in specified path **/
 
         [When(@"\[Cleaning up Capture and Restore Reports Before Launch SandR]")]
         public void WhenCleaningUpCaptureAndRestoreReportsBeforeLaunchSandR()
         {
-
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             try
             {
                 System.IO.Directory.Delete(@"C:\CaptureBase\Reports", true);
-                test.Pass("All files are deleted");
+                stepName.Pass("All files are deleted");
             }
             catch (Exception e)
             {
-                test.Fail("No files found to be deleted");
+                stepName.Info("No files found to be deleted");
             }
 
             try
             {
                 System.IO.Directory.Delete(@"C:\Users\Public\Documents\Camelot\Logs", true);
-                test.Pass("All Camelot log files are deleted");
+                stepName.Pass("All Camelot log files are deleted");
             }
             catch (Exception e)
             {
-                test.Fail("No files found to be deleted");
+                stepName.Info("No files found to be deleted");
             }
         }
 
@@ -2029,7 +1997,8 @@ namespace MyNamespace
         public void WhenLaunchSandR(string device, string DeviceNo)
         
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             FunctionLibrary lib = new FunctionLibrary();
 
@@ -2043,23 +2012,25 @@ namespace MyNamespace
             }
             catch { }
 
-            Thread.Sleep(10000);
+            //Thread.Sleep(10000);
 
-            try
-            {
-                session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
+            //try
+            //{
+            //    session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-           
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //}
+
             Thread.Sleep(5000);
 
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             //Thread.Sleep(10000);
-            test.Log(Status.Pass, "S&R Tool launched successfully");
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
@@ -2068,7 +2039,7 @@ namespace MyNamespace
                 /** Clciks on "Discover" button **/
 
                 session.FindElementByName("Discover").Click();
-                test.Log(Status.Pass, "Clicked on Discover.");
+                stepName.Log(Status.Pass, "Clicked on Discover.");
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
 
@@ -2109,11 +2080,11 @@ namespace MyNamespace
 
 
 
-                test.Log(Status.Pass, "Clicked on Search");
+                stepName.Log(Status.Pass, "Clicked on Search");
 
                 session = lib.waitForElement(session, "Model Name");
 
-                test.Log(Status.Pass, "Dook2 Dev");
+                stepName.Log(Status.Pass, "Dook2 Dev");
             }
 
             
@@ -2130,15 +2101,15 @@ namespace MyNamespace
         [When(@"\[Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]")]
         public void WhenGoToDeviceInfoTabAndCaptureDeviceInfoInExcelThenVerifyTheDeviceInformationIsShownCorrectly()
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             /** Getting Device Info from Info tab **/
 
             FunctionLibrary lib = new FunctionLibrary();
             lib = new FunctionLibrary();
             lib.getDeviceInfo(session);
 
-            test.Log(Status.Info, "Device information is captured in excel file");
+            stepName.Log(Status.Info, "Device information is captured in excel file");
         }
 
 
@@ -2152,7 +2123,8 @@ namespace MyNamespace
         [Then(@"\[Compare firmware version is upgraded successfully ""([^""]*)""]")]
         public void ThenCompareFirmwareVersionIsUpgradedSuccessfully(string device)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(2000);
         
@@ -2162,7 +2134,7 @@ namespace MyNamespace
             string Dooku3PBTE = "[7].42.1.1 (Dooku3)";
             string Dooku3Rechargeable = "[7].42.1.1 (Dooku3)";
 
-            if (device.Contains("RT962-DRW") || device.Contains("RT961-DRWC") || device.Contains("RU961-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC") || device.Contains("NX"))
+            if (device.Contains("RT962-DRW") || device.Contains("RT960-DRWC") || device.Contains("RU960-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC") || device.Contains("NX"))
             {
                 session.FindElementByName("Device Info").Click();
                 Thread.Sleep(2000);
@@ -2178,41 +2150,41 @@ namespace MyNamespace
                 {
 
                     case string _ when version.Text.Equals(Dooku2nonRechargeable) || version.Text.Equals(Dooku2Rechargeable) || version.Text.Equals(Dooku3PBTE) || version.Text.Equals(Dooku1nonRechargeble):
-                        test.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text);
+                        stepName.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RT962-DRW"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku2nonRechargeable + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku2nonRechargeable + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RE962-DRW"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku1nonRechargeble + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku1nonRechargeble + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RT961-DRWC"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku2Rechargeable + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku2Rechargeable + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RU961-DRWC"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3Rechargeable + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3Rechargeable + " But Current Firmware Version is: " + version.Text);
                         break;
 
                     case string _ when  device.Contains("RU988-DWC"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3PBTE + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3PBTE + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     default:
-                        test.Log(Status.Fail, "Unknown Firmware Version: " + version.Text);
+                        stepName.Log(Status.Fail, "Unknown Firmware Version: " + version.Text);
                         break;
                 
                 
@@ -2234,7 +2206,8 @@ namespace MyNamespace
         [Then(@"\[Compare firmware version is downgraded successfully ""([^""]*)""]")]
         public void ThenCompareFirmwareVersionIsDowngradedSuccessfully(string device)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             
             Thread.Sleep(2000);
@@ -2261,30 +2234,30 @@ namespace MyNamespace
 
                     case string _ when version.Text.Equals(Dooku3nonRechargeable) || version.Text.Equals(Dooku3Rechargeable) || version.Text.Equals(Dooku1nonRechargeble):
 
-                        test.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text);
+                        stepName.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RE962-DRW"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku1nonRechargeble + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku1nonRechargeble + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RT961-DRWC"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3nonRechargeable + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3nonRechargeable + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     case string _ when device.Contains("RU988-DWC"):
 
-                        test.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3Rechargeable + " But Current Firmware Version is: " + version.Text);
+                        stepName.Log(Status.Fail, "Expected Firmware Version is: " + Dooku3Rechargeable + " But Current Firmware Version is: " + version.Text);
                         break;
 
 
                     default:
-                        test.Log(Status.Fail, "Unknown Firmware Version: " + version.Text);
+                        stepName.Log(Status.Fail, "Unknown Firmware Version: " + version.Text);
                         break;
 
                 }
@@ -2302,11 +2275,12 @@ namespace MyNamespace
         [When(@"\[Come back to Settings and wait till controls enabled]")]
         public void WhenComeBackToSettingsAndWaitTillControlsEnabled()
          {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(2000);
             session.FindElementByName("Services").Click();
-            test.Log(Status.Pass, "Clicked on Services.");
+            stepName.Log(Status.Pass, "Clicked on Services.");
         }
 
 
@@ -2320,9 +2294,10 @@ namespace MyNamespace
         public async Task GivenDownloadAndVerifyAzureStorageFilesAsync(string scenarioTitle, string DeviceNo)
         {
             //var Sandclose = session.FindElementByAccessibilityId("PART_Close");
-           // Sandclose.Click();
+            // Sandclose.Click();
 
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             // Define the connection string
             string connectionString = "AccountName=camelotwesteudev;AccountKey=ylFzkolO9hUoR63VeJVr9On4QgnrEIHJPUdv8n1V2One8/7LdnZHfTYLJMVf7Pt7B9EVUIF1Xg/iXxoorXoruw==;EndpointSuffix=core.windows.net;DefaultEndpointsProtocol=https;";
 
@@ -2391,16 +2366,16 @@ namespace MyNamespace
                     matchingBlob.DownloadToStream(fileStream);
                 }
 
-                    test.Log(Status.Pass, "Downloaded the file for the current system date to: {destinationFilePath}");
+                    stepName.Log(Status.Pass, "Downloaded the file for the current system date to: {destinationFilePath}");
 
                 if (containerName == "lucan-hiservicerecords")
                 {
-                    test.Log(Status.Pass, "Cloud service record is uploaded under today’s date");
+                    stepName.Log(Status.Pass, "Cloud service record is uploaded under today’s date");
                 }
             }
             else
             {
-                test.Log(Status.Fail, "No matching files found for the specified serial number or date in the " + scenarioTitle + " container.");
+                stepName.Log(Status.Fail, "No matching files found for the specified serial number or date in the " + scenarioTitle + " container.");
             }
         
         }
@@ -2415,7 +2390,8 @@ namespace MyNamespace
         [When(@"\[Clicks on disconnect and verify device information is cleared]")]
         public void ClicksOnDisconnectAndVerifyDeviceInformationIsCleared()
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             lib = new FunctionLibrary();
             session = lib.waitForElement(session, "Connect to hearing instrument automatically");
@@ -2423,7 +2399,7 @@ namespace MyNamespace
             session.FindElementByName("Disconnect").Click();
             lib.getDeviceInfo(session);
 
-            test.Log(Status.Pass, "Clicked on Disconnect.");
+            stepName.Log(Status.Pass, "Clicked on Disconnect.");
         }
 
 
@@ -2437,13 +2413,14 @@ namespace MyNamespace
         [When(@"\[Perform Capture""([^""]*)""]")]
         public void WhenPerformCapture(string device)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             FunctionLibrary lib = new FunctionLibrary();
 
             session = lib.functionWaitForName(session, "Capture");
 
-            test.Log(Status.Pass, "Clicked on Capture.");
+            stepName.Log(Status.Pass, "Clicked on Capture.");
 
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
             lib.clickOnElementWithIdonly(session, "PasswordBox");
@@ -2464,7 +2441,7 @@ namespace MyNamespace
             Thread.Sleep(2000);
             session.FindElementByName("Login").Click();
             session = lib.functionWaitForName(session, "CAPTURE");
-            ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
             var btnClose = session.FindElementByAccessibilityId("PART_Close");
             btnClose.Click();
@@ -2492,13 +2469,14 @@ namespace MyNamespace
         public void WhenPerformCaptureWithListeningTestSettings()
 
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             FunctionLibrary lib = new FunctionLibrary();
 
             session = lib.functionWaitForName(session, "Capture");
 
-            test.Log(Status.Pass, "Clicked on Capture.");
+            stepName.Log(Status.Pass, "Clicked on Capture.");
 
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
             lib.clickOnElementWithIdonly(session, "PasswordBox");
@@ -2527,7 +2505,7 @@ namespace MyNamespace
                 if (session.FindElementByClassName("CheckBox").Selected)
                 {
                     session = lib.functionWaitForName(session, "CAPTURE");
-                    ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+                    ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
                     session = lib.waitForElement(session, "OK");
                     session.Close();
                 }
@@ -2542,12 +2520,12 @@ namespace MyNamespace
                     Thread.Sleep(2000);
                     Thread.Sleep(2000);
                     session = lib.functionWaitForName(session, "CAPTURE");
-                    ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+                    ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
                     session = lib.waitForElement(session, "OK");
                     Thread.Sleep(4000);
 
                     session.FindElementByName("Services").Click();
-                    ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+                    ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
                     Thread.Sleep(4000);
                     session = lib.functionWaitForName(session, "Capture");
                     session = lib.functionWaitForName(session, "LOGIN REQUIRED");
@@ -2587,11 +2565,13 @@ namespace MyNamespace
         [When(@"\[Go to logs and verify capturing time]")]
         public void WhenGoToLogsAndVerifyCapturingTime()
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(4000);
             string path = (@"C:\Users\Public\Documents\Camelot\Logs\" + computer_name + "-" + user_name + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
-            lib.fileVerify(path, test, "Capturing the hearing");
+            lib.fileVerify(path, stepName, "Capturing the hearing");
             Thread.Sleep(2000);
             Thread.Sleep(2000);
             lib.processKill("msedge");
@@ -2609,15 +2589,15 @@ namespace MyNamespace
         [When(@"\[Launch algo and alter ADL value ""([^""]*)"" and ""([^""]*)""]")]
         public void WhenLaunchAlgoAndAlterADLValue(string device, string DeviceNo)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             /** Algo Tet Lab **/
 
-            test = extent.CreateTest("Test ALT WorkFlow");
+            stepName = extent.CreateTest("Test ALT WorkFlow");
 
-            test.Log(Status.Pass, "Altered value is 1");
+            stepName.Log(Status.Pass, "Altered value is 1");
 
-            ModuleFunctions.altTestLab(session, test, device, DeviceNo);
+            ModuleFunctions.altTestLab(session, stepName, device, DeviceNo);
             Thread.Sleep(2000);
         }
 
@@ -2633,9 +2613,10 @@ namespace MyNamespace
         public void WhenPerformRestoreWithAboveCapturedImage(string device, string DeviceNo)
 
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-            if(device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             {
                 ModuleFunctions.socketA(session, test, device);
             }
@@ -2655,9 +2636,11 @@ namespace MyNamespace
            
             Thread.Sleep(8000);
 
-            session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             
-            test.Log(Status.Pass, "S&R Tool launched successfully");
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
             
             Thread.Sleep(2000);
             session.FindElementByName("Device Info").Click();
@@ -2667,7 +2650,7 @@ namespace MyNamespace
             {
                 session.FindElementByName("Discover").Click();
 
-                test.Log(Status.Pass, "Clicked on Discover.");
+                stepName.Log(Status.Pass, "Clicked on Discover.");
 
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
@@ -2677,7 +2660,7 @@ namespace MyNamespace
                     session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceNo);
                     lib.functionWaitForName(session, "Search");
 
-                    test.Log(Status.Pass, "Clicked on Search");
+                    stepName.Log(Status.Pass, "Clicked on Search");
 
 
                     /** Finding the HI till Disconnect button on the display **/
@@ -2703,7 +2686,7 @@ namespace MyNamespace
 
                     session = lib.waitForElement(session, "Model Name");
 
-                    test.Log(Status.Pass, "Dook2 Dev");
+                    stepName.Log(Status.Pass, "Dook2 Dev");
                 }
 
                 catch (Exception ex)
@@ -2735,9 +2718,9 @@ namespace MyNamespace
             session = lib.functionWaitForName(session, "FIND");
             session = lib.waitForElement(session, "SELECT");
             session = lib.functionWaitForName(session, "RESTORE");
-            ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
-            test.Log(Status.Pass, "Restore is successful.");
+            stepName.Log(Status.Pass, "Restore is successful.");
             var btncls = session.FindElementByAccessibilityId("PART_Close");
             btncls.Click();
             Thread.Sleep(1000);
@@ -2749,10 +2732,14 @@ namespace MyNamespace
         [Then(@"\[Close SandR tool]")]
         public void ThenCloseSandRTool()
         {
-            ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             var btncls = session.FindElementByAccessibilityId("PART_Close");
             btncls.Click();
             Thread.Sleep(1000);
+
+            stepName.Log(Status.Pass, "S&R Tool is Closed Successful.");
+
         }
 
 
@@ -2764,11 +2751,12 @@ namespace MyNamespace
         [When(@"\[Launch algo lab and check the ADL value ""([^""]*)"" and ""([^""]*)""]")]
         public void WhenLaunchAlgoLabAndCheckTheADLValue(string device, string DeviceNo)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** Verify AlgoTest Lab **/
 
-            ModuleFunctions.checkADLValue(session, test, device, DeviceNo);
+            ModuleFunctions.checkADLValue(session, stepName, device, DeviceNo);
         }
 
 
@@ -2779,10 +2767,12 @@ namespace MyNamespace
         [Then(@"\[Launch FSW and check the added programs ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         public void ThenLaunchFSWAndCheckTheAddedPrograms(string device, string DeviceNo, string side)
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             Console.WriteLine("This is When method");
 
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+           // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
 
             FunctionLibrary lib = new FunctionLibrary();
 
@@ -2793,24 +2783,25 @@ namespace MyNamespace
 
                 Console.WriteLine("This is When method");
 
-                test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
 
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
                 var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                 var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-                test.Log(Status.Pass, "FSW is launched successfully");
+                stepName.Log(Status.Pass, "FSW is launched successfully");
 
                 int counter = 0;
                 string PatientName = null;
@@ -2834,21 +2825,21 @@ namespace MyNamespace
                 Thread.Sleep(8000);
                 lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
 
-                test.Pass("Patient is clicked");
+                stepName.Pass("Patient is clicked");
 
                 Thread.Sleep(10000);
                 session.Close();
 
                 /** To launch the return visit session **/
 
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                ///ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
                 appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
 
                 /** Clicks on "Back" button **/
@@ -2900,21 +2891,21 @@ namespace MyNamespace
 
             if (device.Contains("LT") || device.Contains("RE"))
             {
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
                 var div = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
                 var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-                test.Log(Status.Pass, "FSW is launched successfully");
+                stepName.Log(Status.Pass, "FSW is launched successfully");
 
                 int counter = 0;
                 string PatientName = null;
@@ -2938,34 +2929,34 @@ namespace MyNamespace
                 Thread.Sleep(4000);
                 lib.clickOnAutomationId(session, "Fit Patient", "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
 
-                test.Pass("Patient is clicked");
+                stepName.Pass("Patient is clicked");
 
                 Thread.Sleep(8000);
                 session.Close();
 
                 /** To launch the return visit session **/
 
-                ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
                 appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", ApplicationPath);
+                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
 
                 try
 
                 {
                     lib.clickOnElementWithIdonly(session, "ConnectionAutomationIds.ConnectAction");
-                    test.Pass("Connect button is clicked");
+                    stepName.Pass("Connect button is clicked");
                 }
 
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    test.Fail(e.Message);
+                    stepName.Fail(e.Message);
                 }
 
                 Thread.Sleep(10000);
@@ -3004,7 +2995,7 @@ namespace MyNamespace
                         if (buttonCount >= 1)
                         {
                             session.SwitchTo().ActiveElement();
-                            session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", test);
+                            session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
                             try
                             {
                                 session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Click();
@@ -3052,13 +3043,13 @@ namespace MyNamespace
                     if ((session.FindElementByAccessibilityId("PART_Items").Text.ToString()).Contains("All-Around"))
                     {
                         Console.WriteLine("After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
-                        test.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                         Assert.Pass();
                         session.CloseApp();
                     }
                     else
                     {
-                        test.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
 
                     }
                 }
@@ -3073,13 +3064,13 @@ namespace MyNamespace
                     if ((session.FindElementByAccessibilityId("PART_Items").Text.ToString()).Contains("All-Around"))
                     {
                         Console.WriteLine("After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
-                        test.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                         Assert.Pass();
                     }
 
                     else
                     {
-                        test.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                     }
                 }
                 catch (Exception ex)
@@ -3093,13 +3084,13 @@ namespace MyNamespace
 
                     {
                         Console.WriteLine("After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
-                        test.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                         Assert.Pass();
                     }
 
                     else
                     {
-                        test.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                     }
                 }
                 catch (Exception ex)
@@ -3113,13 +3104,13 @@ namespace MyNamespace
 
                     {
                         Console.WriteLine("After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
-                        test.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Pass, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                         Assert.Pass();
                     }
 
                     else
                     {
-                        test.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
+                        stepName.Log(Status.Fail, "After listening test setting Value is :" + session.FindElementByAccessibilityId("PART_Items").Text.ToString());
                     }
                 }
 
@@ -3146,7 +3137,7 @@ namespace MyNamespace
                     {
                     }
 
-                    test.Pass("Save is successfully done and Close the FSW");
+                    stepName.Pass("Save is successfully done and Close the FSW");
 
                 }
                 catch (Exception ex)
@@ -3164,13 +3155,13 @@ namespace MyNamespace
         [When(@"\[Go to log file for verifying Restore time]")]
         public void WhenGoToLogFileForVerifyingRestoreTime()
         {
-
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             Thread.Sleep(1000);
             string path = (@"C:\Users\Public\Documents\Camelot\Logs\" + computer_name + "-" + user_name + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
             FunctionLibrary lib = new FunctionLibrary();
-            lib.fileVerify(path, test, "Restoring the hearing");
+            lib.fileVerify(path, stepName, "Restoring the hearing");
         }
 
 
@@ -3179,8 +3170,8 @@ namespace MyNamespace
         [When(@"\[Open Capture and Restore report and log info in report]")]
         public void WhenOpenCaptureAndRestoreReportAndLogInfoInReport()
         {
-            test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
+            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** This is to check if Capture and Restore files are existing **/
 
@@ -3238,7 +3229,8 @@ namespace MyNamespace
                 Thread.Sleep(2000);
 
                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
                 if (device.Contains("RT"))
                 {
@@ -3324,7 +3316,23 @@ namespace MyNamespace
 
                 /**In order to passing the Date and Time in the Product Testdata **/
 
-                row.SendKeys("2022-08-01 12:45:54Z");
+                DateTimeOffset currentTime = DateTimeOffset.Now;
+                Console.WriteLine(currentTime);
+                DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
+                Console.WriteLine(tenDaysAgo);
+                string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
+                Console.WriteLine(formattedtenDaysAgo);
+                long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
+                Console.WriteLine(unixTimestamp);
+
+                //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
+                //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
+                //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
+                //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
+
+                row.SendKeys(formattedtenDaysAgo);
+
+                //row.SendKeys("2022-08-01 12:45:54Z");
                 var miniidentification = session.FindElementByName("_Write to");
                 miniidentification.Click();
                 Thread.Sleep(3000);
@@ -3338,12 +3346,12 @@ namespace MyNamespace
 
                 /** In order to passing the Unix time Stamp ID in the Miniidentification **/
 
-                row.SendKeys("1652118942");
+                row.SendKeys(unixTimestamp.ToString());
                 Thread.Sleep(2000);
                 min = session.FindElementByName("_Write to");
                 min.Click();
                 Thread.Sleep(3000);
-                test.Pass("Writing Presets is done successfully.");
+                stepName.Pass("Writing Presets is done successfully.");
             }
 
 
@@ -3353,7 +3361,8 @@ namespace MyNamespace
                 if (device.Contains("LT"))
 
                 {
-                    test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                    ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                    // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
                     FunctionLibrary lib = new FunctionLibrary();
                     InputSimulator sim = new InputSimulator();
 
@@ -3432,7 +3441,7 @@ namespace MyNamespace
 
                     session.Keyboard.PressKey(Keys.Enter);
 
-                    test.Log(Status.Pass, side + ": is selected");
+                    stepName.Log(Status.Pass, side + ": is selected");
 
                     lib.waitUntilElementExists(session, "File", 0);
                     Thread.Sleep(4000);              
@@ -3450,13 +3459,13 @@ namespace MyNamespace
                     if (computer_name.Equals("FSWIRAY80"))
                     {
                         var txt = session.FindElementsByName("3e900:004c ProductionTestData");
-                        test.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                        stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
 
                         foreach (var item in txt)
                         {
                             Console.WriteLine(item.GetAttribute("Name"));
                             item.Click();
-                            test.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
                         }
 
                         Thread.Sleep(2000);
@@ -3503,7 +3512,24 @@ namespace MyNamespace
                         Thread.Sleep(2000);
                         childTable[0].Clear();
                         Thread.Sleep(2000);
-                        childTable[0].SendKeys("2022-08-01 12:45:54Z");
+
+                        //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
+                        //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
+                        //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
+                        //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
+
+                        DateTimeOffset currentTime = DateTimeOffset.Now;
+                        Console.WriteLine(currentTime);
+                        DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
+                        Console.WriteLine(tenDaysAgo);
+                        string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
+                        Console.WriteLine(formattedtenDaysAgo);
+                        long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
+                        Console.WriteLine(unixTimestamp);
+
+                        childTable[0].SendKeys(formattedtenDaysAgo);
+
+                        //childTable[0].SendKeys("2022-08-01 12:45:54Z");
                         Thread.Sleep(2000);
                         txt[0].Click();
                         Thread.Sleep(4000);
@@ -3518,7 +3544,7 @@ namespace MyNamespace
                         {
                             Console.WriteLine(item.GetAttribute("Name"));
                             item.Click();
-                            test.Pass("2a000:0026 MiniIdentification is selected");
+                            stepName.Pass("2a000:0026 MiniIdentification is selected");
                         }
 
                         Thread.Sleep(2000);
@@ -3533,7 +3559,7 @@ namespace MyNamespace
                             Console.WriteLine("Index value :" + Counter + item.GetAttribute("Value"));
                             Console.WriteLine("Index value :" + Counter + item.GetAttribute("ControlType"));
                             Console.WriteLine("Child Table Value is " + item.GetAttribute("HelpText"));
-                            test.Log(Status.Pass, "Saved value for date +" + item.Text);
+                            stepName.Log(Status.Pass, "Saved value for date +" + item.Text);
                             Counter = Counter + 1;
                         }
 
@@ -3547,7 +3573,7 @@ namespace MyNamespace
                         Console.WriteLine(timeValue);
                         childTable[0].Clear();
                         Thread.Sleep(2000);
-                        childTable[0].SendKeys("1652118942");
+                        childTable[0].SendKeys(unixTimestamp.ToString());
                         Thread.Sleep(4000);
                         txt1[0].Click();
                         Thread.Sleep(4000);
@@ -3579,7 +3605,7 @@ namespace MyNamespace
 
                         catch (Exception e)
                         {
-                            test.Pass("Writing Presets is done successfully.");
+                            stepName.Pass("Writing Presets is done successfully.");
                         }
 
                         /** De select the check boxes  **/
@@ -3597,13 +3623,13 @@ namespace MyNamespace
                     {
                         var txt = session.FindElementsByName("3e900:004c ProductionTestData");
 
-                        test.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                        stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
 
                         foreach (var item in txt)
                         {
                             Console.WriteLine(item.GetAttribute("Name"));
                             item.Click();
-                            test.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
                         }
 
                         Thread.Sleep(2000);
@@ -3613,7 +3639,24 @@ namespace MyNamespace
                         data.Click();
                         var row = session.FindElementByName("Value Row 0");
                         row.Click();
-                        row.SendKeys("2022-08-01 12:45:54Z");
+
+                        //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
+                        //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
+                        //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
+                        //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
+
+                        DateTimeOffset currentTime = DateTimeOffset.Now;
+                        Console.WriteLine(currentTime);
+                        DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
+                        Console.WriteLine(tenDaysAgo);
+                        string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
+                        Console.WriteLine(formattedtenDaysAgo);
+                        long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
+                        Console.WriteLine(unixTimestamp);
+
+                        row.SendKeys(formattedtenDaysAgo);
+
+                        //row.SendKeys("2022-08-01 12:45:54Z");
                         var min = session.FindElementByName("2a000:0026 MiniIdentification");
                         min.Click();
                         Thread.Sleep(2000);
@@ -3621,7 +3664,7 @@ namespace MyNamespace
                         data.Click();
                         row = session.FindElementByName("Row 6");
                         row.Click();
-                        row.SendKeys("1652118942");
+                        row.SendKeys(unixTimestamp.ToString());
                         Thread.Sleep(2000);
                         lib.clickOnAutomationName(session, "File");
                         Thread.Sleep(4000);
@@ -3643,7 +3686,7 @@ namespace MyNamespace
 
                         catch (Exception e)
                         {
-                            test.Pass("Writing Presets is done successfully.");
+                            stepName.Pass("Writing Presets is done successfully.");
                         }
                     }
                 }
@@ -3656,15 +3699,17 @@ namespace MyNamespace
 
                     if (side.Equals("Left"))
                     {
-                        test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                        session= ModuleFunctions.storagelayoutD1(session, test, device, side);
+                        ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                        // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                        session = ModuleFunctions.storagelayoutD1(session, test, device, side);
                     }
 
 
                     else
                     {
-                        test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                        session= ModuleFunctions.storagelayoutD1(session, test, device, side);
+                        ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                        //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                        session = ModuleFunctions.storagelayoutD1(session, test, device, side);
                     }
                 }
             }
