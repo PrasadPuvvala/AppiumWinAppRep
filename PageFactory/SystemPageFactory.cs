@@ -31,12 +31,15 @@ namespace AppiumWinApp.PageFactory
         public static String textDir = Directory.GetCurrentDirectory();
 
 
-        public static void launchSystemSettings(String sideSelection,ExtentReports extent1)
+        
+       
+
+
+        public static void launchSystemSettings(String sideSelection,ExtentReports extent1, ExtentTest stepName)
         {
             extent = extent1;
-
-            test = extent.CreateTest("Launch System Setting window to change the side");
-
+            //test = extent1.CreateTest("Shiva");
+            // test = extent.CreateTest("Launch System Setting window to change the side");
 
             String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
             Thread.Sleep(2000);
@@ -49,10 +52,11 @@ namespace AppiumWinApp.PageFactory
             SystemConfigurationSettings.systemConfig(session);
             systemSettingsPage.changeChannel(session, sideSelection);
 
-            test.Log(Status.Pass, "Systems settings are set ");
+            stepName.Log(Status.Pass, "Systems settings are set ");
 
         }
 
+        
         public partial class testElements : SystemPageFactory
         {
             public static WindowsElement password = session.FindElementByAccessibilityId("textBoxPassword");

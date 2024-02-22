@@ -128,7 +128,7 @@ namespace AppiumWinApp
 
         public void TestWorkFlowTest()
         {
-
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             test = extent.CreateTest("Testing FDTS WorkFlow");
 
             FunctionLibrary lib = new FunctionLibrary();
@@ -146,7 +146,7 @@ namespace AppiumWinApp
             Thread.Sleep(10000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
-            test.Log(Status.Pass, "Test Work Flow launched successfully");
+            stepName.Log(Status.Pass, "Test Work Flow launched successfully");
 
             try
             {
@@ -242,7 +242,7 @@ namespace AppiumWinApp
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(2000);
 
-                test.Log(Status.Pass, "Flashing is started for Device" + devName);
+                stepName.Log(Status.Pass, "Flashing is started for Device" + devName);
 
 
                 // session.FindElementByName("Full").Click();
@@ -447,7 +447,7 @@ namespace AppiumWinApp
         public void launchFSW()
         {
             test = extent.CreateTest("Fitting HI through FSW");
-
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             
 
@@ -471,7 +471,7 @@ namespace AppiumWinApp
 
             var text_Button = session.FindElementsByClassName("ListBoxItem");
 
-            test.Log(Status.Pass, "FSW is launched successfully");
+            stepName.Log(Status.Pass, "FSW is launched successfully");
 
             // string text2 = text_Button[1].GetAttribute("AutomationId");
             int counter = 0;
@@ -580,7 +580,7 @@ namespace AppiumWinApp
                 // Thread.Sleep(4000);
                 /*Click on Fit Patient in Profile screen */
 
-                test.Log(Status.Info,"No Intermediate Windows popped up");
+                stepName.Log(Status.Info,"No Intermediate Windows popped up");
                 try
                 {
                     lib.clickOnElementWithIdonly(session, "PatientAutomationIds.ProfileAutomationIds.FitPatientAction");
@@ -653,7 +653,7 @@ namespace AppiumWinApp
         public void SandRTest()
         {
             //   ModuleFunctions.verifyIfReportsExisted(test);
-
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             test = extent.CreateTest("S&R WorkFlow");
 
             try
@@ -684,7 +684,7 @@ namespace AppiumWinApp
 
             session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
 
-            test.Log(Status.Pass, "S&R Tool launched successfully");
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
@@ -769,10 +769,10 @@ namespace AppiumWinApp
 
             /* Capture SERVICES by Surya */
             session.FindElementByName("Services").Click();
-            test.Log(Status.Pass, "Clicked on Services.");
+            stepName.Log(Status.Pass, "Clicked on Services.");
 
             session = lib.functionWaitForName(session, "Capture");
-            test.Log(Status.Pass, "Clicked on Capture.");
+            stepName.Log(Status.Pass, "Clicked on Capture.");
 
 
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
@@ -820,7 +820,7 @@ namespace AppiumWinApp
 
             session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
 
-            test.Log(Status.Pass, "S&R Tool launched successfully");
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
             session.FindElementByName("Services").Click();
@@ -849,7 +849,7 @@ namespace AppiumWinApp
 
             ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
             session = lib.waitForElement(session, "OK");
-            test.Log(Status.Pass, "Restore is successful.");
+            stepName.Log(Status.Pass, "Restore is successful.");
             var btncls = session.FindElementByAccessibilityId("PART_Close");
             btncls.Click();
 
@@ -894,7 +894,7 @@ namespace AppiumWinApp
         public void storageLayOut()
         {
             test = extent.CreateTest("Verify Storage Layout");
-
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             FunctionLibrary lib = new FunctionLibrary();
             InputSimulator sim = new InputSimulator();
@@ -920,12 +920,12 @@ namespace AppiumWinApp
             Thread.Sleep(2000);
             var txt = session.FindElementsByName("3e900:004c ProductionTestData");
 
-            test.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
             foreach (var item in txt)
             {
                 Console.WriteLine(item.GetAttribute("Name"));
                 item.Click();
-                test.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
 
             }
 
@@ -1032,7 +1032,7 @@ namespace AppiumWinApp
                 Console.WriteLine("Index value :" + Counter + item.GetAttribute("Value"));
                 Console.WriteLine("Index value :" + Counter + item.GetAttribute("ControlType"));
                 Console.WriteLine("Child Table Value is " + item.GetAttribute("HelpText"));
-                test.Log(Status.Pass,"Saved value for date +" + item.Text);
+                stepName.Log(Status.Pass,"Saved value for date +" + item.Text);
                 Counter = Counter + 1;
             }
 
@@ -1201,7 +1201,7 @@ namespace AppiumWinApp
         {
             string dir = "C:\\CaptureBase\\Reports";
             string filename = null;
-
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             string today = DateTime.Now.ToString("yyyy-MM-dd");
 
             string[] files = Directory.GetFiles(dir + "\\" + today);
@@ -1217,8 +1217,8 @@ namespace AppiumWinApp
                 {
                     case "capture report":
 
-                        test.Log(Status.Pass, "!!!!****Capture report generated****!!!!");
-                        test.Log(Status.Pass, "File Name :" + filename);
+                        stepName.Log(Status.Pass, "!!!!****Capture report generated****!!!!");
+                        stepName.Log(Status.Pass, "File Name :" + filename);
                         // Extracting Image and Text content from Pdf Documents
 
                         // open a 128 bit encrypted PDF
@@ -1257,7 +1257,7 @@ namespace AppiumWinApp
 
                             foreach (String s in lableNames)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
                             }
 
                             //This is to write lable values in the report
@@ -1268,7 +1268,7 @@ namespace AppiumWinApp
 
                             foreach (String s in reportValues)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
 
                             }
 
@@ -1279,8 +1279,8 @@ namespace AppiumWinApp
 
                     case "restoration report":
 
-                        test.Log(Status.Pass, "!!!!****Restoration report generated****!!!!");
-                        test.Log(Status.Pass, "File Name +" + filename);
+                        stepName.Log(Status.Pass, "!!!!****Restoration report generated****!!!!");
+                        stepName.Log(Status.Pass, "File Name +" + filename);
                         // Extracting Image and Text content from Pdf Documents
 
                         // open a 128 bit encrypted PDF
@@ -1319,7 +1319,7 @@ namespace AppiumWinApp
 
                             foreach (String s in lableNames)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
                             }
 
                             //This is to write lable values in the report
@@ -1330,7 +1330,7 @@ namespace AppiumWinApp
 
                             foreach (String s in reportValues)
                             {
-                                test.Log(Status.Pass, s + " is found.");
+                                stepName.Log(Status.Pass, s + " is found.");
 
                             }
 

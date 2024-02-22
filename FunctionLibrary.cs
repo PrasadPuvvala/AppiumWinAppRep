@@ -373,7 +373,7 @@ namespace AppiumWinApp
 
 
         /** To verify the files If file is there tehn select last elements in log file and verify the Capture & Restore time **/
-        public void fileVerify(string path, ExtentTest test, string operationVar)
+        public void fileVerify(string path, ExtentTest stepName, string operationVar)
         {
             if (File.Exists(path))
             {
@@ -421,12 +421,12 @@ namespace AppiumWinApp
                     if (timeTaken < 41000)
                     {
                         Console.WriteLine(operationVar + " Operation performed in desired time");
-                        test.Pass(operationVar + " Desired Time : " + timeTaken);
+                         stepName.Pass(operationVar + " Desired Time : " + timeTaken);
                     }
                     else
                     {
                         Console.WriteLine("Failed");
-                        test.Fail(operationVar + " Desired Time : " + timeTaken);
+                        stepName.Fail(operationVar + " Desired Time : " + timeTaken);
                     }
                 }
             }
@@ -625,8 +625,11 @@ namespace AppiumWinApp
 
 
         /** To Compare the Dump files with attached attribute values **/
-        public void dumpCompare1(string device, ExtentTest test)
+        public void dumpCompare1(string device, ExtentTest stepName)
         {
+
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             XmlDocument doc = new XmlDocument();
             doc.Load("C:\\Device C.xml");
 
@@ -871,11 +874,11 @@ namespace AppiumWinApp
                                     if (DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j]))
                                     {
                                         Console.WriteLine("Pass");
-                                        test.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
                                     }
 
                                     break;
@@ -886,11 +889,11 @@ namespace AppiumWinApp
                                 {
                                     if (FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
                                     }
                                     break;
                                 }
@@ -900,11 +903,11 @@ namespace AppiumWinApp
                                 {
                                     if (OsPreset[j].Equals(OsPreset1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "AND Actual Value is :" + OsPreset1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "AND Actual Value is :" + OsPreset1[j]);
                                     }
                                     break;
                                 }
@@ -914,11 +917,11 @@ namespace AppiumWinApp
                                 {
                                     if (PresetTable[j].Equals(PresetTable1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "AND Actual Value is :" + PresetTable1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "AND Actual Value is :" + PresetTable1[j]);
                                     }
                                     break;
                                 }
@@ -928,11 +931,11 @@ namespace AppiumWinApp
                                 {
                                     if (GlobalPreset[j].Equals(GlobalPreset1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "AND Actual Value is :" + GlobalPreset1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "AND Actual Value is :" + GlobalPreset1[j]);
                                     }
                                     break;
                                 }
@@ -942,11 +945,11 @@ namespace AppiumWinApp
                                 {
                                     if (CombinedPreset[j].Equals(CombinedPreset1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
                                     }
                                     break;
                                 }
@@ -956,11 +959,11 @@ namespace AppiumWinApp
                                 {
                                     if (GattDatabase[j].Equals(GattDatabase1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "AND Actual Value is :" + GattDatabase1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "AND Actual Value is :" + GattDatabase1[j]);
                                     }
                                     break;
                                 }
@@ -970,11 +973,11 @@ namespace AppiumWinApp
                                 {
                                     if (PersistentDataSpace[j].Equals(PersistentDataSpace1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "AND Actual Value is :" + PersistentDataSpace1[j]);
                                     }
                                     break;
                                 }
@@ -1133,8 +1136,14 @@ namespace AppiumWinApp
 
         /* Verifying device dumps and report errors incase any differences*/
 
-        public void dumpCompare(string device, ExtentTest test)
+        public void dumpCompare(string device, ExtentTest stepName)
         {
+
+
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+
+            stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
             XmlDocument doc = new XmlDocument();
             doc.Load("C:\\" + device + ".xml");
 
@@ -1378,11 +1387,11 @@ namespace AppiumWinApp
                                     if (DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j]))
                                     {
                                         Console.WriteLine("Pass");
-                                        test.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
                                     }
 
                                     break;
@@ -1393,11 +1402,11 @@ namespace AppiumWinApp
                                 {
                                     if (FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
                                     }
                                     break;
                                 }
@@ -1407,11 +1416,11 @@ namespace AppiumWinApp
                                 {
                                     if (OsPreset[j].Equals(OsPreset1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "AND Actual Value is :" + OsPreset1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "AND Actual Value is :" + OsPreset1[j]);
                                     }
                                     break;
                                 }
@@ -1421,11 +1430,11 @@ namespace AppiumWinApp
                                 {
                                     if (PresetTable[j].Equals(PresetTable1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "AND Actual Value is :" + PresetTable1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "AND Actual Value is :" + PresetTable1[j]);
                                     }
                                     break;
                                 }
@@ -1435,11 +1444,11 @@ namespace AppiumWinApp
                                 {
                                     if (GlobalPreset[j].Equals(GlobalPreset1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "AND Actual Value is :" + GlobalPreset1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "AND Actual Value is :" + GlobalPreset1[j]);
                                     }
                                     break;
                                 }
@@ -1449,11 +1458,11 @@ namespace AppiumWinApp
                                 {
                                     if (CombinedPreset[j].Equals(CombinedPreset1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
                                     }
                                     break;
                                 }
@@ -1463,11 +1472,11 @@ namespace AppiumWinApp
                                 {
                                     if (GattDatabase[j].Equals(GattDatabase1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "AND Actual Value is :" + GattDatabase1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "AND Actual Value is :" + GattDatabase1[j]);
                                     }
                                     break;
                                 }
@@ -1477,11 +1486,11 @@ namespace AppiumWinApp
                                 {
                                     if (PersistentDataSpace[j].Equals(PersistentDataSpace1[j]))
                                     {
-                                        test.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j]);
                                     }
                                     else
                                     {
-                                        test.Log(Status.Fail, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                        stepName.Log(Status.Fail, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "AND Actual Value is :" + PersistentDataSpace1[j]);
                                     }
                                     break;
                                 }
@@ -1753,10 +1762,13 @@ namespace AppiumWinApp
 
         string file2;
 
-        public void AzureFileCompare(WindowsDriver<WindowsElement> session, ExtentTest test)
+        public void AzureFileCompare(WindowsDriver<WindowsElement> session, ExtentTest stepName)
 
         {
 
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+
+            stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             try
             {
@@ -1849,7 +1861,7 @@ namespace AppiumWinApp
             }
 
 
-            test.Log(Status.Info, "Device information is captured in excel file");
+            stepName.Log(Status.Info, "Device information is captured in excel file");
             XmlNodeList node;
             XmlDocument xmlDoc = new XmlDocument();
             string path = fi2.FullName;
@@ -1862,7 +1874,7 @@ namespace AppiumWinApp
             {
                 node = Node2;
 
-                test.Log(Status.Info, "To Strat the checking of overall Azure data ");
+                stepName.Log(Status.Info, "To Strat the checking of overall Azure data ");
 
                 // Loop through the XML nodes and store attribute values in the array
 
@@ -1878,12 +1890,12 @@ namespace AppiumWinApp
                         if (data2.IsNullOrEmpty())
                         {
                             Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            test.Log(Status.Fail, data + "=" + data2);
+                            stepName.Log(Status.Fail, data + "=" + data2);
                         }
                         if (!data2.IsNullOrEmpty())
                         {
                             Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            test.Log(Status.Pass, data + "=" + data2);
+                            stepName.Log(Status.Pass, data + "=" + data2);
                         }
 
                         attributeValues[i] = node2.ChildNodes[i].InnerText;
@@ -1891,9 +1903,9 @@ namespace AppiumWinApp
 
                     }
 
-                    test.Log(Status.Info, "To Completed the verification of overall Azure data");
+                    stepName.Log(Status.Info, "To Completed the verification of overall Azure data");
 
-                    test.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
+                    stepName.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
 
                     foreach (var names in DevicedetailsNames)
                     {
@@ -1906,11 +1918,11 @@ namespace AppiumWinApp
                                 if (windowvalues[0].Equals(attributeValues[2]))
                                 {
 
-                                    test.Log(Status.Pass, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[2]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[2]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[2]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[2]);
                                 }
 
                                 break;
@@ -1920,11 +1932,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[2].Equals(attributeValues[5]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[5]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[5]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[5]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[5]);
                                 }
 
                                 break;
@@ -1940,7 +1952,7 @@ namespace AppiumWinApp
 
                                 if (windowvalues[1].Equals(attributeValues[12]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[12]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[12]);
                                     break;
 
                                 }
@@ -1948,7 +1960,7 @@ namespace AppiumWinApp
                                 else
 
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[12]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[12]);
 
                                 }
 
@@ -1960,11 +1972,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[3].Equals(attributeValues[6]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[6]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[6]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[6]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[6]);
                                 }
                                 break;
 
@@ -1974,11 +1986,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[4].Equals(attributeValues[11]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[11]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[11]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[11]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[11]);
                                 }
 
                                 break;
@@ -1995,12 +2007,12 @@ namespace AppiumWinApp
 
                                 if (windowvalues[5].Equals(attributeValues[19]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[19]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[19]);
                                     break;
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[19]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[19]);
                                 }
 
                                 break;
@@ -2011,11 +2023,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[16].Equals(attributeValues[15]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[15]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[15]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[15]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[15]);
                                 }
 
                                break;
@@ -2027,11 +2039,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[17].Equals(attributeValues[18]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[18]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[18]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[18]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[18]);
                                 }
 
                                 break;
@@ -2043,11 +2055,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[18].Equals(attributeValues[17]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[17]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[17]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[17]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[17]);
                                 }
 
                                 break;
@@ -2060,11 +2072,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[19].Equals(attributeValues[16]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[16]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[16]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[16]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[16]);
                                 }
 
                                 break;
@@ -2076,11 +2088,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[20].Equals(attributeValues[20]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[20]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[20]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[20]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[20]);
                                 }
 
                                break;
@@ -2093,11 +2105,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[21].Equals(attributeValues[21]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[21]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[21]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[21]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[21]);
                                 }
 
                                 break;
@@ -2109,11 +2121,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[23].Equals(attributeValues[9]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[9]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[9]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[9]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[9]);
                                 }
 
                                 break;
@@ -2125,14 +2137,14 @@ namespace AppiumWinApp
                 }
 
 
-                test.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
+                stepName.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
 
             }
             else
             {
                 node = Node1;
 
-                test.Log(Status.Info, "To Strat the checking of overall Azure data ");
+                stepName.Log(Status.Info, "To Strat the checking of overall Azure data ");
 
                // Loop through the XML nodes and store attribute values in the array
 
@@ -2148,12 +2160,12 @@ namespace AppiumWinApp
                         if (data2.IsNullOrEmpty())
                         {
                             Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            test.Log(Status.Fail, data + "=" + data2);
+                            stepName.Log(Status.Fail, data + "=" + data2);
                         }
                         if (!data2.IsNullOrEmpty())
                         {
                             Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            test.Log(Status.Pass, data + "=" + data2);
+                            stepName.Log(Status.Pass, data + "=" + data2);
                         }
 
                         attributeValues[i] = node2.ChildNodes[i].InnerText;
@@ -2161,9 +2173,9 @@ namespace AppiumWinApp
 
                     }
 
-                    test.Log(Status.Info, "To Completed the verification of overall Azure data");
+                    stepName.Log(Status.Info, "To Completed the verification of overall Azure data");
 
-                    test.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
+                    stepName.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
 
                     foreach (var names in DevicedetailsNames)
                     {
@@ -2175,11 +2187,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[0].Equals(attributeValues[28]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[28]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[28]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[28]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[28]);
                                 }
                                 break;
 
@@ -2188,11 +2200,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[2] == attributeValues[1])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[1]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[1]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[1]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[1]);
                                 }
                                 break;
 
@@ -2205,7 +2217,7 @@ namespace AppiumWinApp
 
                                 if (windowvalues[1].Equals(attributeValues[20]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[20]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[20]);
                                     break;
                                 }
 
@@ -2215,11 +2227,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[3].Equals(attributeValues[5]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[5]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[5]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[5]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[5]);
                                 }
 
                                 break;
@@ -2228,11 +2240,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[4].Equals(attributeValues[10]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[10]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[10]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[10]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[10]);
                                 }
 
                                 break;
@@ -2246,7 +2258,7 @@ namespace AppiumWinApp
                                 }
                                 if (windowvalues[5].Equals(attributeValues[26]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[26]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[26]);
                                     break;
                                 }
 
@@ -2265,7 +2277,7 @@ namespace AppiumWinApp
                                 }
                                 if (windowvalues[8].Equals(attributeValues[16]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[20] + "=" + windowvalues[8] + "=" + attributeValues[16]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[20] + "=" + windowvalues[8] + "=" + attributeValues[16]);
                                     break;
                                 }
 
@@ -2283,7 +2295,7 @@ namespace AppiumWinApp
                                 }
                                 if (windowvalues[14].Equals(attributeValues[31]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[26] + "=" + windowvalues[14] + "=" + attributeValues[31]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[26] + "=" + windowvalues[14] + "=" + attributeValues[31]);
                                     break;
                                 }
                                 break;
@@ -2299,12 +2311,12 @@ namespace AppiumWinApp
 
                                 if (windowvalues[15].Equals(attributeValues[32]))
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[27] + "=" + windowvalues[15] + "=" + attributeValues[32]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[27] + "=" + windowvalues[15] + "=" + attributeValues[32]);
                                     break;
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[27] + "=" + windowvalues[15] + "=" + attributeValues[32]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[27] + "=" + windowvalues[15] + "=" + attributeValues[32]);
                                     break;
                                 }
                                 break;
@@ -2314,11 +2326,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[16] == attributeValues[22])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[22]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[22]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[22]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[22]);
                                 }
 
                                 break;
@@ -2327,11 +2339,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[17] == attributeValues[25])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[25]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[25]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[25]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[25]);
                                 }
 
                                 break;
@@ -2340,11 +2352,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[18] == attributeValues[24])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[24]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[24]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[24]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[24]);
                                 }
 
                                 break;
@@ -2354,11 +2366,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[19] == attributeValues[23])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[23]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[23]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[23]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[23]);
                                 }
 
                                 break;
@@ -2368,11 +2380,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[20] == attributeValues[27])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[27]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[27]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[27]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[27]);
                                 }
 
                                 break;
@@ -2382,11 +2394,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[21] == attributeValues[14])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[14]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[14]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[14]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[14]);
                                 }
 
                                 break;
@@ -2395,11 +2407,11 @@ namespace AppiumWinApp
 
                                 if (windowvalues[23] == attributeValues[8])
                                 {
-                                    test.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[8]);
+                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[8]);
                                 }
                                 else
                                 {
-                                    test.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[8]);
+                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[8]);
                                 }
 
                                 break;
@@ -2409,7 +2421,7 @@ namespace AppiumWinApp
 
                 }
 
-                test.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
+                stepName.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
 
             }
             string File;
