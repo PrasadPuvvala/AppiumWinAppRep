@@ -30,6 +30,7 @@ using AventStack.ExtentReports;
 using System.IO;
 using AventStack.ExtentReports.Reporter;
 using AventStack.ExtentReports.Model;
+using Microsoft.SqlServer.Management.Smo;
 
 //using AppiumWinApp.PageFactory;
 
@@ -68,21 +69,24 @@ namespace AppiumWinApp.StepDefinitions
           * Connects the HI device
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
-        [When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenGetTheDumpOfConnectedDeviceLeftOfDumpBByStorageLayoutAnd(string device, string side, string DeviceNo)
-        {
+        //[When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenGetTheDumpOfConnectedDeviceLeftOfDumpBByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
+        {          
+       
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
           
             if (side.Equals("Left"))
             {
-                if (device.Contains("RT") || device.Contains("C"))
+               // if (device.Contains("RT") || device.Contains("C"))
+                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device B", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device B", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device B");
 
             }
@@ -94,28 +98,31 @@ namespace AppiumWinApp.StepDefinitions
           * Perfrom restore operation using SWAP Option **/
 
 
-        [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPOption(string deviceSlNo, string DeviceLeftSlNo, string device, string side)
-        
-        {
+        //  [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+
+        [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPOptionAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
+        {          
+  
             config = (appconfigsettings)_featureContext["config"];
             FunctionLibrary lib = new FunctionLibrary();
 
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
 
                 {
-                    ModuleFunctions.socketA(session, test, device); 
+                    ModuleFunctions.socketA(session, test, DeviceType); 
                 }
 
                 else if (side.Equals("Right"))
 
 
                 {
-                    ModuleFunctions.socketB(session, test, device); 
+                    ModuleFunctions.socketB(session, test, DeviceType); 
                 }
             }
 
@@ -142,7 +149,8 @@ namespace AppiumWinApp.StepDefinitions
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
 
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
 
@@ -275,25 +283,27 @@ namespace AppiumWinApp.StepDefinitions
          * Perfrom restore operation using SWAP Option **/
 
 
-        [When(@"\[Perform Restore with above captured image using SWAP with left ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPWithLeft(string deviceSlNo, string DeviceLeftSlNo, string device, string side)
-        
+        //[When(@"\[Perform Restore with above captured image using SWAP with left ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Perform Restore with above captured image using SWAP with left ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPWithLeftAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
         {
+              
             FunctionLibrary lib = new FunctionLibrary();
 
             config = (appconfigsettings)_featureContext["config"];
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+           // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+           if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
 
                 {
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
                 else if(side.Equals("Right"))
                 {
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
             }
 
@@ -322,7 +332,8 @@ namespace AppiumWinApp.StepDefinitions
 
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
 
@@ -395,7 +406,8 @@ namespace AppiumWinApp.StepDefinitions
             /* Identifying checkbox */
 
 
-            if (device.Contains("LT") || device.Contains("RE"))
+            // if (device.Contains("LT") || device.Contains("RE"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
                 Thread.Sleep(2000);
@@ -453,32 +465,35 @@ namespace AppiumWinApp.StepDefinitions
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
 
-        [When(@"\[Get the dump of connected device of left DumpC by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenGetTheDumpOfConnectedDeviceOfLeftDumpCByStorageLayout(string device, string side, string DeviceNo)
+        //[When(@"\[Get the dump of connected device of left DumpC by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Get the dump of connected device of left DumpC by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenGetTheDumpOfConnectedDeviceOfLeftDumpCByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
-            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+           //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (side.Equals("Left"))
             {
-                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
+               // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
+                if(DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device C", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device C", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device C");
 
             }
             else if (side.Equals("Right"))
             {
 
-                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
+                //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
+                if(DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device B ");
             }
 
@@ -489,20 +504,23 @@ namespace AppiumWinApp.StepDefinitions
           * Connects the HI device
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
-        [When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenGetTheDumpOfConnectedDeviceOfDumpDByStorageLayout(string device, string side, string DeviceNo)
+        //[When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenGetTheDumpOfConnectedDeviceOfDumpDByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
+                   
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (side.Equals("Right"))
             {
-                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
+               // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
+                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
 
-                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device D", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device D", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device D ");
 
             }

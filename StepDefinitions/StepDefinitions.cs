@@ -7,6 +7,7 @@ using AventStack.ExtentReports.Reporter;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -526,9 +527,14 @@ namespace MyNamespace
           * perfrom Flashing and close the FDTS **/
 
 
-        [Given(@"Launch FDTS WorkFlow And Flash Device ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""")]
-        public void GivenLaunchFDTSWorkFlowAndFlashDeviceAndAnd(string device, string DeviceNo, string flashHIWithSlno, string side)
+        // [Given(@"Launch FDTS WorkFlow And Flash Device ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""")]
+        [Given(@"Launch FDTS WorkFlow And Flash Device ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""")]
+        public void GivenLaunchFDTSWorkFlowAndFlashDeviceAndAndAndAnd(string device, string DeviceNo, string flashHIWithSlno, string side, string DeviceType)
         {
+            
+        
+
+       
             Console.WriteLine("This is Given method");
 
              ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -536,15 +542,16 @@ namespace MyNamespace
 
             try
             {
-                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+               // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {
                     if (side.Equals("Left"))
                     {
-                        ModuleFunctions.socketA(session, test, device);
+                        ModuleFunctions.socketA(session, test, DeviceType);
                     }
                     else if (side.Equals("Right"))
                     {
-                        ModuleFunctions.socketB(session, test, device);
+                        ModuleFunctions.socketB(session, test, DeviceType);
                     }
                 }
             }
@@ -1054,14 +1061,17 @@ namespace MyNamespace
          * make adjustments, save them, and then exit. **/
 
 
-        [When(@"\[Create a Patient and Fitting HI In FSW ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenCreateAPatientAndFittingHIInFSW(string alterValue, string device, string DeviceNo, string side)
+        // [When(@"\[Create a Patient and Fitting HI In FSW ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Create a Patient and Fitting HI In FSW ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenCreateAPatientAndFittingHIInFSWAndAndAndAnd(string alterValue, string device, string DeviceNo, string side, string DeviceType)
         {
+        
             string devName = device;
             FunctionLibrary lib = new FunctionLibrary();
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-            if (devName.Contains("RT") || devName.Contains("RU") || devName.Contains("NX"))
+            //if (devName.Contains("RT") || devName.Contains("RU") || devName.Contains("NX"))
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
             {
                 Console.WriteLine("This is When method");
                 // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -1071,20 +1081,20 @@ namespace MyNamespace
                 {
                     if (side.Equals("Left"))
                     {
-                        ModuleFunctions.socketA(session, test, device);
+                        ModuleFunctions.socketA(session, test, DeviceType);
                         Thread.Sleep(2000);
                     }
 
                     else if (side.Equals("Right"))
                     {
-                        ModuleFunctions.socketB(session, test, device);
+                        ModuleFunctions.socketB(session, test, DeviceType);
                         Thread.Sleep(2000);
                     }
 
 
                     else if (side.Equals("Cdevice"))
                     {
-                        ModuleFunctions.socketC(session, test, device);
+                        ModuleFunctions.socketC(session, test, DeviceType);
                         Thread.Sleep(2000);
 
                     }
@@ -1402,13 +1412,13 @@ namespace MyNamespace
                     {
                         if (side.Equals("Left"))
                         {
-                            ModuleFunctions.socketA(session, test, device);
+                            ModuleFunctions.socketA(session, test, DeviceType);
                             Thread.Sleep(2000);
                         }
 
                         else if (side.Equals("Right"))
                         {
-                            ModuleFunctions.socketB(session, test, device);
+                            ModuleFunctions.socketB(session, test, DeviceType);
                             Thread.Sleep(2000);
                         }
                     }
@@ -1612,11 +1622,12 @@ namespace MyNamespace
             }
 
 
-            if (devName.Contains("RE961-DRWC"))
+            //if (devName.Contains("RE961-DRWC"))
+            if(DeviceType.Equals("D1rechageableWired"))
             {
                 Console.WriteLine("This is When method");
                 // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                //stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
                 //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
@@ -1688,13 +1699,14 @@ namespace MyNamespace
             }
 
 
-            else if (devName.Contains("LT") || devName.Contains("RE"))
+           // else if (devName.Contains("LT") || devName.Contains("RE"))
+            else if(DeviceType.Equals("Wired"))
             {
                 Console.WriteLine("This is When method");
 
                 //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-                stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+               // stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
                 //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
                 DesiredCapabilities appCapabilities = new DesiredCapabilities();
@@ -1993,10 +2005,11 @@ namespace MyNamespace
         /** Opens S&R tool 
           * Connects the HI device **/
 
-        [When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenLaunchSandR(string device, string DeviceNo)
-        
+        //[When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenLaunchSandRAndAnd(string device, string DeviceNo, string DeviceType)
         {
+                  
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
@@ -2004,9 +2017,10 @@ namespace MyNamespace
 
             try
             {
-                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {                 
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                                    
                 }
             }
@@ -2034,7 +2048,8 @@ namespace MyNamespace
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 /** Clciks on "Discover" button **/
 
@@ -2120,10 +2135,10 @@ namespace MyNamespace
 
 
 
-        [Then(@"\[Compare firmware version is upgraded successfully ""([^""]*)""]")]
-        public void ThenCompareFirmwareVersionIsUpgradedSuccessfully(string device)
+        [Then(@"\[Compare firmware version is upgraded successfully ""([^""]*)""and""([^""]*)""]")]
+        public void ThenCompareFirmwareVersionIsUpgradedSuccessfullyAnd(string device, string DeviceType)
         {
-            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+          //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(2000);
@@ -2134,7 +2149,8 @@ namespace MyNamespace
             string Dooku3PBTE = "[7].42.1.1 (Dooku3)";
             string Dooku3Rechargeable = "[7].42.1.1 (Dooku3)";
 
-            if (device.Contains("RT962-DRW") || device.Contains("RT960-DRWC") || device.Contains("RU960-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC") || device.Contains("NX"))
+            //if (device.Contains("RT962-DRW") || device.Contains("RT960-DRWC") || device.Contains("RU960-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC") || device.Contains("NX"))
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable")|| DeviceType.Equals("Wired")|| DeviceType.Equals("D1rechageableWired"))
             {
                 session.FindElementByName("Device Info").Click();
                 Thread.Sleep(2000);
@@ -2295,7 +2311,11 @@ namespace MyNamespace
         {
             //var Sandclose = session.FindElementByAccessibilityId("PART_Close");
             // Sandclose.Click();
-
+            string path2 = textDir + "\\azurefiles";
+            if (Directory.Exists(path2))
+            {
+                Directory.Delete(path2, true);
+            }
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             // Define the connection string
@@ -2409,10 +2429,12 @@ namespace MyNamespace
          *  Navigates to settings tab
          *  Perform the Capture operation **/
 
-        
-        [When(@"\[Perform Capture""([^""]*)""]")]
-        public void WhenPerformCapture(string device)
+
+        //[When(@"\[Perform Capture""([^""]*)""]")]
+        [When(@"\[Perform Capture""([^""]*)""and""([^""]*)""]")]
+        public void WhenPerformCaptureand(string device, string DeviceType)
         {
+           
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
@@ -2448,9 +2470,10 @@ namespace MyNamespace
 
             try
             {
-                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
             }
             catch { }
@@ -2586,18 +2609,21 @@ namespace MyNamespace
 
 
 
-        [When(@"\[Launch algo and alter ADL value ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenLaunchAlgoAndAlterADLValue(string device, string DeviceNo)
+        //[When(@"\[Launch algo and alter ADL value ""([^""]*)"" and ""([^""]*)""]")]
+
+        [When(@"\[Launch algo and alter ADL value ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenLaunchAlgoAndAlterADLValueAndAnd(string device, string DeviceNo, string DeviceType)
         {
-            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            
+                    // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             /** Algo Tet Lab **/
 
-            stepName = extent.CreateTest("Test ALT WorkFlow");
+            //stepName = extent.CreateTest("Test ALT WorkFlow");
 
             stepName.Log(Status.Pass, "Altered value is 1");
 
-            ModuleFunctions.altTestLab(session, stepName, device, DeviceNo);
+            ModuleFunctions.altTestLab(session, stepName, device, DeviceNo,DeviceType);
             Thread.Sleep(2000);
         }
 
@@ -2609,16 +2635,19 @@ namespace MyNamespace
 
 
 
-        [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenPerformRestoreWithAboveCapturedImage(string device, string DeviceNo)
-
+        // [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenPerformRestoreWithAboveCapturedImageAndAnd(string device, string DeviceNo, string DeviceType)
         {
+           
+ 
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
             {
-                ModuleFunctions.socketA(session, test, device);
+                ModuleFunctions.socketA(session, test, DeviceType);
             }
 
             try
@@ -2646,7 +2675,8 @@ namespace MyNamespace
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
 
@@ -2748,15 +2778,20 @@ namespace MyNamespace
          *  validates the ADL saved value **/
 
 
-        [When(@"\[Launch algo lab and check the ADL value ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenLaunchAlgoLabAndCheckTheADLValue(string device, string DeviceNo)
+        // [When(@"\[Launch algo lab and check the ADL value ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Launch algo lab and check the ADL value ""([^""]*)"" and ""([^""]*)""and ""([^""]*)""]")]
+        public void WhenLaunchAlgoLabAndCheckTheADLValueAndAnd(string device, string DeviceNo, string DeviceType)
         {
+            
+        
+
+        
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** Verify AlgoTest Lab **/
 
-            ModuleFunctions.checkADLValue(session, stepName, device, DeviceNo);
+            ModuleFunctions.checkADLValue(session, stepName, device, DeviceNo,DeviceType);
         }
 
 
@@ -2764,9 +2799,12 @@ namespace MyNamespace
           * Navigates to Fitting Screen
           * validates the FSW programs **/
 
-        [Then(@"\[Launch FSW and check the added programs ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void ThenLaunchFSWAndCheckTheAddedPrograms(string device, string DeviceNo, string side)
+        //[Then(@"\[Launch FSW and check the added programs ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+
+        [Then(@"\[Launch FSW and check the added programs ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void ThenLaunchFSWAndCheckTheAddedProgramsAndAndAnd(string device, string DeviceNo, string side, string DeviceType)
         {
+       
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             Console.WriteLine("This is When method");
@@ -2776,10 +2814,11 @@ namespace MyNamespace
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            if(device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if(device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
 
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
             {
-                ModuleFunctions.socketA(session, test, device);
+                ModuleFunctions.socketA(session, test, DeviceType);
 
                 Console.WriteLine("This is When method");
 
@@ -2889,7 +2928,8 @@ namespace MyNamespace
             }
 
 
-            if (device.Contains("LT") || device.Contains("RE"))
+           // if (device.Contains("LT") || device.Contains("RE"))
+           if(DeviceType.Equals("Wired")|| DeviceType.Equals("D1rechageableWired"))
             {
                 //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
@@ -3213,507 +3253,566 @@ namespace MyNamespace
            * changes the Date and Time in storage layout viewer **/
 
 
-        [When(@"\[Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenVerifyStorageLayoutScenarioByChangingDateAndConfirmCloudIcon(string device, string side, string DeviceNo)
-
+        //[When(@"\[Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenVerifyStorageLayoutScenarioByChangingDateAndConfirmCloudIconAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
 
+
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
+            Thread.Sleep(5000);
+
+            string jsonString = File.ReadAllText(configsettingpath);
+            Dictionary<string, Dictionary<string, string>> slv = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(jsonString);
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            foreach (var slvPath in slv["SLV"])
             {
-                try
+                if (device == slvPath.Key)
                 {
-                    ModuleFunctions.socketA(session, test, device);
-                }
-                catch (Exception ex) { }
-
-                Thread.Sleep(2000);
-
-                string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
-                if (device.Contains("RT"))
-                {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
-                }
-                else if (device.Contains("RU"))
-                {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
-
-                }
-                else
-                {
-                    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
-                }
-                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
-
-                FunctionLibrary lib = new FunctionLibrary();
-
-                Actions actions = new Actions(session);
-                Thread.Sleep(5000);
-                session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(15000);
-                session.FindElementByAccessibilityId("FINDICON").Click();
-                Thread.Sleep(15000);
-
-
-                /** To select the Hi serial number **/
-
-                var SN = session.FindElementsByClassName("TextBlock");
-
-                foreach (WindowsElement value in SN)
-
-                {
-                    string S = value.Text;
-
-                    if (S == DeviceNo)
-
+                    Console.WriteLine($"{slvPath.Value}");
+                    foreach (var workingDirectory in slv["WorkingDirectory"])
                     {
-                        value.Click();
-                    }
-
-                }
-
-
-
-                lib.functionWaitForName(session, "Connect");
-                lib.waitUntilElementExists(session, "File", 0);
-                Thread.Sleep(4000);
-                var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                ext[0].Click();
-                Thread.Sleep(2000);
-                ext = session.FindElements(WorkFlowPageFactory.readHI);
-                actions = new Actions(session);
-                actions.MoveToElement(ext[0]).Build().Perform();
-                Thread.Sleep(2000);
-                session.Keyboard.PressKey(Keys.Enter);
-                Thread.Sleep(5000);
-
-                /** Click on Uncheck button **/
-
-                session.FindElementByName("Uncheck All").Click();
-                Thread.Sleep(3000);
-                session.FindElementByAccessibilityId("1001").Click();
-                Thread.Sleep(2000);
-
-                /** Choose the All option in drop down **/
-
-                var rd = session.FindElementByName("All");
-                actions.MoveToElement(rd).Click().Perform();
-                Thread.Sleep(2000);
-
-                /** To Click the Apply selection button **/
-
-                session.FindElementByName("Apply selection").Click();
-                Thread.Sleep(5000);
-                var txt = session.FindElementByName("0f8e00:0004a ProductionTestData");
-                txt.Click();              
-                Thread.Sleep(4000);
-                var data = session.FindElementByName("DataGridView");
-                data.Click();
-                var row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 0");
-                row.Click();
-
-                /**In order to passing the Date and Time in the Product Testdata **/
-
-                DateTimeOffset currentTime = DateTimeOffset.Now;
-                Console.WriteLine(currentTime);
-                DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
-                Console.WriteLine(tenDaysAgo);
-                string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
-                Console.WriteLine(formattedtenDaysAgo);
-                long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
-                Console.WriteLine(unixTimestamp);
-
-                //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
-                //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
-                //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
-                //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
-
-                row.SendKeys(formattedtenDaysAgo);
-
-                //row.SendKeys("2022-08-01 12:45:54Z");
-                var miniidentification = session.FindElementByName("_Write to");
-                miniidentification.Click();
-                Thread.Sleep(3000);
-                var min = session.FindElementByName("111000:00026 MiniIdentification");
-                min.Click();
-                Thread.Sleep(2000);
-                data = session.FindElementByName("DataGridView");
-                data.Click();
-                row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 6");
-                row.Click();
-
-                /** In order to passing the Unix time Stamp ID in the Miniidentification **/
-
-                row.SendKeys(unixTimestamp.ToString());
-                Thread.Sleep(2000);
-                min = session.FindElementByName("_Write to");
-                min.Click();
-                Thread.Sleep(3000);
-                stepName.Pass("Writing Presets is done successfully.");
-            }
-
-
-            if (device.Contains("LT") || device.Contains("RE"))
-
-            {
-                if (device.Contains("LT"))
-
-                {
-                    ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                    // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                    FunctionLibrary lib = new FunctionLibrary();
-                    InputSimulator sim = new InputSimulator();
-
-                    session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.workingdirectory.Palpatine6);
-                    // session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");                 
-                    lib.waitUntilElementExists(session, "Channel", 0);
-                    var ext = session.FindElements(WorkFlowPageFactory.channel);
-                    ext[0].Click();
-                    Thread.Sleep(2000);
-
-                    if (computer_name.Equals("FSWIRAY80"))
-                    {
-                        ext = session.FindElements(WorkFlowPageFactory.inter);
-                    }
-                    else
-                    {
-                        ext = session.FindElements(WorkFlowPageFactory.domainInterface);
-                    }
-
-                    Actions action = new Actions(session);
-
-                    if (computer_name.Equals("FSWIRAY80"))
-                    {
-                        if (side.Equals("Left"))
+                        if (device == workingDirectory.Key)
                         {
-                            action.MoveToElement(ext[0]).Build().Perform();
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.Enter);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                        }
-
-
-                        else
-                        {
-                            action.MoveToElement(ext[0]).Build().Perform();
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.Enter);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                        }
-                    }
-
-                    else
-                    {
-                        if (side.Equals("Left"))
-                        {
-                            action.MoveToElement(ext[1]).Build().Perform();
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.Enter);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                        }
-
-                        else
-                        {
-                            action.MoveToElement(ext[1]).Build().Perform();
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.Enter);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.ArrowDown);
-                            Thread.Sleep(2000);
-                            session.Keyboard.PressKey(Keys.Enter);
-                            Thread.Sleep(2000);
-                        }
-                    }
-
-                    session.Keyboard.PressKey(Keys.Enter);
-
-                    stepName.Log(Status.Pass, side + ": is selected");
-
-                    lib.waitUntilElementExists(session, "File", 0);
-                    Thread.Sleep(4000);              
-                    ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                    ext[0].Click();
-                    Thread.Sleep(2000);                  
-                    ext = session.FindElements(WorkFlowPageFactory.readHI);
-                    action = new Actions(session);
-                    action.MoveToElement(ext[0]).Build().Perform();
-                    Thread.Sleep(2000);
-                    session.Keyboard.PressKey(Keys.Enter);
-
-                    Thread.Sleep(2000);
-
-                    if (computer_name.Equals("FSWIRAY80"))
-                    {
-                        var txt = session.FindElementsByName("3e900:004c ProductionTestData");
-                        stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
-
-                        foreach (var item in txt)
-                        {
-                            Console.WriteLine(item.GetAttribute("Name"));
-                            item.Click();
-                            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
-                        }
-
-                        Thread.Sleep(2000);
-                        string text = session.FindElementByName("Value Row 0").GetAttribute("Value");
-                        Console.WriteLine(text);                       
-                        var text1 = session.FindElementsByXPath("(//*[@ClassName='WindowsForms10.Window.8.app.0.2804c64_r17_ad1'])");
-                        Thread.Sleep(2000);
-
-                        int Counter = 0;
-                        foreach (var item in text1)
-                        {
-                            Console.WriteLine("Index value :" + Counter + item.Text);
-                            Console.WriteLine("Index value :" + Counter + item.GetAttribute("Name"));
-                            Console.WriteLine("Index value :" + Counter + item.GetAttribute("Value"));
-                            Console.WriteLine("Index value :" + Counter + item.GetAttribute("ControlType"));
-                            Counter = Counter + 1;
-                        }
-
-
-                        string tableName = session.FindElementByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]").GetAttribute("ControlType"); ;
-                        Console.WriteLine("Table Index value :" + Counter + tableName);
-                        tableName = session.FindElementByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]").GetAttribute("AutomationId"); ;
-                        Console.WriteLine("Table Index value :" + Counter + tableName);                      
-                        tableName = session.FindElementByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]").FindElementByName("Top Row").GetAttribute("Value");
-                        var childTable = session.FindElementsByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]//*[@Name='Row 0']//*[@Name='Value Row 0']");
-                        
-                        Counter = 0;
-                        
-                        foreach (var item in childTable)
-                        {
-                            Console.WriteLine("Production Index value :" + Counter + item.Text);
-                            Console.WriteLine("Production Index value :" + Counter + item.GetAttribute("Name"));
-                            Console.WriteLine("ProductionIndex value :" + Counter + item.GetAttribute("Value"));
-                            Console.WriteLine("Production Index value :" + Counter + item.GetAttribute("ControlType"));
-                            Console.WriteLine("Production Child Table Value is " + item.GetAttribute("HelpText"));
-                            Counter = Counter + 1;
-                        }
-
-                        childTable[0].Click();
-                        Thread.Sleep(2000);
-                        childTable[0].Click();
-                        Thread.Sleep(2000);
-                        childTable[0].Click();
-                        Thread.Sleep(2000);
-                        childTable[0].Clear();
-                        Thread.Sleep(2000);
-
-                        //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
-                        //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
-                        //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
-                        //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
-
-                        DateTimeOffset currentTime = DateTimeOffset.Now;
-                        Console.WriteLine(currentTime);
-                        DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
-                        Console.WriteLine(tenDaysAgo);
-                        string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
-                        Console.WriteLine(formattedtenDaysAgo);
-                        long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
-                        Console.WriteLine(unixTimestamp);
-
-                        childTable[0].SendKeys(formattedtenDaysAgo);
-
-                        //childTable[0].SendKeys("2022-08-01 12:45:54Z");
-                        Thread.Sleep(2000);
-                        txt[0].Click();
-                        Thread.Sleep(4000);
-                        sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
-                        Thread.Sleep(4000);                      
-
-                        /** Mini identification **/
-
-                var txt1 = session.FindElementsByName("2a000:0026 MiniIdentification");
-
-                        foreach (var item in txt1)
-                        {
-                            Console.WriteLine(item.GetAttribute("Name"));
-                            item.Click();
-                            stepName.Pass("2a000:0026 MiniIdentification is selected");
-                        }
-
-                        Thread.Sleep(2000);
-                        childTable = session.FindElementsByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]//*[@Name='Row 6']//*[@Name='Value Row 6']");
-                        Thread.Sleep(2000);
-
-                        Counter = 0;
-                        foreach (var item in childTable)
-                        {
-                            Console.WriteLine("Index value :" + Counter + item.Text);
-                            Console.WriteLine("Index value :" + Counter + item.GetAttribute("Name"));
-                            Console.WriteLine("Index value :" + Counter + item.GetAttribute("Value"));
-                            Console.WriteLine("Index value :" + Counter + item.GetAttribute("ControlType"));
-                            Console.WriteLine("Child Table Value is " + item.GetAttribute("HelpText"));
-                            stepName.Log(Status.Pass, "Saved value for date +" + item.Text);
-                            Counter = Counter + 1;
-                        }
-
-                        childTable[0].Click();
-                        Thread.Sleep(2000);
-                        childTable[0].Click();
-                        Thread.Sleep(2000);
-                        childTable[0].Click();
-                        Thread.Sleep(2000);
-                        string timeValue = childTable[0].GetAttribute("Value");
-                        Console.WriteLine(timeValue);
-                        childTable[0].Clear();
-                        Thread.Sleep(2000);
-                        childTable[0].SendKeys(unixTimestamp.ToString());
-                        Thread.Sleep(4000);
-                        txt1[0].Click();
-                        Thread.Sleep(4000);
-
-                        sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
-                        Thread.Sleep(2000);
-
-                        /** Write Data **/
-
-                        lib.clickOnAutomationName(session, "File");
-
-                        Thread.Sleep(4000);
-                        ext = session.FindElementsByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[12]//*[@Name='File']//*[@LocalizedControlType='menu item'][3]");
-                        action.MoveToElement(ext[0]).Build().Perform();
-                        Thread.Sleep(2000);
-                        sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                        Thread.Sleep(2000);
-                        session.SwitchTo().Window(session.WindowHandles.First());
-                        session.SwitchTo().ActiveElement();
-
-                        try
-                        {
-                            do
+                            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
-
-                            } while (session.FindElementByAccessibilityId("WorkerDialog").Enabled);
-
-                        }
-
-                        catch (Exception e)
-                        {
-                            stepName.Pass("Writing Presets is done successfully.");
-                        }
-
-                        /** De select the check boxes  **/
-
-                        txt[0].Click();
-                        Thread.Sleep(4000);
-                        sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
-                        Thread.Sleep(4000);
-                        txt1[0].Click();
-                        Thread.Sleep(4000);
-                        sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
-                        Thread.Sleep(4000);
-                    }
-                    else
-                    {
-                        var txt = session.FindElementsByName("3e900:004c ProductionTestData");
-
-                        stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
-
-                        foreach (var item in txt)
-                        {
-                            Console.WriteLine(item.GetAttribute("Name"));
-                            item.Click();
-                            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
-                        }
-
-                        Thread.Sleep(2000);
+                                try
+                                {
+                                    ModuleFunctions.socketA(session, test, DeviceType);
+                                }
+                                catch (Exception ex) { }
+                            }
+                                Console.WriteLine($"{workingDirectory.Value}");
+                            session = ModuleFunctions.sessionInitialize(slvPath.Value, workingDirectory.Value);
+                            Thread.Sleep(5000);
 
 
-                        var data = session.FindElementByName("DataGridView");
-                        data.Click();
-                        var row = session.FindElementByName("Value Row 0");
-                        row.Click();
-
-                        //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
-                        //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
-                        //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
-                        //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
-
-                        DateTimeOffset currentTime = DateTimeOffset.Now;
-                        Console.WriteLine(currentTime);
-                        DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
-                        Console.WriteLine(tenDaysAgo);
-                        string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
-                        Console.WriteLine(formattedtenDaysAgo);
-                        long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
-                        Console.WriteLine(unixTimestamp);
-
-                        row.SendKeys(formattedtenDaysAgo);
-
-                        //row.SendKeys("2022-08-01 12:45:54Z");
-                        var min = session.FindElementByName("2a000:0026 MiniIdentification");
-                        min.Click();
-                        Thread.Sleep(2000);
-                        data = session.FindElementByName("DataGridView");
-                        data.Click();
-                        row = session.FindElementByName("Row 6");
-                        row.Click();
-                        row.SendKeys(unixTimestamp.ToString());
-                        Thread.Sleep(2000);
-                        lib.clickOnAutomationName(session, "File");
-                        Thread.Sleep(4000);
-                        ext = session.FindElements(WorkFlowPageFactory.writeHI);
-                        action = new Actions(session);
-                        action.MoveToElement(ext[0]).Build().Perform();
-                        Thread.Sleep(2000);
-                        session.Keyboard.PressKey(Keys.Enter);
-                     
-
-                        try
-                        {
-                            do
+                            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
+                               
 
-                            } while (session.FindElementByAccessibilityId("WorkerDialog").Enabled);
+                                Thread.Sleep(2000);
+
+                                string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+                                //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
+                                //if (device.Contains("RT"))
+                                //{
+                                //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
+                                //}
+                                //else if (device.Contains("RU"))
+                                //{
+                                //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
+
+                                //}
+                                //else
+                                //{
+                                //    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
+                                //}
+                                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
+
+                                FunctionLibrary lib = new FunctionLibrary();
+
+                                session.SwitchTo().Window(session.WindowHandles.First());
+                                session.SwitchTo().ActiveElement();
+                                Actions actions = new Actions(session);
+                                Thread.Sleep(5000);
+                                session.FindElementByAccessibilityId("FINDICON").Click();
+                                Thread.Sleep(15000);
+                                session.FindElementByAccessibilityId("FINDICON").Click();
+                                Thread.Sleep(15000);
+
+
+                                /** To select the Hi serial number **/
+
+                                var SN = session.FindElementsByClassName("TextBlock");
+
+                                foreach (WindowsElement value in SN)
+
+                                {
+                                    string S = value.Text;
+
+                                    if (S == DeviceNo)
+
+                                    {
+                                        value.Click();
+                                    }
+
+                                }
+
+
+
+                                lib.functionWaitForName(session, "Connect");
+                                lib.waitUntilElementExists(session, "File", 0);
+                                Thread.Sleep(4000);
+                                var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                                ext[0].Click();
+                                Thread.Sleep(2000);
+                                ext = session.FindElements(WorkFlowPageFactory.readHI);
+                                actions = new Actions(session);
+                                actions.MoveToElement(ext[0]).Build().Perform();
+                                Thread.Sleep(2000);
+                                session.Keyboard.PressKey(Keys.Enter);
+                                Thread.Sleep(5000);
+
+                                /** Click on Uncheck button **/
+
+                                session.FindElementByName("Uncheck All").Click();
+                                Thread.Sleep(3000);
+                                session.FindElementByAccessibilityId("1001").Click();
+                                Thread.Sleep(2000);
+
+                                /** Choose the All option in drop down **/
+
+                                var rd = session.FindElementByName("All");
+                                actions.MoveToElement(rd).Click().Perform();
+                                Thread.Sleep(2000);
+
+                                /** To Click the Apply selection button **/
+
+                                session.FindElementByName("Apply selection").Click();
+                                Thread.Sleep(5000);
+                                var txt = session.FindElementByName("0f8e00:0004a ProductionTestData");
+                                txt.Click();
+                                Thread.Sleep(4000);
+                                var data = session.FindElementByName("DataGridView");
+                                data.Click();
+                                var row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 0");
+                                row.Click();
+
+                                /**In order to passing the Date and Time in the Product Testdata **/
+
+                                DateTimeOffset currentTime = DateTimeOffset.Now;
+                                Console.WriteLine(currentTime);
+                                DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
+                                Console.WriteLine(tenDaysAgo);
+                                string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
+                                Console.WriteLine(formattedtenDaysAgo);
+                                long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
+                                Console.WriteLine(unixTimestamp);
+
+                                //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
+                                //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
+                                //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
+                                //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
+
+                                row.SendKeys(formattedtenDaysAgo);
+
+                                //row.SendKeys("2022-08-01 12:45:54Z");
+                                var miniidentification = session.FindElementByName("_Write to");
+                                miniidentification.Click();
+                                Thread.Sleep(3000);
+                                var min = session.FindElementByName("111000:00026 MiniIdentification");
+                                min.Click();
+                                Thread.Sleep(2000);
+                                data = session.FindElementByName("DataGridView");
+                                data.Click();
+                                row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 6");
+                                row.Click();
+
+                                /** In order to passing the Unix time Stamp ID in the Miniidentification **/
+
+                                row.SendKeys(unixTimestamp.ToString());
+                                Thread.Sleep(2000);
+                                min = session.FindElementByName("_Write to");
+                                min.Click();
+                                Thread.Sleep(3000);
+                                stepName.Pass("Writing Presets is done successfully.");
+                            }
+                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+                            {
+                                //if (device.Contains("LT"))
+                                try
+                                {
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.SwitchTo().ActiveElement();
+                                    Thread.Sleep(5000);
+                                    if (session.FindElementByName("Channel").Displayed == true)
+                                    {
+                                        //ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        FunctionLibrary lib = new FunctionLibrary();
+                                        InputSimulator sim = new InputSimulator();
+
+                                        // session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.workingdirectory.Palpatine6);
+                                        // session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");                 
+                                        lib.waitUntilElementExists(session, "Channel", 0);
+                                        var ext = session.FindElements(WorkFlowPageFactory.channel);
+                                        ext[0].Click();
+                                        Thread.Sleep(2000);
+
+                                        if (computer_name.Equals("FSWIRAY80"))
+                                        {
+                                            ext = session.FindElements(WorkFlowPageFactory.inter);
+                                        }
+                                        else
+                                        {
+                                            ext = session.FindElements(WorkFlowPageFactory.domainInterface);
+                                        }
+
+                                        Actions action = new Actions(session);
+
+                                        if (computer_name.Equals("FSWIRAY80"))
+                                        {
+                                            if (side.Equals("Left"))
+                                            {
+                                                action.MoveToElement(ext[0]).Build().Perform();
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.Enter);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                            }
+
+
+                                            else
+                                            {
+                                                action.MoveToElement(ext[0]).Build().Perform();
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.Enter);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                            }
+                                        }
+
+                                        else
+                                        {
+                                            if (side.Equals("Left"))
+                                            {
+                                                action.MoveToElement(ext[1]).Build().Perform();
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.Enter);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                            }
+
+                                            else
+                                            {
+                                                action.MoveToElement(ext[1]).Build().Perform();
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.Enter);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.Enter);
+                                                Thread.Sleep(2000);
+                                            }
+                                        }
+
+                                        session.Keyboard.PressKey(Keys.Enter);
+
+                                        stepName.Log(Status.Pass, side + ": is selected");
+
+                                        lib.waitUntilElementExists(session, "File", 0);
+                                        Thread.Sleep(4000);
+                                        ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                                        ext[0].Click();
+                                        Thread.Sleep(2000);
+                                        ext = session.FindElements(WorkFlowPageFactory.readHI);
+                                        action = new Actions(session);
+                                        action.MoveToElement(ext[0]).Build().Perform();
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.Enter);
+
+                                        Thread.Sleep(2000);
+
+                                        if (computer_name.Equals("FSWIRAY80"))
+                                        {
+                                            var txt = session.FindElementsByName("3e900:004c ProductionTestData");
+                                            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+
+                                            foreach (var item in txt)
+                                            {
+                                                Console.WriteLine(item.GetAttribute("Name"));
+                                                item.Click();
+                                                stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                                            }
+
+                                            Thread.Sleep(2000);
+                                            string text = session.FindElementByName("Value Row 0").GetAttribute("Value");
+                                            Console.WriteLine(text);
+                                            var text1 = session.FindElementsByXPath("(//*[@ClassName='WindowsForms10.Window.8.app.0.2804c64_r17_ad1'])");
+                                            Thread.Sleep(2000);
+
+                                            int Counter = 0;
+                                            foreach (var item in text1)
+                                            {
+                                                Console.WriteLine("Index value :" + Counter + item.Text);
+                                                Console.WriteLine("Index value :" + Counter + item.GetAttribute("Name"));
+                                                Console.WriteLine("Index value :" + Counter + item.GetAttribute("Value"));
+                                                Console.WriteLine("Index value :" + Counter + item.GetAttribute("ControlType"));
+                                                Counter = Counter + 1;
+                                            }
+
+
+                                            string tableName = session.FindElementByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]").GetAttribute("ControlType"); ;
+                                            Console.WriteLine("Table Index value :" + Counter + tableName);
+                                            tableName = session.FindElementByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]").GetAttribute("AutomationId"); ;
+                                            Console.WriteLine("Table Index value :" + Counter + tableName);
+                                            tableName = session.FindElementByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]").FindElementByName("Top Row").GetAttribute("Value");
+                                            var childTable = session.FindElementsByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]//*[@Name='Row 0']//*[@Name='Value Row 0']");
+
+                                            Counter = 0;
+
+                                            foreach (var item in childTable)
+                                            {
+                                                Console.WriteLine("Production Index value :" + Counter + item.Text);
+                                                Console.WriteLine("Production Index value :" + Counter + item.GetAttribute("Name"));
+                                                Console.WriteLine("ProductionIndex value :" + Counter + item.GetAttribute("Value"));
+                                                Console.WriteLine("Production Index value :" + Counter + item.GetAttribute("ControlType"));
+                                                Console.WriteLine("Production Child Table Value is " + item.GetAttribute("HelpText"));
+                                                Counter = Counter + 1;
+                                            }
+
+                                            childTable[0].Click();
+                                            Thread.Sleep(2000);
+                                            childTable[0].Click();
+                                            Thread.Sleep(2000);
+                                            childTable[0].Click();
+                                            Thread.Sleep(2000);
+                                            childTable[0].Clear();
+                                            Thread.Sleep(2000);
+
+                                            //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
+                                            //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
+                                            //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
+                                            //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
+
+                                            DateTimeOffset currentTime = DateTimeOffset.Now;
+                                            Console.WriteLine(currentTime);
+                                            DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
+                                            Console.WriteLine(tenDaysAgo);
+                                            string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
+                                            Console.WriteLine(formattedtenDaysAgo);
+                                            long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
+                                            Console.WriteLine(unixTimestamp);
+
+                                            childTable[0].SendKeys(formattedtenDaysAgo);
+
+                                            //childTable[0].SendKeys("2022-08-01 12:45:54Z");
+                                            Thread.Sleep(2000);
+                                            txt[0].Click();
+                                            Thread.Sleep(4000);
+                                            sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
+                                            Thread.Sleep(4000);
+
+                                            /** Mini identification **/
+
+                                            var txt1 = session.FindElementsByName("2a000:0026 MiniIdentification");
+
+                                            foreach (var item in txt1)
+                                            {
+                                                Console.WriteLine(item.GetAttribute("Name"));
+                                                item.Click();
+                                                stepName.Pass("2a000:0026 MiniIdentification is selected");
+                                            }
+
+                                            Thread.Sleep(2000);
+                                            childTable = session.FindElementsByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[11]//*[@Name='Row 6']//*[@Name='Value Row 6']");
+                                            Thread.Sleep(2000);
+
+                                            Counter = 0;
+                                            foreach (var item in childTable)
+                                            {
+                                                Console.WriteLine("Index value :" + Counter + item.Text);
+                                                Console.WriteLine("Index value :" + Counter + item.GetAttribute("Name"));
+                                                Console.WriteLine("Index value :" + Counter + item.GetAttribute("Value"));
+                                                Console.WriteLine("Index value :" + Counter + item.GetAttribute("ControlType"));
+                                                Console.WriteLine("Child Table Value is " + item.GetAttribute("HelpText"));
+                                                stepName.Log(Status.Pass, "Saved value for date +" + item.Text);
+                                                Counter = Counter + 1;
+                                            }
+
+                                            childTable[0].Click();
+                                            Thread.Sleep(2000);
+                                            childTable[0].Click();
+                                            Thread.Sleep(2000);
+                                            childTable[0].Click();
+                                            Thread.Sleep(2000);
+                                            string timeValue = childTable[0].GetAttribute("Value");
+                                            Console.WriteLine(timeValue);
+                                            childTable[0].Clear();
+                                            Thread.Sleep(2000);
+                                            childTable[0].SendKeys(unixTimestamp.ToString());
+                                            Thread.Sleep(4000);
+                                            txt1[0].Click();
+                                            Thread.Sleep(4000);
+
+                                            sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
+                                            Thread.Sleep(2000);
+
+                                            /** Write Data **/
+
+                                            lib.clickOnAutomationName(session, "File");
+
+                                            Thread.Sleep(4000);
+                                            ext = session.FindElementsByXPath("(//*[@ClassName='" + storageLayOutDate + "'])[12]//*[@Name='File']//*[@LocalizedControlType='menu item'][3]");
+                                            action.MoveToElement(ext[0]).Build().Perform();
+                                            Thread.Sleep(2000);
+                                            sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                                            Thread.Sleep(2000);
+                                            session.SwitchTo().Window(session.WindowHandles.First());
+                                            session.SwitchTo().ActiveElement();
+
+                                            try
+                                            {
+                                                do
+                                                {
+
+                                                } while (session.FindElementByAccessibilityId("WorkerDialog").Enabled);
+
+                                            }
+
+                                            catch (Exception e)
+                                            {
+                                                stepName.Pass("Writing Presets is done successfully.");
+                                            }
+
+                                            /** De select the check boxes  **/
+
+                                            txt[0].Click();
+                                            Thread.Sleep(4000);
+                                            sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
+                                            Thread.Sleep(4000);
+                                            txt1[0].Click();
+                                            Thread.Sleep(4000);
+                                            sim.Keyboard.KeyPress(VirtualKeyCode.SPACE);
+                                            Thread.Sleep(4000);
+                                        }
+                                        else
+                                        {
+                                            var txt = session.FindElementsByName("3e900:004c ProductionTestData");
+
+                                            stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+
+                                            foreach (var item in txt)
+                                            {
+                                                Console.WriteLine(item.GetAttribute("Name"));
+                                                item.Click();
+                                                stepName.Log(Status.Pass, "3e900:004c ProductionTestData " + "is selected");
+                                            }
+
+                                            Thread.Sleep(2000);
+
+
+                                            var data = session.FindElementByName("DataGridView");
+                                            data.Click();
+                                            var row = session.FindElementByName("Value Row 0");
+                                            row.Click();
+
+                                            //DateTime currentDateTime = DateTime.UtcNow; // Get current UTC date and time
+                                            //string formattedDate = currentDateTime.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date
+                                            //DateTime tenDaysAgo = currentDateTime.AddDays(-10);
+                                            //string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ"); // Format the date before 10 Days
+
+                                            DateTimeOffset currentTime = DateTimeOffset.Now;
+                                            Console.WriteLine(currentTime);
+                                            DateTimeOffset tenDaysAgo = currentTime.AddDays(-10);
+                                            Console.WriteLine(tenDaysAgo);
+                                            string formattedtenDaysAgo = tenDaysAgo.ToString("yyyy-MM-dd HH:mm:ssZ");
+                                            Console.WriteLine(formattedtenDaysAgo);
+                                            long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
+                                            Console.WriteLine(unixTimestamp);
+
+                                            row.SendKeys(formattedtenDaysAgo);
+
+                                            //row.SendKeys("2022-08-01 12:45:54Z");
+                                            var min = session.FindElementByName("2a000:0026 MiniIdentification");
+                                            min.Click();
+                                            Thread.Sleep(2000);
+                                            data = session.FindElementByName("DataGridView");
+                                            data.Click();
+                                            row = session.FindElementByName("Row 6");
+                                            row.Click();
+                                            row.SendKeys(unixTimestamp.ToString());
+                                            Thread.Sleep(2000);
+                                            lib.clickOnAutomationName(session, "File");
+                                            Thread.Sleep(4000);
+                                            ext = session.FindElements(WorkFlowPageFactory.writeHI);
+                                            action = new Actions(session);
+                                            action.MoveToElement(ext[0]).Build().Perform();
+                                            Thread.Sleep(2000);
+                                            session.Keyboard.PressKey(Keys.Enter);
+
+
+                                            try
+                                            {
+                                                do
+                                                {
+
+                                                } while (session.FindElementByAccessibilityId("WorkerDialog").Enabled);
+
+                                            }
+
+                                            catch (Exception e)
+                                            {
+                                                stepName.Pass("Writing Presets is done successfully.");
+                                            }
+                                        }
+                                    }
+
+
+                                }
+
+                                catch (Exception e)
+                                {
+
+                                    if (side.Equals("Left"))
+                                    {
+                                        //ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        session = ModuleFunctions.storagelayoutD1(session, stepName, device, side);
+                                    }
+
+
+                                    else
+                                    {
+                                        //ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        session = ModuleFunctions.storagelayoutD1(session, stepName, device, side);
+                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+                                }
+
+
+
+
+
+
+
+
+                            }
+
+
+
+
 
                         }
-
-                        catch (Exception e)
-                        {
-                            stepName.Pass("Writing Presets is done successfully.");
-                        }
-                    }
-                }
-
-
-
-                else if (device.Contains("RE"))
-
-                {
-
-                    if (side.Equals("Left"))
-                    {
-                        ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                        // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                        session = ModuleFunctions.storagelayoutD1(session, test, device, side);
-                    }
-
-
-                    else
-                    {
-                        ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                        //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-                        session = ModuleFunctions.storagelayoutD1(session, test, device, side);
                     }
                 }
             }
-
+           // if (device.Contains("LT") || device.Contains("RE"))
+          
 
 
           session.CloseApp();
