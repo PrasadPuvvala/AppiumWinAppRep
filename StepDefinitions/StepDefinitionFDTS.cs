@@ -213,9 +213,12 @@ namespace AppiumWinApp.StepDefinitions
           * Connects the HI device
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
-        [When(@"\[Get the dump of connected device by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenGetTheDumpOfConnectedDeviceByStorageLayout(string device, string side, string DeviceNo)
+        //[When(@"\[Get the dump of connected device by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+
+        [When(@"\[Get the dump of connected device by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenGetTheDumpOfConnectedDeviceByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
+      
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -224,13 +227,14 @@ namespace AppiumWinApp.StepDefinitions
             {
                 Thread.Sleep(4000);
 
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+               // if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {
 
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device A", side, DeviceNo);
-                test.Log(Status.Pass, " Dump image taken for Device A ");
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device A", side, DeviceNo, DeviceType);
+                stepName.Log(Status.Pass, " Dump image taken for Device A ");
 
             }
             else if (side.Equals("Right"))
@@ -239,11 +243,12 @@ namespace AppiumWinApp.StepDefinitions
 
                 Thread.Sleep(4000);
 
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                //if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device B ");
 
             }
@@ -254,11 +259,12 @@ namespace AppiumWinApp.StepDefinitions
 
                 Thread.Sleep(4000);
 
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                // if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketC(session, test, device);
+                    ModuleFunctions.socketC(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device C ");
 
             }
@@ -273,12 +279,13 @@ namespace AppiumWinApp.StepDefinitions
                 }
                 catch (Exception e) { }
 
-                if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                // if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
 
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo);
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device C ");
 
             }
@@ -291,13 +298,16 @@ namespace AppiumWinApp.StepDefinitions
          *  Navigates to System settings - Communication device
          *  Changes the Interface Channel side **/
 
-        [Given(@"Lauch socket Driver ""([^""]*)""")]
-        public void GivenLauchSocketDriver(string device)
+        //[Given(@"Lauch socket Driver ""([^""]*)""")]
+        [Given(@"Lauch socket Driver ""([^""]*)""and""([^""]*)""")]
+        public void GivenLauchSocketDriverAnd(string device, string DeviceType)
         {
+                 
            
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
             {
-                ModuleFunctions.socket(session, test, device);
+                ModuleFunctions.socket(session, test, DeviceType);
             }
 
         }
@@ -338,10 +348,12 @@ namespace AppiumWinApp.StepDefinitions
           * Navigates to services tab
           * Perfrom restore operation using RTS Option **/
 
-        [When(@"\[Perform Restore with above captured image using RTS option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
-        public void WhenPerformRestoreWithAboveCapturedImageUsingRTSOption(string DeviceLeftSlNo, string deviceSlNo, string device, string side)
+        // [When(@"\[Perform Restore with above captured image using RTS option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
+        [When(@"\[Perform Restore with above captured image using RTS option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        public void WhenPerformRestoreWithAboveCapturedImageUsingRTSOptionAndAndAndAnd(string DeviceLeftSlNo, string deviceSlNo, string device, string side, string DeviceType)
         {
-            FunctionLibrary lib = new FunctionLibrary();
+
+           FunctionLibrary lib = new FunctionLibrary();
 
             config = (appconfigsettings)_featureContext["config"];
 
@@ -354,23 +366,24 @@ namespace AppiumWinApp.StepDefinitions
 
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
                 {
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
                 else if (side.Equals("Right"))
 
                 {
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
 
                 else if (side.Equals("Cdevice"))
 
                 {
-                    ModuleFunctions.socketC(session, test, device);
+                    ModuleFunctions.socketC(session, test, DeviceType);
                 }
             }
 
@@ -395,7 +408,8 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
                 stepName.Log(Status.Pass, "Clicked on Discover.");
@@ -476,7 +490,8 @@ namespace AppiumWinApp.StepDefinitions
 
             /** Identifying checkbox **/
 
-            if (device.Contains("LT") || device.Contains("RE"))
+            // if (device.Contains("LT") || device.Contains("RE"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
             {
 
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
@@ -542,23 +557,24 @@ namespace AppiumWinApp.StepDefinitions
             btncls1.Click();
             Thread.Sleep(1000);
 
-            if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
                 {
-                    ModuleFunctions.socketA(session, test, device);
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
                 else if (side.Equals("Right"))
 
                 {
-                    ModuleFunctions.socketB(session, test, device);
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
 
                 else if (side.Equals("Cdevice"))
 
                 {
-                    ModuleFunctions.socketC(session, test, device);
+                    ModuleFunctions.socketC(session, test, DeviceType);
                 }
             }
 
