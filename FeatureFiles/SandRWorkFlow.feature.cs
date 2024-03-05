@@ -127,8 +127,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 17
  testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -186,16 +186,12 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 47
- testRunner.When(string.Format("[Create a Patient and Fitting HI In FSW \"<AlterFSWNo>\" and \"{0}\" and \"{1}\" and \"{" +
-                            "2}\"and\"{3}\"]", deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
 #line 48
  testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 49
- testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 50
  testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -379,8 +375,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("[Cleaning up Capture and Restore Reports Before Launch SandR]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 155
- testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 156
  testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -402,7 +398,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("07Test Case ID 1105498: Verify that S&R Tool properly sets listening test setting" +
             "s")]
         [NUnit.Framework.CategoryAttribute("tag7")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806646", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806546", "Rechargeable", null)]
         public void _07TestCaseID1105498VerifyThatSRToolProperlySetsListeningTestSettings(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -440,8 +436,8 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 216
-    testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 217
     testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -459,7 +455,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("09Test case ID 1629628: Verify that firmware is upgraded if conditions apply")]
         [NUnit.Framework.CategoryAttribute("tag09")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300806646", "NoDev", "2300806615", "Yes", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300806546", "NoDev", "2300806615", "Yes", "Rechargeable", null)]
         public void _09TestCaseID1629628VerifyThatFirmwareIsUpgradedIfConditionsApply(
                     string deviceId, 
                     string deviceLeft, 
@@ -545,7 +541,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("10Test Case ID 1629629: Verify that firmware is downgraded if conditions apply")]
         [NUnit.Framework.CategoryAttribute("tag10")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300806646", "NoDev", "2300806615", "Yes", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300806546", "NoDev", "2300806615", "Yes", "Rechargeable", null)]
         public void _10TestCaseID1629629VerifyThatFirmwareIsDowngradedIfConditionsApply(
                     string deviceId, 
                     string deviceLeft, 
@@ -636,7 +632,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("11Test Case ID 1105470: Verify the data saved during capture and cleaning in Came" +
             "lot Cloud")]
         [NUnit.Framework.CategoryAttribute("tag11")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806646", "capture", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806546", "capture", "Rechargeable", null)]
         public void _11TestCaseID1105470VerifyTheDataSavedDuringCaptureAndCleaningInCamelotCloud(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -675,8 +671,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 314
- testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 315
  testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -704,7 +700,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("12Test Case ID 1101758: Verify device information is uploaded to Camelot cloud co" +
             "rrectly")]
         [NUnit.Framework.CategoryAttribute("tag12")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806646", "service records", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806546", "service records", "Rechargeable", null)]
         public void _12TestCaseID1101758VerifyDeviceInformationIsUploadedToCamelotCloudCorrectly(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -771,7 +767,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("13Test Case ID 1105521: Verify the data saved during restore in Camelot Cloud")]
         [NUnit.Framework.CategoryAttribute("tag13")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806646", "restore", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806546", "restore", "Rechargeable", null)]
         public void _13TestCaseID1105521VerifyTheDataSavedDuringRestoreInCamelotCloud(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -805,8 +801,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 379
- testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 380
  testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -837,7 +833,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("14Test Case ID 1103983: Verify cloud icon is shown when device information in sav" +
             "ed in cloud")]
         [NUnit.Framework.CategoryAttribute("tag14")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806646", "service records", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806546", "service records", "Rechargeable", null)]
         public void _14TestCaseID1103983VerifyCloudIconIsShownWhenDeviceInformationInSavedInCloud(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -892,7 +888,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("15Test Case ID 1105696: Verify that fitting data is properly restored during rest" +
             "oration on new device (RTS)")]
         [NUnit.Framework.CategoryAttribute("tag15")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Temp", "Yes", "No", "2300806646", "NoDev", "2300806615", "Yes", "2000816933", "Cdevice", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Temp", "Yes", "No", "2300806546", "NoDev", "2300806615", "Yes", "2000816933", "Cdevice", "Rechargeable", null)]
         public void _15TestCaseID1105696VerifyThatFittingDataIsProperlyRestoredDuringRestorationOnNewDeviceRTS(
                     string deviceId, 
                     string deviceLeft, 
@@ -965,8 +961,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 449
- testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 450
  testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -1040,7 +1036,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("16Test Case ID 1105669: Verify that fitting data is properly restored during rest" +
             "oration on original device or Clone (SWAP)")]
         [NUnit.Framework.CategoryAttribute("tag16")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300806646", "NoDev", "2300806615", "Yes", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300806546", "NoDev", "2300806615", "Yes", "Rechargeable", null)]
         public void _16TestCaseID1105669VerifyThatFittingDataIsProperlyRestoredDuringRestorationOnOriginalDeviceOrCloneSWAP(
                     string deviceId, 
                     string deviceLeft, 
@@ -1115,8 +1111,8 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 513
-        testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+        testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 514
         testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -1159,8 +1155,8 @@ this.ScenarioInitialize(scenarioInfo);
         testRunner.When(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"]", deviceId, deviceLeftSlNo, devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 531
-        testRunner.When("[Go to Device Info tab and capture device info in excel then verify the device in" +
-                        "formation is shown correctly]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+        testRunner.When(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 532
         testRunner.When("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -1189,7 +1185,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("17Test Case ID 1142328: PC_Verify HI can be PC programmed properly.")]
         [NUnit.Framework.CategoryAttribute("tag17")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806646", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300806615", "Yes", "Right", "Left", "2300806546", "Rechargeable", null)]
         public void _17TestCaseID1142328PC_VerifyHICanBePCProgrammedProperly_(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {

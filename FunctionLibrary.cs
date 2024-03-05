@@ -438,44 +438,123 @@ namespace AppiumWinApp
 
         }
 
+        public void LogElementStatus(ExtentTest test, string elementName, string textValue, string textBoxValue)
+        {
+            if (textValue == elementName)
+            {
+                if (string.IsNullOrEmpty(textBoxValue))
+                {
+                    test.Log(Status.Fail, $"{elementName} is displayed as => {textBoxValue}");
+                }
+                else
+                {
+                    if (textValue == "Fitting Software")
+                    {
+                        if (textBoxValue.Contains("?"))
+                        {
+                            test.Log(Status.Fail, $"{elementName} is displayed as => {textBoxValue}");
+                        }
+                        else
+                        {
+                            test.Log(Status.Pass, $"{elementName} is displayed as => {textBoxValue}");
+                        }
+                    }
+                    else
+                    {
+                        test.Log(Status.Pass, $"{elementName} is displayed as => {textBoxValue}");
+                    }                 
+                }
+            }                 
+        }
 
         /** To get the Device information into the Excel sheet **/
 
-        public void getDeviceInfo(WindowsDriver<WindowsElement> session)
+        public void getDeviceInfo(WindowsDriver<WindowsElement> session,ExtentTest test,string deviceType)
         {
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
-            var labels = session.FindElementsByClassName("Text");
-            strArray = new string[labels.Count];
+            var textElements = session.FindElementsByClassName("Text");
+            //strArray = new string[labels.Count];
             int i = 0;
 
-            foreach (var label in labels)
+            //foreach (var label in labels)
+            //{
+            //    Console.Write(label.Text);
+
+            //    strArray[i] = label.Text;
+            //    i = i + 1;
+            //}
+
+            var textboxElements = session.FindElementsByClassName("TextBox");
+            var textvalues=textElements.Select(e=>e.Text).ToArray();
+            var textboxvalues=textboxElements.Select(e=>e.Text).ToArray();
+            LogElementStatus(test, "Model Name", textvalues[3], textboxvalues[0]);
+            LogElementStatus(test, "Private Label", textvalues[4], textboxvalues[1]);
+            LogElementStatus(test, "Serial Number", textvalues[5], textboxvalues[2]);
+            LogElementStatus(test, "Hybrid S/N", textvalues[6], textboxvalues[3]);
+            LogElementStatus(test, "Hybrid Version", textvalues[7], textboxvalues[4]);
+            LogElementStatus(test, "Firmware Version", textvalues[8], textboxvalues[5]);
+            LogElementStatus(test, "Wireless", textvalues[9], textboxvalues[6]);
+            LogElementStatus(test, "Volume Control", textvalues[10], textboxvalues[7]);
+            LogElementStatus(test, "Push Button", textvalues[11], textboxvalues[8]);
+            LogElementStatus(test, "Telecoil", textvalues[12], textboxvalues[9]);
+            LogElementStatus(test, "DAI", textvalues[13], textboxvalues[10]);
+            LogElementStatus(test, "AutoPhone", textvalues[14], textboxvalues[11]);
+            LogElementStatus(test, "TBR", textvalues[15], textboxvalues[12]);
+            if (deviceType == "Rechargeable")
             {
-                Console.Write(label.Text);
-
-                strArray[i] = label.Text;
-                i = i + 1;
+                LogElementStatus(test, "RHI Battery Health", textvalues[17], textboxvalues[14]);
+                LogElementStatus(test, "Battery Type", textvalues[18], textboxvalues[15]);
+                LogElementStatus(test, "Battery Level", textvalues[19], textboxvalues[16]);
             }
+            LogElementStatus(test, "Final Test Date", textvalues[20], textboxvalues[17]);
+            LogElementStatus(test, "Test Program", textvalues[22], textboxvalues[18]);
+            LogElementStatus(test, "Test Station", textvalues[22], textboxvalues[19]);
+            LogElementStatus(test, "Test Site", textvalues[23], textboxvalues[20]);
+            LogElementStatus(test, "Fitting Software", textvalues[24], textboxvalues[21]);
+            LogElementStatus(test, "Fitting Side", textvalues[25], textboxvalues[22]);
+            LogElementStatus(test, "Binaural", textvalues[26], textboxvalues[23]);
+            LogElementStatus(test, "Cloud HIID", textvalues[27], textboxvalues[24]);
+            LogElementStatus(test, "Paired Accessories", textvalues[28], textboxvalues[25]);
+            //i = 0;
+            //strArrayVal = new string[labelValue.Count];
 
-            var labelValue = session.FindElementsByClassName("TextBox");
-            i = 0;
-            strArrayVal = new string[labelValue.Count];
+            //foreach (var label in labelValue)
+            //{
+            //    Console.Write(label.Text.ToString());
+            //    strArrayVal[i] = label.Text.ToString();
+            //    i = i + 1;
 
-            foreach (var label in labelValue)
-            {
-                Console.Write(label.Text.ToString());
-                strArrayVal[i] = label.Text.ToString();
-                i = i + 1;
-
-            }
-
+            //}
+            //if (strArray[3]== "Model Name")
+            //{
+            //    if (strArrayVal[0] == "")
+            //    {
+            //        test.Log(Status.Fail, strArray[3] + ":" + strArrayVal[0]);
+            //    }
+            //    else
+            //    {
+            //        test.Log(Status.Pass, strArray[3] + ":" + strArrayVal[0]);
+            //    }
+            //}
+            //if (strArray[4] == "Private Label")
+            //{
+            //    if (strArrayVal[1] == "")
+            //    {
+            //        test.Log(Status.Fail, strArray[4] + ":" + strArrayVal[1]);
+            //    }
+            //    else
+            //    {
+            //        test.Log(Status.Pass, strArray[4] + ":" + strArrayVal[1]);
+            //    }
+            //}
 
             /*Excel */
 
 
             String textDir = Directory.GetCurrentDirectory();
 
-            var path = textDir + "\\" + strArrayVal[0] + ".xlsx";
+            var path = textDir + "\\" + textboxvalues[0] + ".xlsx";
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (ExcelPackage excelPackage = new ExcelPackage())
@@ -492,16 +571,16 @@ namespace AppiumWinApp
 
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Sheet 1");
 
-                for (i = 0; i < strArray.Length; i++)
+                for (i = 0; i < textvalues.Length; i++)
                 {
-                    worksheet.Cells[i + 1, 1].Value = strArray[i]; // Column= 1, Row =3
+                    worksheet.Cells[i + 1, 1].Value = textvalues[i]; // Column= 1, Row =3
 
                 }
-                for (i = 0; i < strArrayVal.Length; i++)
+                for (i = 0; i < textboxvalues.Length; i++)
                 {
                     // Column= 1, Row =3
 
-                    worksheet.Cells[i + 4, 2].Value = strArrayVal[i]; //*adding data
+                    worksheet.Cells[i + 4, 2].Value = textboxvalues[i]; //*adding data
 
 
                 }

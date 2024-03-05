@@ -66,6 +66,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", path);
             appCapabilities.SetCapability("appArguments", "--run-as-administrator");
+            appCapabilities.SetCapability("ms:waitForAppLaunch", "40");
             Thread.Sleep(8000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);

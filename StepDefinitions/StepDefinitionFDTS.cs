@@ -535,7 +535,7 @@ namespace AppiumWinApp.StepDefinitions
 
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            stepName.Log(Status.Pass, "Restore is successful.");
+           // stepName.Log(Status.Pass, "Restore is successful.");
 
 
 
@@ -548,6 +548,20 @@ namespace AppiumWinApp.StepDefinitions
             catch (Exception e)
             {
 
+            }
+
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
+            {
+
+                stepName.Log(Status.Pass, "Restoration " + text.Text);
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
             }
 
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);

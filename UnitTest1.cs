@@ -691,7 +691,7 @@ namespace AppiumWinApp
 
              lib = new FunctionLibrary();
 
-               lib.getDeviceInfo(session);
+               //lib.getDeviceInfo(session,stepName);
                Thread.Sleep(1000);
 
             // FunctionLibrary lib = new FunctionLibrary();

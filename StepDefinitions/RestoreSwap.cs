@@ -223,7 +223,8 @@ namespace AppiumWinApp.StepDefinitions
             Thread.Sleep(5000);
 
             /* Identifying checkbox */
-            if (device.Contains("LT") || device.Contains("RE"))
+            // if (device.Contains("LT") || device.Contains("RE"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
                 Thread.Sleep(2000);
@@ -256,7 +257,7 @@ namespace AppiumWinApp.StepDefinitions
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            stepName.Log(Status.Pass, "Restore is successful.");
+            //stepName.Log(Status.Pass, "Restore is successful.");
        
 
             try
@@ -269,9 +270,22 @@ namespace AppiumWinApp.StepDefinitions
 
             }
 
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
+            {
+
+                stepName.Log(Status.Pass, "Restoration " + text.Text);
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
+            }
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
-            stepName.Log(Status.Pass, "Restore is successful.");
+            //stepName.Log(Status.Pass, "Restore is successful.");
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();
             Thread.Sleep(1000);
@@ -439,7 +453,7 @@ namespace AppiumWinApp.StepDefinitions
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            stepName.Log(Status.Pass, "Restore is successful.");
+            //stepName.Log(Status.Pass, "Restore is successful.");
 
 
             try
@@ -451,10 +465,24 @@ namespace AppiumWinApp.StepDefinitions
             {
             }
 
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
+            {
+
+
+                stepName.Log(Status.Pass, "Restoration " + text.Text);
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
+            }
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
             session = lib.waitForElement(session, "OK");
-            stepName.Log(Status.Pass, "Restore is successful.");         
+           // stepName.Log(Status.Pass, "Restore is successful.");         
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();          
         }
