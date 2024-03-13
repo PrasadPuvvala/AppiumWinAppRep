@@ -24,6 +24,8 @@ using System.Diagnostics;
 //using Console = System.Console;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +36,7 @@ using Xamarin.Forms;
 using Console = System.Console;
 using Environment = System.Environment;
 using File = System.IO.File;
+using AventStack.ExtentReports.Gherkin.Model;
 
 namespace MyNamespace
 {
@@ -53,7 +56,6 @@ namespace MyNamespace
         private static ExtentReports extent;
         private static ExtentHtmlReporter htmlReporter;
         private static ExtentTest test;
-
 
         public TestContext TestContext { get; set; }
 
@@ -290,7 +292,7 @@ namespace MyNamespace
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            lib.PassingXML(test);
+            //lib.PassingXML(test);
 
         }
 
@@ -487,13 +489,19 @@ namespace MyNamespace
             //    Console.WriteLine("An error occurred: " + ex.Message);
             //}
 
-            processKill("SmartFit");
-            processKill("SmartFitSA");
-            processKill("Camelot.WorkflowRuntime");
-            processKill("Camelot.SystemInfobar");
-            processKill("Lucan.App.UI");
-            processKill("StorageLayoutViewer");
-            processKill("WinAppDriver.exe");
+            //processKill("SmartFit");
+            //processKill("SmartFitSA");
+            //processKill("Camelot.WorkflowRuntime");
+            //processKill("Camelot.SystemInfobar");
+            //processKill("Lucan.App.UI");
+            //processKill("StorageLayoutViewer");
+            //processKill("WinAppDriver.exe");
+
+            string[] processesToKill = { "SmartFit", "SmartFitSA", "Camelot.WorkflowRuntime", "Camelot.SystemInfobar", "Lucan.App.UI", "StorageLayoutViewer", "WinAppDriver.exe" };
+            foreach (string processName in processesToKill)
+            {
+                processKill(processName);
+            }
         }
 
         public void processKill(string name)
@@ -1801,7 +1809,19 @@ namespace MyNamespace
                     if (element.Text == "Connection Lost")
                     {
                         stepName.Log(Status.Fail, "Connection Error");
-                        Assert.Fail("This step intentionally fails.");
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+                        mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("anjaneyulu.chinthapalli@i-raysolutions.com"));
+                        mailMessage.Subject = "S&R Automation Script Error";
+                        mailMessage.Body = "FSW Connection Error";
+                        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+                        smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+                        smtpClient.EnableSsl = true; // Enable SSL/TLS
+                        smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+                        smtpClient.Send(mailMessage);
                         processKill("SmartFit");
                         processKill("SmartFitSA");
                         break;
@@ -1979,7 +1999,19 @@ namespace MyNamespace
                     else if (element.Text =="Connection Error")
                     {
                         stepName.Log(Status.Fail, "Connection Error");
-                        Assert.Fail("This step intentionally fails.");
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+                        mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("anjaneyulu.chinthapalli@i-raysolutions.com"));
+                        mailMessage.Subject = "S&R Automation Script Error";
+                        mailMessage.Body = "FSW Connection Error";
+                        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+                        smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+                        smtpClient.EnableSsl = true; // Enable SSL/TLS
+                        smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+                        smtpClient.Send(mailMessage);
                         processKill("SmartFit");
                         processKill("SmartFitSA");
                         break;
@@ -2156,7 +2188,7 @@ namespace MyNamespace
                     }
                 }
                 catch (Exception e) {
-                    throw new Exception(e.Message);
+                throw new Exception(e.Message);
                 }
             }         
         }
@@ -2205,15 +2237,15 @@ namespace MyNamespace
             try
             {
                 //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
-                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
-                {                 
-                    ModuleFunctions.socketA(session, test, DeviceType);
-                                   
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                {
+                ModuleFunctions.socketA(session, stepName, DeviceType);
+
                 }
             }
             catch { }
 
-            //Thread.Sleep(10000);
+            Thread.Sleep(10000);
 
             //try
             //{
@@ -2265,13 +2297,38 @@ namespace MyNamespace
                     try
                     {
                         session.SwitchTo().Window(session.WindowHandles.First());
+                        string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                        if (session.FindElementByName("Discover").Text == "Discover")
+                        while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                         {
-                            session.SwitchTo().Window(session.WindowHandles.First());
-                            session.FindElementByName("Search").Click();
+
+                            if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                            {
+                                var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                stepName.Log(Status.Info, sandRConnection);
+                                var btncls = session.FindElementByAccessibilityId("PART_Close");
+                                btncls.Click();
+                                Thread.Sleep(1000);
+                                 ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo);
+                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                            }
+
+                            if (session.FindElementByName("Discover").Text == "Discover")
+                            {
+                                session.SwitchTo().Window(session.WindowHandles.First());
+                                session.FindElementByName("Search").Click();
+                            }
+
+
+
                         }
-                      
+
+
+
+                        //Thread.Sleep(5000);                
+
+
                     }
                     catch (Exception)
                     {
@@ -2935,24 +2992,72 @@ namespace MyNamespace
 
                     /** Finding the HI till Disconnect button on the display **/
 
-                    do
-                    {
+                    //do
+                    //{
+                    //    try
+                    //    {
+                    //        session.SwitchTo().Window(session.WindowHandles.First());
+
+                    //        if (session.FindElementByName("Discover").Text == "Discover")
+                    //        {
+                    //            session.SwitchTo().Window(session.WindowHandles.First());
+                    //            session.FindElementByName("Search").Click();
+                    //        }
+                    //    }
+                    //    catch (Exception)
+                    //    {
+
+                    //    }
+
+                    //} while (!session.FindElementByName("Disconnect").Displayed);
+
+                     do
+                     {
                         try
                         {
                             session.SwitchTo().Window(session.WindowHandles.First());
+                            string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                            if (session.FindElementByName("Discover").Text == "Discover")
+                            while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                             {
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.FindElementByName("Search").Click();
+
+                                if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                                {
+                                    var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                    stepName.Log(Status.Info, sandRConnection);
+                                    var btncls1 = session.FindElementByAccessibilityId("PART_Close");
+                                    btncls1.Click();
+                                    Thread.Sleep(1000);
+                                     ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo);
+                                     session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                                }
+
+                                if (session.FindElementByName("Discover").Text == "Discover")
+                                {
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.FindElementByName("Search").Click();
+                                }
+
+
+
                             }
+
+
+
+                            //Thread.Sleep(5000);                
+
+
                         }
                         catch (Exception)
                         {
 
                         }
 
-                    } while (!session.FindElementByName("Disconnect").Displayed);
+                     
+                     } while (!session.FindElementByName("Disconnect").Displayed);
+
+
 
                     session = lib.waitForElement(session, "Model Name");
 
@@ -3570,15 +3675,23 @@ namespace MyNamespace
 
                                 FunctionLibrary lib = new FunctionLibrary();
 
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.SwitchTo().ActiveElement();
+                                //session.SwitchTo().Window(session.WindowHandles.First());
+                                //session.SwitchTo().ActiveElement();
                                 Actions actions = new Actions(session);
                                 Thread.Sleep(5000);
                                 session.FindElementByAccessibilityId("FINDICON").Click();
                                 Thread.Sleep(15000);
                                 session.FindElementByAccessibilityId("FINDICON").Click();
-                                Thread.Sleep(15000);
+                                Thread.Sleep(2000);
 
+                                var Popup = session.FindElementByClassName("Popup");
+                                int height = Popup.Size.Height;
+                                var drag = Popup.FindElementsByClassName("Thumb");
+                                Actions action = new Actions(session);
+                                action.MoveToElement(drag[6]).Perform();
+                                action.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
+                                Thread.Sleep(15000);
 
                                 /** To select the Hi serial number **/
 

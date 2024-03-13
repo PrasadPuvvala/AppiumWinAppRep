@@ -433,17 +433,63 @@ namespace AppiumWinApp.StepDefinitions
                         session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(deviceSlNo);
                     }
 
+                    //do
+                    //{
+                    //    try
+                    //    {
+                    //        session.SwitchTo().Window(session.WindowHandles.First());
+
+                    //        if (session.FindElementByName("Discover").Text == "Discover")
+                    //        {
+                    //            session.SwitchTo().Window(session.WindowHandles.First());
+                    //            session.FindElementByName("Search").Click();
+                    //        }
+
+                    //    }
+                    //    catch (Exception)
+                    //    {
+
+                    //    }
+
+                    //} while (!session.FindElementByName("Disconnect").Displayed);
+
+
                     do
                     {
                         try
                         {
                             session.SwitchTo().Window(session.WindowHandles.First());
+                            string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                            if (session.FindElementByName("Discover").Text == "Discover")
+                            while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                             {
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.FindElementByName("Search").Click();
+
+                                if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                                {
+                                    var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                    stepName.Log(Status.Info, sandRConnection);
+                                    var btncls = session.FindElementByAccessibilityId("PART_Close");
+                                    btncls.Click();
+                                    Thread.Sleep(1000);
+                                    ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo);
+                                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                                }
+
+                                if (session.FindElementByName("Discover").Text == "Discover")
+                                {
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.FindElementByName("Search").Click();
+                                }
+
+
+
                             }
+
+
+
+                            //Thread.Sleep(5000);                
+
 
                         }
                         catch (Exception)
@@ -527,13 +573,13 @@ namespace AppiumWinApp.StepDefinitions
             /** To pass the Device serial number **/
 
             session.FindElementByAccessibilityId("textBoxSerialNumber").SendKeys(DeviceLeftSlNo);
-            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+            //ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             Thread.Sleep(2000);
             session = lib.functionWaitForId(session, "buttonFind");
 
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
 
-            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+           // ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
            // stepName.Log(Status.Pass, "Restore is successful.");
 

@@ -65,4 +65,17 @@
     <Folder Include="Reports\" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <!-- Move your configuration settings inside this PropertyGroup -->
+    <configuration>
+      <system.net>
+        <mailSettings>
+          <smtp deliveryMethod="Network">
+            <network host="smtp.gmail.com" enableSsl="true" port="587" userName="assettracker@i-raysolutions.com" password="asset@2k19" />
+          </smtp>
+        </mailSettings>
+      </system.net>
+    </configuration>
+  </PropertyGroup>
+
 </Project>
