@@ -31,6 +31,7 @@ using Xamarin.Forms.Internals;
 
 namespace AppiumWinApp
 {
+
     internal class FunctionLibrary
     {
         string[] strArray;
@@ -438,51 +439,66 @@ namespace AppiumWinApp
 
         }
 
+        public void LogElementStatus(ExtentTest test, string elementName, string textBoxValue)
+        {
+            if (string.IsNullOrEmpty(textBoxValue) || textBoxValue.Contains("?"))
+            {
+                test.Log(Status.Fail, $"{elementName} is displayed as => {textBoxValue}");
+            }
+            else
+            {
+                test.Log(Status.Pass, $"{elementName} is displayed as => {textBoxValue}");
+            }
+        }
 
         /** To get the Device information into the Excel sheet **/
 
-        public void getDeviceInfo(WindowsDriver<WindowsElement> session)
+        public void getDeviceInfo(WindowsDriver<WindowsElement> session,ExtentTest test,string deviceType)
         {
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
-            var labels = session.FindElementsByClassName("Text");
-            strArray = new string[labels.Count];
-            int i = 0;
+            var textElements = session.FindElementsByClassName("Text");
+            var textboxElements = session.FindElementsByClassName("TextBox");
+            var textValues = textElements.Select(e => e.Text).ToArray();
+            var textboxValues = textboxElements.Select(e => e.Text).ToArray();
+            int startIndex = 3;
+            int endIndex = textValues.Length;
 
-            foreach (var label in labels)
+            for (int i = startIndex; i <= endIndex - 1; i++)
             {
-                Console.Write(label.Text);
-
-                strArray[i] = label.Text;
-                i = i + 1;
+                if (deviceType == "Wired" || deviceType == "Non-Rechargeable")
+                {
+                    if (i >= 16 && i <= 19)
+                    {
+                        continue;
+                    }
+                    LogElementStatus(test, textValues[i], textboxValues[i - startIndex]);
+                }
+                else if (deviceType == "Rechargeable" || deviceType == "D1rechargeableWired")
+                {
+                    if (i == 16)
+                    {
+                        continue;
+                    }
+                    LogElementStatus(test, textValues[i], textboxValues[i - startIndex]);
+                }
+                else
+                {
+                    LogElementStatus(test, textValues[i], textboxValues[i - startIndex]);
+                }
             }
-
-            var labelValue = session.FindElementsByClassName("TextBox");
-            i = 0;
-            strArrayVal = new string[labelValue.Count];
-
-            foreach (var label in labelValue)
-            {
-                Console.Write(label.Text.ToString());
-                strArrayVal[i] = label.Text.ToString();
-                i = i + 1;
-
-            }
-
 
             /*Excel */
 
 
             String textDir = Directory.GetCurrentDirectory();
 
-            var path = textDir + "\\" + strArrayVal[0] + ".xlsx";
+            var path = textDir + "\\" + textboxValues[0] + ".xlsx";
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-
                 //Set some properties of the Excel document
-
                 excelPackage.Workbook.Properties.Author = "Test S&R Tool";
                 excelPackage.Workbook.Properties.Title = "Device Info Parameters";
                 excelPackage.Workbook.Properties.Subject = "Write in Excel";
@@ -492,20 +508,15 @@ namespace AppiumWinApp
 
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Sheet 1");
 
-                for (i = 0; i < strArray.Length; i++)
+                for ( int i = 0; i < textValues.Length; i++)
                 {
-                    worksheet.Cells[i + 1, 1].Value = strArray[i]; // Column= 1, Row =3
-
+                    worksheet.Cells[i + 1, 1].Value = textValues[i]; // Column= 1, Row =3
                 }
-                for (i = 0; i < strArrayVal.Length; i++)
+                for (int i = 0; i < textboxValues.Length; i++)
                 {
                     // Column= 1, Row =3
-
-                    worksheet.Cells[i + 4, 2].Value = strArrayVal[i]; //*adding data
-
-
+                    worksheet.Cells[i + 4, 2].Value = textboxValues[i]; //*adding data
                 }
-
 
                 //Save your file
 
@@ -2458,6 +2469,31 @@ namespace AppiumWinApp
             //Sandclose.Click();
 
         }
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

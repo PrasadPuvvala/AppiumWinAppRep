@@ -66,6 +66,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", path);
             appCapabilities.SetCapability("appArguments", "--run-as-administrator");
+            appCapabilities.SetCapability("ms:waitForAppLaunch", "25");
             Thread.Sleep(8000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
@@ -1723,12 +1724,21 @@ namespace AppiumWinApp
                                 FunctionLibrary lib = new FunctionLibrary();
                                 Actions actions = new Actions(session);
 
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.SwitchTo().ActiveElement();
+                                //session.SwitchTo().Window(session.WindowHandles.First());
+                                //session.SwitchTo().ActiveElement();
                                 Thread.Sleep(2000);
                                 session.FindElementByAccessibilityId("FINDICON").Click();
                                 Thread.Sleep(10000);
                                 session.FindElementByAccessibilityId("FINDICON").Click();
+                                Thread.Sleep(2000);
+
+                                var Popup = session.FindElementByClassName("Popup");
+                                int height = Popup.Size.Height;
+                                var drag = Popup.FindElementsByClassName("Thumb");
+                                Actions action = new Actions(session);
+                                action.MoveToElement(drag[6]).Perform();
+                                action.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
                                 Thread.Sleep(15000);
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 session.SwitchTo().ActiveElement();
@@ -2369,7 +2379,7 @@ namespace AppiumWinApp
         {
             config = config1;
             return config;
-        }
+                                                                                                                                                             }
 
         /** This is to modify the values in Miniidentification
          * and Production test data in storagelayout to get 
@@ -2638,7 +2648,104 @@ namespace AppiumWinApp
                     session.SwitchTo().ActiveElement();
                 } while (session.FindElementByAccessibilityId("MessageForm").Displayed);
             
-        }  
+        }
+
+
+        public static void Recovery(WindowsDriver<WindowsElement> session, ExtentTest stepname, string DeviceType, string DeviceNo)
+        {
+            FunctionLibrary lib = new FunctionLibrary();
+
+            try
+            {
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                {
+                    ModuleFunctions.socketA(session, stepname, DeviceType);
+
+
+                }
+            }
+            catch { }
+
+            //Thread.Sleep(10000);
+
+            try
+            {
+                session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            //Thread.Sleep(5000);
+
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+            stepname.Log(Status.Pass, "S&R Tool launched successfully");
+            lib.waitUntilElementExists(session, "Device Info", 0);
+            session.FindElementByName("Device Info").Click();
+            //Thread.Sleep(2000);
+
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+            {
+                session.FindElementByName("Discover").Click();
+                stepname.Log(Status.Pass, "Clicked on Discover.");
+                session.SwitchTo().Window(session.WindowHandles.First());
+                session.SwitchTo().ActiveElement();
+
+
+                try
+                {
+                    session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceNo);
+                    lib.functionWaitForName(session, "Search");
+                }
+
+                catch (Exception ex)
+                {
+
+                }
+
+
+                //do
+                //{
+                //    try
+                //    {
+                //        session.SwitchTo().Window(session.WindowHandles.First());
+
+                //        //if (session.FindElementByAccessibilityId("TextBox_1").Text)
+                //        //{
+
+                //        //}
+
+                //        if (session.FindElementByName("Discover").Text == "Discover")
+                //        {
+                //            session.SwitchTo().Window(session.WindowHandles.First());
+                //            session.FindElementByName("Search").Click();
+                //        }
+
+
+
+
+
+                //    }
+                //    catch (Exception)
+                //    {
+
+                //    }
+
+                //} while (!session.FindElementByName("Disconnect").Displayed);
+
+
+
+
+            }
+
+        }
+
+
+
+
+
 
     } /**End of ModuleFunctions*/ 
     

@@ -8,24 +8,24 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
 	Given Lauch socket Driver "<DeviceId>"and"<Devicetype>"
 	#Given [Change channel side in FDTS<DeviceLeft>]
 	#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>"
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
  	When [Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
 	When [Cleaning up Capture and Restore Reports Before Launch SandR]
 	When [Change communication channel in S and R<DeviceLeft>]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	When [Perform Capture"<DeviceId>"and"<Devicetype>"]
 	When [Go to logs and verify capturing time]
 	#When [Launch algo and alter ADL value "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
 	When [Perform Restore with above captured image "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-	#Given [Change channel side in FDTS<DeviceLeft>]    #Added For D2 Family
-	#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>" #Added For D2 Family
+	#Given [Change channel side in FDTS<DeviceLeft>]    Added For D2 Family
+	#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>" Added For D2 Family
 	#When [Launch algo lab and check the ADL value "<DeviceId>" and "<DeviceLeftSlNo>"and "<DeviceLeftSlNo>"]
 	When [Go to log file for verifying Restore time] 
 	And  [Open Capture and Restore report and log info in report]
 	Then [done]
-
+	
 	Examples:
 
 	 | DeviceId  | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft |  Devicetype      |
@@ -35,8 +35,8 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |
 	 #| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right    | Left        |Rechargeable      |
+	 #| NX977-DWC | 2300806547     | Yes     | Right       | Left       | Rechargeable     |
+	| NX960S-DRWC | 2300803315     | Yes     | Right    | Left        |Rechargeable      |
 	#| RU960-DRWC | 4483181561     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |D1rechageableWired|
 
@@ -44,9 +44,9 @@ Scenario Outline: 01Test Case ID 1537268: Verify that battery ADL data is restor
 Scenario Outline: 02Test Case ID 1103972: Verify device information is shown correctly
 
 	
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	Then [Close SandR tool]
 	
@@ -55,16 +55,16 @@ Scenario Outline: 02Test Case ID 1103972: Verify device information is shown cor
 	Examples:
 	 | DeviceId  | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft |  Devicetype      |
     #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left      |     Wired        |
-     #| RE962-DRW |  1900812197    | Yes     | Right       | Left       |     Wired        |
+     #| RE962-DRW |  1900812195    | Yes     | Right       | Left       |     Wired        |
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left      |     Wired        |
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
-	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |SS
+	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right    | Left        |Rechargeable      |
+	 #| NX977-DWC | 2300806547     | Yes     | Right       | Left       | Rechargeable     |
+	| NX960S-DRWC | 2300803315     | Yes     | Right    | Left        |Rechargeable      |
 	#| RU960-DRWC | 4483181561     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |D1rechageableWired|
-
+	# |XF9ITC-DWC-MP | 2476020406     | Yes     | Right       | Left       | Rechargeable     |
 
 
 
@@ -86,8 +86,8 @@ Scenario Outline: 03Test Case ID 1105474: Verify capture operation is performed 
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right    | Left        |Rechargeable      |
+	 #| NX977-DWC | 2300806547     | Yes     | Right       | Left       | Rechargeable     |
+	| NX960S-DRWC | 2300803315     | Yes     | Right    | Left        |Rechargeable      |
 	#| RU960-DRWC | 4483181561     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |D1rechageableWired|
 
@@ -113,8 +113,8 @@ Scenario Outline: 04Test Case ID 1103482: Verify supported PC configuration
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right    | Left        |Rechargeable      |
+	 #| NX977-DWC | 2300806547     | Yes     | Right       | Left       | Rechargeable     |
+	| NX960S-DRWC | 2300803315     | Yes     | Right    | Left        |Rechargeable      |
 	#| RU960-DRWC | 4483181561     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |D1rechageableWired|
 
@@ -135,8 +135,8 @@ Scenario Outline: 05Test Case ID 1103833: Verify channel can be changed while S&
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right    | Left        |Rechargeable      |
+	# | NX977-DWC | 2300806547     | Yes     | Right       | Left       | Rechargeable     |
+	| NX960S-DRWC | 2300803315     | Yes     | Right    | Left        |Rechargeable      |
 	#| RU960-DRWC | 4483181561     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |D1rechageableWired|
 
@@ -152,7 +152,7 @@ Scenario Outline: 06Test Case ID 1104002: Verify HI capture/restoration report
 	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"] #Added for D2 Family
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
 	When [Cleaning up Capture and Restore Reports Before Launch SandR]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	When [Perform Capture"<DeviceId>"and"<Devicetype>"]
 	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]#Added for D2 Family
@@ -171,8 +171,8 @@ Scenario Outline: 06Test Case ID 1104002: Verify HI capture/restoration report
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left        |    Wired         |
 	 #| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right    | Left        |Rechargeable      |
+	#| NX977-DWC | 2300806547     | Yes     | Right       | Left       | Rechargeable     |
+	 | NX960S-DRWC | 2300803315     | Yes     | Right    | Left        |Rechargeable      |
 	#| RU960-DRWC | 4483181561     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |D1rechageableWired|
 
@@ -183,24 +183,24 @@ Scenario Outline: 06Test Case ID 1104002: Verify HI capture/restoration report
 #@tag8
 #Scenario Outline: 08Test Case 1103981: Verify device information is cleared when HI is disconnected
 #
-#		When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"]
-#		When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+#		When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
+#		When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 #		When [Come back to Settings and wait till controls enabled]
-#		When [Clicks on disconnect and verify device information is cleared]
+#		When [Clicks on disconnect and verify device information is cleared "<Devicetype>"]
 #
-#		Examples:b
-#
-#
-#	| DeviceId   | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | 
-#    | LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |
-#	| RE962-DRW | 2026335111     | Yes     | Right       | Left       |
-#	| RE962-DRWT | 2000803069     | Yes     | Right       | Left       |
-#	| RT962-DRW | 2000800247     | Yes     | Right       | Left       |
-#	| LT988-DW | 1600806099     | Yes     | Right       | Left       |
-#	| RT961-DRWC | 2000801965     | Yes     | Right       | Left       | 
+#		Examples:
 #
 #
-#
+#	| DeviceId     | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | Devicetype       |
+#	| LT961-DRW-UP | 2000800436     | Yes     | Right       | Left       | Wired            |
+#	| RE962-DRW    | 2026335111     | Yes     | Right       | Left       | Wired            |
+#	| RE962-DRWT   | 2000803069     | Yes     | Right       | Left       | Wired            |
+#	| RT962-DRW    | 2000800247     | Yes     | Right       | Left       | Non-Rechargeable |
+#	| LT988-DW     | 1600806099     | Yes     | Right       | Left       | Wired            |
+#	| RT961-DRWC   | 2000801965     | Yes     | Right       | Left       | Rechargeable     |
+
+
+
 
 @tag7
 
@@ -213,7 +213,7 @@ Scenario Outline: 07Test Case ID 1105498: Verify that S&R Tool properly sets lis
 		        #Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"and"<Devicetype>"  #Added for D2 Family
 				When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 				When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-				When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+				When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 				When [Come back to Settings and wait till controls enabled]
 				When [Perform Capture with listening test settings]
 			    Then [Launch FSW and check the added programs "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
@@ -227,8 +227,8 @@ Scenario Outline: 07Test Case ID 1105498: Verify that S&R Tool properly sets lis
 				 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269 | Non-Rechargeable    |
 				  #| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066 |Wired    |
 				 #| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | Rechargeable |
-				  #| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803315 |Rechargeable |
-				  | NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806646 |Rechargeable |
+				  | NX960S-DRWC | 2300803315     | Yes     | Right       | Left       | 2300807477 |Rechargeable |
+				  #| NX977-DWC | 2300806547     | Yes     | Right       | Left       | 2300806546 |Rechargeable |
 				  #| RU960-DRWC  | 4483181561     | Yes     | Right       | Left       | 4483070777 | Rechargeable |
 				  #| RE961-DRWC | 4483181561     | Yes     | Right       | Left      |2300806645 |D1rechageableWired|
 
@@ -266,8 +266,8 @@ Scenario Outline: 09Test case ID 1629628: Verify that firmware is upgraded if co
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     | D1rechageableWired    |
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     |Rechargeable |
-     | NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806646 | NoDev    | 2300806615     | Yes     |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300807477     | Yes     |Rechargeable |
+     #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806546 | NoDev    | 2300806547     | Yes     |Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300807477 | NoDev    | 2300803315     | Yes     |Rechargeable |
 	#| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 4483070777 | NoDev    | 4483181561     | Yes     |Rechargeable |
 
 @tag10
@@ -300,8 +300,8 @@ Scenario Outline: 10Test Case ID 1629629: Verify that firmware is downgraded if 
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     | D1rechageableWired    |
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     |Rechargeable |
-     | NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806646 | NoDev    | 2300806615     | Yes     |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300807477     | Yes     |Rechargeable |
+    #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806546 | NoDev    | 2300806547     | Yes     |Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300807477 | NoDev    | 2300803315     | Yes     |Rechargeable |
 	#| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 4483070777 | NoDev    | 4483181561     | Yes     |Rechargeable |
 
 
@@ -311,7 +311,7 @@ Scenario Outline: 10Test Case ID 1629629: Verify that firmware is downgraded if 
 
 	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	When [Perform Capture"<DeviceId>"and"<Devicetype>"]
 	Given [Download and verify azure storage files "<ScenarioTitle>" and "<DeviceLeftSlNo>"]
@@ -330,8 +330,8 @@ Examples:
 	 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269 |  capture    |Non-Rechargeable |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066   | capture      |   Wired    |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934  | capture    |  Rechargeable |
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806646 | capture       |Rechargeable |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803315 |capture      |Rechargeable |
+	#| NX977-DWC | 2300806547     | Yes     | Right       | Left       | 2300806546 | capture       |Rechargeable |
+	| NX960S-DRWC | 2300803315     | Yes     | Right       | Left       | 2300807477 |capture      |Rechargeable |
 	 #| NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806645 | capture       |Rechargeable |
 	#| RU960-DRWC  | 4483181561     | Yes     | Right       | Left       | 4483070777  | capture | Rechargeable |
 
@@ -363,8 +363,8 @@ Examples:
 	 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269  | service records |Non-Rechargeable |
 	 #| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066   | service records |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934  | service records | Rechargeable |
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806646 | service records  | Rechargeable  |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803315  |service records  | Rechargeable |
+	 #| NX977-DWC | 2300806547     | Yes     | Right       | Left       | 2300806546 | service records  | Rechargeable  |
+	| NX960S-DRWC | 2300803315     | Yes     | Right       | Left       | 2300807477  |service records  | Rechargeable |
 	#| RU960-DRWC  | 4483181561     | Yes     | Right       | Left       | 4483070777  | service records | Rechargeable |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left     | 4483070777    |service records | D1rechageableWired|
 
@@ -376,7 +376,7 @@ Examples:
 
 	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"] #Added for D2 Family	
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	Then [Close SandR tool]
     When [Perform Restore with above captured image "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
@@ -398,8 +398,8 @@ Examples:
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066   | restore     |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | restore   | Rechargeable |
 	#| NX977-DWC | 2426512940     | Yes     | Right       | Left       | 2426512941 | restore     |Rechargeable |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803315 |restore    |Rechargeable |
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806646 | restore      |Rechargeable |
+	 | NX960S-DRWC | 2300803315     | Yes     | Right       | Left       | 2300807477 |restore    |Rechargeable |
+	#| NX977-DWC | 2300806547     | Yes     | Right       | Left       | 2300806546 | restore      |Rechargeable |
 	#| RU960-DRWC  | 4483181561     | Yes     | Right       | Left       | 4483070777 | restore    | Rechargeable |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left     | 4483070777    |restore    | D1rechageableWired|
 		
@@ -426,8 +426,8 @@ Examples:
 	# | RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269  | service records   |Non-Rechargeable |
 	#| LT988-DW | 1700800149     | Yes     | Right       | Left       | 1700800066   | service records     |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | service records   | Rechargeable |
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806646 | service records     |Rechargeable |
-	#| NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803315 |service records    |Rechargeable |
+	#| NX977-DWC | 2300806547     | Yes     | Right       | Left       | 2300806546 | service records     |Rechargeable |
+	| NX960S-DRWC | 2300803315     | Yes     | Right       | Left       | 2300807477 |service records    |Rechargeable |
 	#| NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806645 | service records      |Rechargeable |
 	#| RU960-DRWC  | 4483181561     | Yes     | Right       | Left       | 4483070777 | service records    | Rechargeable |
 	#| RE961-DRWC | 4483181561     | Yes     | Right       | Left     | 4483070777    |service records    | D1rechageableWired|
@@ -446,7 +446,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 	When [Cleaning up Capture and Restore Reports Before Launch SandR]
 	When [Change communication channel in S and R<DeviceLeft>]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	When [Perform Capture"<DeviceId>"and"<Devicetype>"]
 	When [Go to logs and verify capturing time]
@@ -489,8 +489,8 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 #	 | RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     | Cdevice  | Cdevice   | D1rechageableWired|
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Cdevice  | Cdevice   |Non-Rechargeable |
 	 #| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 4483070777 | NoDev    | 4483181561     | Yes     | 2000816933  | Cdevice   |Rechargeable |
-	  | NX977-DWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2300806646 | NoDev    | 2300806615     | Yes     | 2000816933  | Cdevice |Rechargeable |
-	 #| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300807477     | Yes     | 2000816933  | Cdevice   |Rechargeable |
+	 #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2300806546 | NoDev    | 2300806547     | Yes     | 2000816933  | Cdevice |Rechargeable |
+	 | NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2300807477 | NoDev    | 2300803315     | Yes     | 2000816933  | Cdevice   |Rechargeable |
 	 #| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     | 2000816933  | Cdevice   |Rechargeable |
 
 
@@ -510,7 +510,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
         When [Change communication channel in S and R<DeviceLeft>]
 		#When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"] #Added for D2 Family
 		When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-        When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+        When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
         When [Come back to Settings and wait till controls enabled]
         When [Perform Capture"<DeviceId>"and"<Devicetype>"]
 		When [Go to logs and verify capturing time]
@@ -528,7 +528,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
         When [Change communication channel in S and R<DeviceLeft>]
 		#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"] #Added for D2 Family
         When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
-        When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]
+        When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
         When [Come back to Settings and wait till controls enabled]
         When [Perform Capture"<DeviceId>"and"<Devicetype>"]
         When [Go to logs and verify capturing time]
@@ -536,7 +536,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 		#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>" #Added for D2 Family
 		#Given [Change channel side in FDTS<DeviceRight>]  #Added for D2 Family
   #      Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"and"<Devicetype>" #Added for D2 Family
-        When [Perform Restore with above captured image using SWAP with left "<DeviceSlNo>" and "<DeviceLeftSlNo>" and "<DeviceId>" and "<DeviceRight>"and"<Devicetype>"]
+        #When [Perform Restore with above captured image using SWAP with left "<DeviceSlNo>" and "<DeviceLeftSlNo>" and "<DeviceId>" and "<DeviceRight>"and"<Devicetype>"]
         When [Get the dump of connected device of DumpD by storage layout "<DeviceId>" and "<DeviceRight>" and "<DeviceLeftSlNo>"and"<Devicetype>"] 
 		#This above step modified from leftsl no to right sl no
         Then [Do the dump comparison between two device DeviceC and DeviceD dumps<DumpD>]
@@ -551,8 +551,8 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 #	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156716945 | NoDev    | 2156716944       | Yes     |D1rechageableWired|
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936    | Yes     |Rechargeable |
-     | NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806646 | NoDev    | 2300806615     | Yes     |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300807477    | Yes     |Rechargeable |
+    #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806546 | NoDev    | 2300806547     | Yes     |Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300807477 | NoDev    | 2300803315    | Yes     |Rechargeable |
      #| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 4483070777 | NoDev    | 4483181561     | Yes     |Rechargeable |
 
 
@@ -575,7 +575,7 @@ Scenario Outline: 15Test Case ID 1105696: Verify that fitting data is properly r
 	#| RT962-DRW    | 2000800246     | Yes     | Right       | Left       | 2000800269 |Non-Rechargeable |
     #| LT988-DW     | 1700800149     | Yes     | Right       | Left       | 1700800066 |Wired |
 	#| RT961-DRWC   | 2000816936     | Yes     | Right       | Left       | 2000816934 |Rechargeable |
-	#|NX960S-DRWC | 2300807477     | Yes     | Right       | Left       | 2300803315  |Rechargeable |
-	 | NX977-DWC | 2300806615     | Yes     | Right       | Left       | 2300806646 |Rechargeable |
+	 |NX960S-DRWC | 2300803315     | Yes     | Right       | Left       | 2300807477  |Rechargeable |
+	#| NX977-DWC | 2300806547     | Yes     | Right       | Left       | 2300806546 |Rechargeable |
 	#| RU960-DRWC   | 4483181561     | Yes     | Right       | Left       | 4483070777 |Rechargeable |
 	#| RE961-DRWC   | 4483181561     | Yes     | Right       | Left       | 4483070777 |D1rechageableWired|

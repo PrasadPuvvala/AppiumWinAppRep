@@ -100,10 +100,12 @@ namespace AppiumWinApp.StepDefinitions
 
         //  [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
 
+        // [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        //[When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""and""<DeviceNo>]")]
         [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPOptionAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
-        {          
-  
+        {
+            
             config = (appconfigsettings)_featureContext["config"];
             FunctionLibrary lib = new FunctionLibrary();
 
@@ -172,17 +174,65 @@ namespace AppiumWinApp.StepDefinitions
                 }
 
 
+                //do
+                //{
+                //    try
+                //    {
+                //        session.SwitchTo().Window(session.WindowHandles.First());
+
+                //        if (session.FindElementByName("Discover").Text == "Discover")
+                //        {
+                //            session.SwitchTo().Window(session.WindowHandles.First());
+                //            session.FindElementByName("Search").Click();
+                //        }
+
+                //    }
+                //    catch (Exception)
+                //    {
+
+                //    }
+
+                //} while (!session.FindElementByName("Disconnect").Displayed);
+
+
+
+
                 do
                 {
                     try
                     {
                         session.SwitchTo().Window(session.WindowHandles.First());
+                        string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                        if (session.FindElementByName("Discover").Text == "Discover")
+                        while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                         {
-                            session.SwitchTo().Window(session.WindowHandles.First());
-                            session.FindElementByName("Search").Click();
+
+                            if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                            {
+                                var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                stepName.Log(Status.Info, sandRConnection);
+                                var btncls = session.FindElementByAccessibilityId("PART_Close");
+                                btncls.Click();
+                                Thread.Sleep(1000);
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceLeftSlNo);
+                                session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                            }
+
+                            if (session.FindElementByName("Discover").Text == "Discover")
+                            {
+                                session.SwitchTo().Window(session.WindowHandles.First());
+                                session.FindElementByName("Search").Click();
+                            }
+
+
+
                         }
+
+
+
+                        //Thread.Sleep(5000);                
+
 
                     }
                     catch (Exception)
@@ -192,8 +242,7 @@ namespace AppiumWinApp.StepDefinitions
 
                 } while (!session.FindElementByName("Disconnect").Displayed);
 
-              
-                    stepName.Log(Status.Pass, "Clicked on Search");
+                stepName.Log(Status.Pass, "Clicked on Search");
 
                     session = lib.waitForElement(session, "Model Name");
 
@@ -223,7 +272,8 @@ namespace AppiumWinApp.StepDefinitions
             Thread.Sleep(5000);
 
             /* Identifying checkbox */
-            if (device.Contains("LT") || device.Contains("RE"))
+            // if (device.Contains("LT") || device.Contains("RE"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
                 Thread.Sleep(2000);
@@ -256,7 +306,7 @@ namespace AppiumWinApp.StepDefinitions
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            stepName.Log(Status.Pass, "Restore is successful.");
+            //stepName.Log(Status.Pass, "Restore is successful.");
        
 
             try
@@ -269,9 +319,22 @@ namespace AppiumWinApp.StepDefinitions
 
             }
 
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
+            {
+
+                stepName.Log(Status.Pass, "Restoration " + text.Text);
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
+            }
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
-            stepName.Log(Status.Pass, "Restore is successful.");
+            //stepName.Log(Status.Pass, "Restore is successful.");
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();
             Thread.Sleep(1000);
@@ -354,18 +417,64 @@ namespace AppiumWinApp.StepDefinitions
                 }
 
 
+                //do
+                //{
+                //    try
+                //    {
+                //        session.SwitchTo().Window(session.WindowHandles.First());
+
+                //        if (session.FindElementByName("Discover").Text == "Discover")
+                //        {
+
+                //            session.SwitchTo().Window(session.WindowHandles.First());
+                //            session.FindElementByName("Search").Click();
+                //        }
+
+                //    }
+                //    catch (Exception)
+                //    {
+
+                //    }
+
+                //} while (!session.FindElementByName("Disconnect").Displayed);
+
+
                 do
                 {
                     try
                     {
                         session.SwitchTo().Window(session.WindowHandles.First());
+                        string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                        if (session.FindElementByName("Discover").Text == "Discover")
+                        while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                         {
 
-                            session.SwitchTo().Window(session.WindowHandles.First());
-                            session.FindElementByName("Search").Click();
+                            if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                            {
+                                var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                stepName.Log(Status.Info, sandRConnection);
+                                var btncls = session.FindElementByAccessibilityId("PART_Close");
+                                btncls.Click();
+                                Thread.Sleep(1000);
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo);
+                                session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                            }
+
+                            if (session.FindElementByName("Discover").Text == "Discover")
+                            {
+                                session.SwitchTo().Window(session.WindowHandles.First());
+                                session.FindElementByName("Search").Click();
+                            }
+
+
+
                         }
+
+
+
+                        //Thread.Sleep(5000);                
+
 
                     }
                     catch (Exception)
@@ -374,7 +483,6 @@ namespace AppiumWinApp.StepDefinitions
                     }
 
                 } while (!session.FindElementByName("Disconnect").Displayed);
-
 
                 stepName.Log(Status.Pass, "Clicked on Search");
 
@@ -439,7 +547,7 @@ namespace AppiumWinApp.StepDefinitions
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            stepName.Log(Status.Pass, "Restore is successful.");
+            //stepName.Log(Status.Pass, "Restore is successful.");
 
 
             try
@@ -451,10 +559,24 @@ namespace AppiumWinApp.StepDefinitions
             {
             }
 
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
+            {
+
+
+                stepName.Log(Status.Pass, "Restoration " + text.Text);
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
+            }
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
             session = lib.waitForElement(session, "OK");
-            stepName.Log(Status.Pass, "Restore is successful.");         
+           // stepName.Log(Status.Pass, "Restore is successful.");         
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();          
         }

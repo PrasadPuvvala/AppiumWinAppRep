@@ -7,6 +7,7 @@ using AventStack.ExtentReports.Reporter;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
+using Microsoft.SqlServer.Management.Smo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -23,6 +24,8 @@ using System.Diagnostics;
 //using Console = System.Console;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +36,7 @@ using Xamarin.Forms;
 using Console = System.Console;
 using Environment = System.Environment;
 using File = System.IO.File;
+using AventStack.ExtentReports.Gherkin.Model;
 
 namespace MyNamespace
 {
@@ -52,7 +56,6 @@ namespace MyNamespace
         private static ExtentReports extent;
         private static ExtentHtmlReporter htmlReporter;
         private static ExtentTest test;
-
 
         public TestContext TestContext { get; set; }
 
@@ -289,7 +292,7 @@ namespace MyNamespace
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            lib.PassingXML(test);
+            //lib.PassingXML(test);
 
         }
 
@@ -486,13 +489,19 @@ namespace MyNamespace
             //    Console.WriteLine("An error occurred: " + ex.Message);
             //}
 
-            processKill("SmartFit");
-            processKill("SmartFitSA");
-            processKill("Camelot.WorkflowRuntime");
-            processKill("Camelot.SystemInfobar");
-            processKill("Lucan.App.UI");
-            processKill("StorageLayoutViewer");
-            processKill("WinAppDriver.exe");
+            //processKill("SmartFit");
+            //processKill("SmartFitSA");
+            //processKill("Camelot.WorkflowRuntime");
+            //processKill("Camelot.SystemInfobar");
+            //processKill("Lucan.App.UI");
+            //processKill("StorageLayoutViewer");
+            //processKill("WinAppDriver.exe");
+
+            string[] processesToKill = { "SmartFit", "SmartFitSA", "Camelot.WorkflowRuntime", "Camelot.SystemInfobar", "Lucan.App.UI", "StorageLayoutViewer", "WinAppDriver.exe" };
+            foreach (string processName in processesToKill)
+            {
+                processKill(processName);
+            }
         }
 
         public void processKill(string name)
@@ -1791,187 +1800,397 @@ namespace MyNamespace
                 { }
 
             }
-
             Thread.Sleep(10000);
-
-            int buttonCount = 0;
-            try
+            var textBlockelements = session.FindElementsByClassName("TextBlock");
+            foreach(var element in textBlockelements)
             {
-                WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(60));
-                waitForMe.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("Button")));
-
-                do
-                {
-                    session.SwitchTo().ActiveElement();
-
-                    if (buttonCount >= 1)
-                    {
-                        session.SwitchTo().ActiveElement();
-                        session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
-                        try
-                        {
-                            session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Click();
-                            waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(40));
-                            waitForMe.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("Button")));
-                        }
-                        catch
-                        {
-
-                        }
-
-                    }
-
-                    buttonCount = buttonCount + 1;
-
-                } while (session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Enabled);
-            }
-
-            catch (Exception)
-            {
-                Thread.Sleep(4000);
-
                 try
                 {
-                    lib.clickOnElementWithIdonly(session, "PatientAutomationIds.ProfileAutomationIds.FitPatientAction");
-                }
-                catch (Exception ex)
-                {
-
-                }
-
-                try
-                {
-                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");
-
-                    int increment = 0;
-                    int stepIncrement = 0;
-                    if (alterValue.Equals("Yes"))
+                    if (element.Text == "Connection Lost")
                     {
-                        /** Clicks on Fiiting menu buttion **/
-
-                        session.FindElementByName("Fitting").Click();
-                        Thread.Sleep(2000);
-
-                        /** To perform reset initial fit **/
-
-                        session.FindElementByName("Reset to Initial Fit").Click();
-                        Thread.Sleep(2000);
-                        session.SwitchTo().Window(session.WindowHandles.First());
-                        session.SwitchTo().ActiveElement();
-
-                        try
-                        {
-                            Thread.Sleep(2000);
-                            lib.clickOnAutomationName(session, "Continue");
-                        }
-                        catch (Exception e1)
-                        {
-                        }
-
-                        stepName.Pass("Reset is successfully done");
-                        Thread.Sleep(2000);
-                        lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
-
-                        /** Add the music program **/
-
-                        session.FindElementByName("Music").Click();
-                        Thread.Sleep(5000);
-                        lib.clickOnAutomationId(session, "All", "ContentTextBlock");
-                        stepIncrement = 5;
+                        stepName.Log(Status.Fail, "Connection Error");
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+                        mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("anjaneyulu.chinthapalli@i-raysolutions.com"));
+                        mailMessage.Subject = "S&R Automation Script Error";
+                        mailMessage.Body = "FSW Connection Error";
+                        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+                        smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+                        smtpClient.EnableSsl = true; // Enable SSL/TLS
+                        smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+                        smtpClient.Send(mailMessage);
+                        processKill("SmartFit");
+                        processKill("SmartFitSA");
+                        break;
                     }
-
-                    else
-                    {
-                        /** Clicks on "Fiiting" Redmenu buttion **/
-
-                        session.FindElementByName("Fitting").Click();
-                        Thread.Sleep(2000);
-
-                        /** To perform reset initial fit **/
-
-                        session.FindElementByName("Reset to Initial Fit").Click();
-                        Thread.Sleep(2000);
-                        session.SwitchTo().Window(session.WindowHandles.First());
-                        session.SwitchTo().ActiveElement();
-
-                        try
-                        {
-                            Thread.Sleep(2000);
-                            lib.clickOnAutomationName(session, "Continue");
-                        }
-                        catch (Exception e1)
-                        {
-                        }
-
-                        stepName.Pass("Reset is successfully done");
-
-                        Thread.Sleep(2000);
-                        lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
-
-                        /** Add the Outdoor program **/
-
-                        session.FindElementByName("Outdoor").Click();
-                        Thread.Sleep(5000);
-                        lib.clickOnAutomationId(session, "All", "ContentTextBlock");
-                        stepIncrement = 3;
-                    }
-
-
-                    /** In order to raise the Gain values **/
-
-                    do
-                    {
-                        lib.functionWaitForId(session, "FittingAutomationIds.GainAutomationIds.AdjustmentItemsAutomationIds.Increase");
-
-                        increment = increment + 1;
-                        stepName.Pass("Increment Gain is clicked for :" + increment + " times");
-                        Thread.Sleep(2000);
-                    } while (increment <= stepIncrement);
-
-                }
-                catch (Exception)
-                {
-                }
-
-
-                    try
+                    else if (element.Text == "Connection")
                     {
                         Thread.Sleep(10000);
-                        lib.clickOnElementWithIdonly(session, "FittingAutomationIds.SaveAction");
-
-                        /** Clicks on "Skip" Button **/
-
+                        stepName.Log(Status.Pass, "Connection Success");
+                        int buttonCount = 0;
                         try
                         {
-                            Thread.Sleep(2000);
-                            lib.clickOnElementWithIdonly(session, "SkipButton");
+                            WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(60));
+                            waitForMe.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("Button")));
+
+                            do
+                            {
+                                session.SwitchTo().ActiveElement();
+
+                                if (buttonCount >= 1)
+                                {
+                                    session.SwitchTo().ActiveElement();
+                                    session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
+                                    try
+                                    {
+                                        session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Click();
+                                        waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(40));
+                                        waitForMe.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("Button")));
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                }
+
+                                buttonCount = buttonCount + 1;
+
+                            } while (session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Enabled);
                         }
-                        catch (Exception )
+
+                        catch (Exception)
                         {
-                            lib.clickOnElementWithIdonly(session, "PART_Cancel");
+                            Thread.Sleep(4000);
+
+                            try
+                            {
+                                lib.clickOnElementWithIdonly(session, "PatientAutomationIds.ProfileAutomationIds.FitPatientAction");
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+
+                            try
+                            {
+                                lib.clickOnAutomationId(session, "All", "ContentTextBlock");
+
+                                int increment = 0;
+                                int stepIncrement = 0;
+                                if (alterValue.Equals("Yes"))
+                                {
+                                    /** Clicks on Fiiting menu buttion **/
+
+                                    session.FindElementByName("Fitting").Click();
+                                    Thread.Sleep(2000);
+
+                                    /** To perform reset initial fit **/
+
+                                    session.FindElementByName("Reset to Initial Fit").Click();
+                                    Thread.Sleep(2000);
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.SwitchTo().ActiveElement();
+
+                                    try
+                                    {
+                                        Thread.Sleep(2000);
+                                        lib.clickOnAutomationName(session, "Continue");
+                                    }
+                                    catch (Exception e1)
+                                    {
+                                    }
+
+                                    stepName.Pass("Reset is successfully done");
+                                    Thread.Sleep(2000);
+                                    lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
+
+                                    /** Add the music program **/
+
+                                    session.FindElementByName("Music").Click();
+                                    Thread.Sleep(5000);
+                                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");
+                                    stepIncrement = 5;
+                                }
+
+                                else
+                                {
+                                    /** Clicks on "Fiiting" Redmenu buttion **/
+
+                                    session.FindElementByName("Fitting").Click();
+                                    Thread.Sleep(2000);
+
+                                    /** To perform reset initial fit **/
+
+                                    session.FindElementByName("Reset to Initial Fit").Click();
+                                    Thread.Sleep(2000);
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.SwitchTo().ActiveElement();
+
+                                    try
+                                    {
+                                        Thread.Sleep(2000);
+                                        lib.clickOnAutomationName(session, "Continue");
+                                    }
+                                    catch (Exception e1)
+                                    {
+                                    }
+                                    stepName.Pass("Reset is successfully done");
+                                    Thread.Sleep(2000);
+                                    lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
+
+                                    /** Add the Outdoor program **/
+
+                                    session.FindElementByName("Outdoor").Click();
+                                    Thread.Sleep(5000);
+                                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");
+                                    stepIncrement = 3;
+                                }
+
+                                /** In order to raise the Gain values **/
+
+                                do
+                                {
+                                    lib.functionWaitForId(session, "FittingAutomationIds.GainAutomationIds.AdjustmentItemsAutomationIds.Increase");
+
+                                    increment = increment + 1;
+                                    stepName.Pass("Increment Gain is clicked for :" + increment + " times");
+                                    Thread.Sleep(2000);
+                                } while (increment <= stepIncrement);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            try
+                            {
+                                Thread.Sleep(10000);
+                                lib.clickOnElementWithIdonly(session, "FittingAutomationIds.SaveAction");
+
+                                /** Clicks on "Skip" Button **/
+
+                                try
+                                {
+                                    Thread.Sleep(2000);
+                                    lib.clickOnElementWithIdonly(session, "SkipButton");
+                                }
+                                catch (Exception)
+                                {
+                                    lib.clickOnElementWithIdonly(session, "PART_Cancel");
+                                }
+                                stepName.Pass("Save is successfully done and Close the FSW");
+                            }
+                            catch (Exception skip)
+                            {
+                                Console.WriteLine(skip);
+                            }
+                            lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+
+                            /** Exit the FSW **/
+
+                            stepName.Pass("Click on FSW Exit button");
+                            Thread.Sleep(8000);
+                            lib.processKill("SmartFitSA");
+                        }
+                        break;
+                    }
+                    else if (element.Text =="Connection Error")
+                    {
+                        stepName.Log(Status.Fail, "Connection Error");
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+                        mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+                        mailMessage.To.Add(new MailAddress("anjaneyulu.chinthapalli@i-raysolutions.com"));
+                        mailMessage.Subject = "S&R Automation Script Error";
+                        mailMessage.Body = "FSW Connection Error";
+                        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+                        smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+                        smtpClient.EnableSsl = true; // Enable SSL/TLS
+                        smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+                        smtpClient.Send(mailMessage);
+                        processKill("SmartFit");
+                        processKill("SmartFitSA");
+                        break;
+                    }
+                    else
+                    {
+                        Thread.Sleep(10000);
+                        stepName.Log(Status.Pass, "Connection Success");
+                        int buttonCount = 0;
+                        try
+                        {
+                            WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(60));
+                            waitForMe.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("Button")));
+
+                            do
+                            {
+                                session.SwitchTo().ActiveElement();
+
+                                if (buttonCount >= 1)
+                                {
+                                    session.SwitchTo().ActiveElement();
+                                    session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
+                                    try
+                                    {
+                                        session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Click();
+                                        waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(40));
+                                        waitForMe.Until(ExpectedConditions.ElementToBeClickable(By.ClassName("Button")));
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                }
+
+                                buttonCount = buttonCount + 1;
+
+                            } while (session.FindElementByAccessibilityId("StateMachineAutomationIds.ContinueAction").Enabled);
                         }
 
-                        stepName.Pass("Save is successfully done and Close the FSW");
+                        catch (Exception)
+                        {
+                            Thread.Sleep(4000);
 
+                            try
+                            {
+                                lib.clickOnElementWithIdonly(session, "PatientAutomationIds.ProfileAutomationIds.FitPatientAction");
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+
+                            try
+                            {
+                                lib.clickOnAutomationId(session, "All", "ContentTextBlock");
+
+                                int increment = 0;
+                                int stepIncrement = 0;
+                                if (alterValue.Equals("Yes"))
+                                {
+                                    /** Clicks on Fiiting menu buttion **/
+
+                                    session.FindElementByName("Fitting").Click();
+                                    Thread.Sleep(2000);
+
+                                    /** To perform reset initial fit **/
+
+                                    session.FindElementByName("Reset to Initial Fit").Click();
+                                    Thread.Sleep(2000);
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.SwitchTo().ActiveElement();
+
+                                    try
+                                    {
+                                        Thread.Sleep(2000);
+                                        lib.clickOnAutomationName(session, "Continue");
+                                    }
+                                    catch (Exception e1)
+                                    {
+                                    }
+
+                                    stepName.Pass("Reset is successfully done");
+                                    Thread.Sleep(2000);
+                                    lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
+
+                                    /** Add the music program **/
+
+                                    session.FindElementByName("Music").Click();
+                                    Thread.Sleep(5000);
+                                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");
+                                    stepIncrement = 5;
+                                }
+
+                                else
+                                {
+                                    /** Clicks on "Fiiting" Redmenu buttion **/
+
+                                    session.FindElementByName("Fitting").Click();
+                                    Thread.Sleep(2000);
+
+                                    /** To perform reset initial fit **/
+
+                                    session.FindElementByName("Reset to Initial Fit").Click();
+                                    Thread.Sleep(2000);
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.SwitchTo().ActiveElement();
+
+                                    try
+                                    {
+                                        Thread.Sleep(2000);
+                                        lib.clickOnAutomationName(session, "Continue");
+                                    }
+                                    catch (Exception e1)
+                                    {
+                                    }
+                                    stepName.Pass("Reset is successfully done");
+                                    Thread.Sleep(2000);
+                                    lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
+
+                                    /** Add the Outdoor program **/
+
+                                    session.FindElementByName("Outdoor").Click();
+                                    Thread.Sleep(5000);
+                                    lib.clickOnAutomationId(session, "All", "ContentTextBlock");
+                                    stepIncrement = 3;
+                                }
+
+                                /** In order to raise the Gain values **/
+
+                                do
+                                {
+                                    lib.functionWaitForId(session, "FittingAutomationIds.GainAutomationIds.AdjustmentItemsAutomationIds.Increase");
+
+                                    increment = increment + 1;
+                                    stepName.Pass("Increment Gain is clicked for :" + increment + " times");
+                                    Thread.Sleep(2000);
+                                } while (increment <= stepIncrement);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            try
+                            {
+                                Thread.Sleep(10000);
+                                lib.clickOnElementWithIdonly(session, "FittingAutomationIds.SaveAction");
+
+                                /** Clicks on "Skip" Button **/
+
+                                try
+                                {
+                                    Thread.Sleep(2000);
+                                    lib.clickOnElementWithIdonly(session, "SkipButton");
+                                }
+                                catch (Exception)
+                                {
+                                    lib.clickOnElementWithIdonly(session, "PART_Cancel");
+                                }
+                                stepName.Pass("Save is successfully done and Close the FSW");
+                            }
+                            catch (Exception skip)
+                            {
+                                Console.WriteLine(skip);
+                            }
+                            lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+
+                            /** Exit the FSW **/
+
+                            stepName.Pass("Click on FSW Exit button");
+                            Thread.Sleep(8000);
+                            lib.processKill("SmartFitSA");
+                        }
+                        break;
                     }
-                    catch (Exception skip)
-
-                    {
-                        Console.WriteLine(skip);
-                    }
-
-                    lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
-
-                    /** Exit the FSW **/
-
-                    stepName.Pass("Click on FSW Exit button");
-
-                    Thread.Sleep(8000);
-
-                    lib.processKill("SmartFitSA");
-
-                
-            }
+                }
+                catch (Exception e) {
+                throw new Exception(e.Message);
+                }
+            }         
         }
         /** Used to clear exisisting 'capture' and 'restore' reports in specified path **/
 
@@ -2018,15 +2237,15 @@ namespace MyNamespace
             try
             {
                 //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
-                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
-                {                 
-                    ModuleFunctions.socketA(session, test, DeviceType);
-                                   
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                {
+                ModuleFunctions.socketA(session, stepName, DeviceType);
+
                 }
             }
             catch { }
 
-            //Thread.Sleep(10000);
+            Thread.Sleep(10000);
 
             //try
             //{
@@ -2078,13 +2297,38 @@ namespace MyNamespace
                     try
                     {
                         session.SwitchTo().Window(session.WindowHandles.First());
+                        string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                        if (session.FindElementByName("Discover").Text == "Discover")
+                        while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                         {
-                            session.SwitchTo().Window(session.WindowHandles.First());
-                            session.FindElementByName("Search").Click();
+
+                            if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                            {
+                                var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                stepName.Log(Status.Info, sandRConnection);
+                                var btncls = session.FindElementByAccessibilityId("PART_Close");
+                                btncls.Click();
+                                Thread.Sleep(1000);
+                                 ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo);
+                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                            }
+
+                            if (session.FindElementByName("Discover").Text == "Discover")
+                            {
+                                session.SwitchTo().Window(session.WindowHandles.First());
+                                session.FindElementByName("Search").Click();
+                            }
+
+
+
                         }
-                      
+
+
+
+                        //Thread.Sleep(5000);                
+
+
                     }
                     catch (Exception)
                     {
@@ -2113,8 +2357,8 @@ namespace MyNamespace
 
         
 
-        [When(@"\[Go to Device Info tab and capture device info in excel then verify the device information is shown correctly]")]
-        public void WhenGoToDeviceInfoTabAndCaptureDeviceInfoInExcelThenVerifyTheDeviceInformationIsShownCorrectly()
+        [When(@"\[Go to Device Info tab and capture device info in excel then verify the device information is shown correctly ""([^""]*)""]")]
+        public void WhenGoToDeviceInfoTabAndCaptureDeviceInfoInExcelThenVerifyTheDeviceInformationIsShownCorrectly(string deviceType)
         {
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -2122,7 +2366,7 @@ namespace MyNamespace
 
             FunctionLibrary lib = new FunctionLibrary();
             lib = new FunctionLibrary();
-            lib.getDeviceInfo(session);
+            lib.getDeviceInfo(session,stepName,deviceType);
 
             stepName.Log(Status.Info, "Device information is captured in excel file");
         }
@@ -2399,16 +2643,11 @@ namespace MyNamespace
             }
         
         }
-        
-    
-
-
-        
 
 
 
-        [When(@"\[Clicks on disconnect and verify device information is cleared]")]
-        public void ClicksOnDisconnectAndVerifyDeviceInformationIsCleared()
+        [When(@"\[Clicks on disconnect and verify device information is cleared ""([^""]*)""]")]
+        public void WhenClicksOnDisconnectAndVerifyDeviceInformationIsCleared(string deviceType)
         {
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -2417,12 +2656,10 @@ namespace MyNamespace
             session = lib.waitForElement(session, "Connect to hearing instrument automatically");
             Thread.Sleep(2000);
             session.FindElementByName("Disconnect").Click();
-            lib.getDeviceInfo(session);
+            lib.getDeviceInfo(session, stepName, deviceType);
 
             stepName.Log(Status.Pass, "Clicked on Disconnect.");
         }
-
-
 
 
         /** Opens S&R tool 
@@ -2463,6 +2700,27 @@ namespace MyNamespace
             Thread.Sleep(2000);
             session.FindElementByName("Login").Click();
             session = lib.functionWaitForName(session, "CAPTURE");
+
+
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Capture Succeeded")
+            {
+
+               
+                stepName.Log(Status.Pass, "Capture "+ text.Text);
+                
+
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Capture Failed" + ":"+"  " + text.Text);
+               
+
+            }
+
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
             var btnClose = session.FindElementByAccessibilityId("PART_Close");
@@ -2528,6 +2786,28 @@ namespace MyNamespace
                 if (session.FindElementByClassName("CheckBox").Selected)
                 {
                     session = lib.functionWaitForName(session, "CAPTURE");
+
+
+                    var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+                    //session = lib.functionWaitForName(session, "");
+                    var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+                    if (session.FindElementByAccessibilityId("labelHeader").Text == "Capture Succeeded")
+                    {
+
+
+                        stepName.Log(Status.Pass, "Capture " + text.Text);
+
+
+                    }
+                    else
+                    {
+                        stepName.Log(Status.Fail, "Capture Failed" + ":" + "  " + text.Text);
+
+
+                    }
+
+
                     ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
                     session = lib.waitForElement(session, "OK");
                     session.Close();
@@ -2543,6 +2823,23 @@ namespace MyNamespace
                     Thread.Sleep(2000);
                     Thread.Sleep(2000);
                     session = lib.functionWaitForName(session, "CAPTURE");
+
+                    var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+                    //session = lib.functionWaitForName(session, "");
+                    var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+                    if (session.FindElementByAccessibilityId("labelHeader").Text == "Capture Succeeded")
+                    {
+
+                        stepName.Log(Status.Pass, "Capture " + text.Text);
+
+                    }
+                    else
+                    {
+                        stepName.Log(Status.Fail, "Capture Failed" + ":" + "  " + text.Text);
+
+                    }
+
                     ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
                     session = lib.waitForElement(session, "OK");
                     Thread.Sleep(4000);
@@ -2695,24 +2992,72 @@ namespace MyNamespace
 
                     /** Finding the HI till Disconnect button on the display **/
 
-                    do
-                    {
+                    //do
+                    //{
+                    //    try
+                    //    {
+                    //        session.SwitchTo().Window(session.WindowHandles.First());
+
+                    //        if (session.FindElementByName("Discover").Text == "Discover")
+                    //        {
+                    //            session.SwitchTo().Window(session.WindowHandles.First());
+                    //            session.FindElementByName("Search").Click();
+                    //        }
+                    //    }
+                    //    catch (Exception)
+                    //    {
+
+                    //    }
+
+                    //} while (!session.FindElementByName("Disconnect").Displayed);
+
+                     do
+                     {
                         try
                         {
                             session.SwitchTo().Window(session.WindowHandles.First());
+                            string Message = "Connecting to the device failed as it has been powered for more than 2 minutes. Reboot the device and try again.";
 
-                            if (session.FindElementByName("Discover").Text == "Discover")
+                            while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                             {
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.FindElementByName("Search").Click();
+
+                                if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
+                                {
+                                    var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
+                                    stepName.Log(Status.Info, sandRConnection);
+                                    var btncls1 = session.FindElementByAccessibilityId("PART_Close");
+                                    btncls1.Click();
+                                    Thread.Sleep(1000);
+                                     ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo);
+                                     session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+                                }
+
+                                if (session.FindElementByName("Discover").Text == "Discover")
+                                {
+                                    session.SwitchTo().Window(session.WindowHandles.First());
+                                    session.FindElementByName("Search").Click();
+                                }
+
+
+
                             }
+
+
+
+                            //Thread.Sleep(5000);                
+
+
                         }
                         catch (Exception)
                         {
 
                         }
 
-                    } while (!session.FindElementByName("Disconnect").Displayed);
+                     
+                     } while (!session.FindElementByName("Disconnect").Displayed);
+
+
 
                     session = lib.waitForElement(session, "Model Name");
 
@@ -2748,9 +3093,25 @@ namespace MyNamespace
             session = lib.functionWaitForName(session, "FIND");
             session = lib.waitForElement(session, "SELECT");
             session = lib.functionWaitForName(session, "RESTORE");
+
+            var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
+            //session = lib.functionWaitForName(session, "");
+            var text = session.FindElementByAccessibilityId("textBlockMessage");
+
+            if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
+            {
+
+               
+                stepName.Log(Status.Pass, "Restoration " + text.Text);
+            }
+            else
+            {
+                stepName.Log(Status.Fail, "Restoration Failed" + ":"+" " + text.Text);
+            }
+
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
-            stepName.Log(Status.Pass, "Restore is successful.");
+           // stepName.Log(Status.Pass, "Restore is successful.");
             var btncls = session.FindElementByAccessibilityId("PART_Close");
             btncls.Click();
             Thread.Sleep(1000);
@@ -3314,15 +3675,23 @@ namespace MyNamespace
 
                                 FunctionLibrary lib = new FunctionLibrary();
 
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.SwitchTo().ActiveElement();
+                                //session.SwitchTo().Window(session.WindowHandles.First());
+                                //session.SwitchTo().ActiveElement();
                                 Actions actions = new Actions(session);
                                 Thread.Sleep(5000);
                                 session.FindElementByAccessibilityId("FINDICON").Click();
                                 Thread.Sleep(15000);
                                 session.FindElementByAccessibilityId("FINDICON").Click();
-                                Thread.Sleep(15000);
+                                Thread.Sleep(2000);
 
+                                var Popup = session.FindElementByClassName("Popup");
+                                int height = Popup.Size.Height;
+                                var drag = Popup.FindElementsByClassName("Thumb");
+                                Actions action = new Actions(session);
+                                action.MoveToElement(drag[6]).Perform();
+                                action.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
+                                Thread.Sleep(15000);
 
                                 /** To select the Hi serial number **/
 
