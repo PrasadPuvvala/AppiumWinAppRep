@@ -37,6 +37,7 @@ using Console = System.Console;
 using Environment = System.Environment;
 using File = System.IO.File;
 using AventStack.ExtentReports.Gherkin.Model;
+using System.Collections.ObjectModel;
 
 namespace MyNamespace
 {
@@ -497,7 +498,7 @@ namespace MyNamespace
             //processKill("StorageLayoutViewer");
             //processKill("WinAppDriver.exe");
 
-            string[] processesToKill = { "SmartFit", "SmartFitSA", "Camelot.WorkflowRuntime", "Camelot.SystemInfobar", "Lucan.App.UI", "StorageLayoutViewer", "WinAppDriver.exe" };
+            string[] processesToKill = { "SmartFit", "SmartFitSA", "Camelot.WorkflowRuntime", "Camelot.SystemInfobar", "Lucan.App.UI", "StorageLayoutViewer" };
             foreach (string processName in processesToKill)
             {
                 processKill(processName);
@@ -554,6 +555,9 @@ namespace MyNamespace
                // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
                 if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
                 {
+
+                    Thread.Sleep(240000);
+
                     if (side.Equals("Left"))
                     {
                         ModuleFunctions.socketA(session, test, DeviceType);
@@ -647,8 +651,10 @@ namespace MyNamespace
                     element.Click();
                 }
 
+                session.FindElementByName(devName + " (Final)").Click();
+
                 session.FindElementByName("Continue >>").Click();
-                Thread.Sleep(2000);
+                Thread.Sleep(10000);
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
                 session.FindElementByName("Continue >>").Click();
@@ -690,6 +696,9 @@ namespace MyNamespace
                     {
                         element.Click();
                     }
+
+                    session.FindElementByName(devName + " (Final)").Click();
+
                 }
                 else
                 {
@@ -772,8 +781,9 @@ namespace MyNamespace
                 {
                     if (session.FindElementByAccessibilityId("MessageForm").Displayed)
 
-                    {
-                        ModuleFunctions.discoveryFailed(session, test, textDir, device, side, DeviceNo);
+                    {                     
+
+                        ModuleFunctions.discoveryFailed(session, test, textDir, device, side, DeviceNo, DeviceType);
                     }
                 }
                 catch (Exception) 
@@ -1084,8 +1094,6 @@ namespace MyNamespace
             {
                 Console.WriteLine("This is When method");
                 // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
-
                 try
                 {
                     if (side.Equals("Left"))
@@ -1093,14 +1101,11 @@ namespace MyNamespace
                         ModuleFunctions.socketA(session, test, DeviceType);
                         Thread.Sleep(2000);
                     }
-
                     else if (side.Equals("Right"))
                     {
                         ModuleFunctions.socketB(session, test, DeviceType);
                         Thread.Sleep(2000);
                     }
-
-
                     else if (side.Equals("Cdevice"))
                     {
                         ModuleFunctions.socketC(session, test, DeviceType);
@@ -1109,11 +1114,8 @@ namespace MyNamespace
                     }
                 }
                 catch (Exception ex) { }
-
                 try
                 {
-
-
                     //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                     Thread.Sleep(2000);
                     DesiredCapabilities appCapabilities = new DesiredCapabilities();
@@ -1165,7 +1167,7 @@ namespace MyNamespace
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(5000);
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
+                    Thread.Sleep(10000);
                     lib.clickOnAutomationName(session, "Assign Instruments");
                     session.FindElementByName("Back").Click();
                     Thread.Sleep(5000);
@@ -1181,11 +1183,8 @@ namespace MyNamespace
                     Thread.Sleep(13000);
 
                     try
-
                     {
-
                         if (session.FindElementByName("Unassign").Enabled)
-
                         {
 
                             lib.clickOnAutomationName(session, "Assign Instruments");
@@ -1197,190 +1196,145 @@ namespace MyNamespace
                             // Check if DeviceNo is already discovered
 
                             foreach (WindowsElement value in SN)
-
                             {
-
                                 string S = value.Text;
-
                                 if (S.Contains(DeviceNo) && S.Contains("Assign Left"))
-
                                 {
                                     value.Text.Contains("Assign Left");
-
                                     // value.Click();
-
                                     value.FindElementByName("Assign Left").Click();
-
                                     break;
-
                                 }
-
                             }
 
                         }
+                    }
+                    catch (Exception)
+                    { 
 
                     }
 
-                    catch (Exception)
-
-                    {
-                        bool deviceFound = false;
-
-                        if (!deviceFound)
-
-                        {
-
-                            // Loop until the search button is enabled or timeout occurs
-
-                            DateTime startTime = DateTime.Now;
-
-                            while (!session.FindElementByAccessibilityId("SearchButton").Enabled &&
-
-                                   (DateTime.Now - startTime).TotalSeconds < 40) // Wait for button to become enabled for 30 seconds
-
+                            do
                             {
-
-                                Thread.Sleep(1000); // Wait for 1 second before checking again
-
-                            }
-
-                            // Check if the button is enabled
-
-                            if (session.FindElementByAccessibilityId("SearchButton").Enabled)
-
-                            {
-
-                                session.FindElementByAccessibilityId("SearchButton").Click();
-
-                                Thread.Sleep(5000); // Wait after clicking search button
-
-                                var List = session.FindElementsByClassName("ListBoxItem");
-
-                                // Loop until the device is found or timeout occurs
-
-                                startTime = DateTime.Now;
-
-                                while (!deviceFound && (DateTime.Now - startTime).TotalSeconds < 30) // Adjust timeout as needed
-
+                                if (session.FindElementByName("Continue").Enabled == false)
                                 {
-
-                                    foreach (WindowsElement value in List)
-
+                                  processKill("SmartFitSA");
+                                  processKill("SmartFit");
+                                    if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                                     {
-
-                                        string S = value.Text;
-
-                                        if (S.Contains(DeviceNo))
-
+                                        Console.WriteLine("This is When method");
+                                        // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
+                                        try
+                                        {
+                                            if (side.Equals("Left"))
+                                            {
+                                                ModuleFunctions.socketA(session, test, DeviceType);
+                                                Thread.Sleep(2000);
+                                            }
+                                            else if (side.Equals("Right"))
+                                            {
+                                                ModuleFunctions.socketB(session, test, DeviceType);
+                                                Thread.Sleep(2000);
+                                            }
+                                        }
+                                        catch
                                         {
 
-                                            // Ensure it contains "Assign Left"
+                                        }
+                                        try
+                                        {
+                                            //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
+                                            Thread.Sleep(2000);
+                                            appCapabilities = new DesiredCapabilities();
+                                            appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
+                                            appCapabilities.SetCapability("deviceName", "WindowsPC");
+                                            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
+                                            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                            Thread.Sleep(10000);
+                                            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                            //Thread.Sleep(10000);
+                                            session.Manage().Window.Maximize();
+                                            var wait1 = new WebDriverWait(session, TimeSpan.FromSeconds(60));
+                                            var div1 = wait1.Until(ExpectedConditions.ElementIsVisible(By.ClassName("ListBoxItem")));
+                                            var text_Button1 = session.FindElementsByClassName("ListBoxItem");
 
-                                            if (S.Contains("Assign Left"))
+                                            stepName.Log(Status.Pass, "FSW is launched successfully");
+
+                                           int counter1 = 0;
+                                           string PatientName1 = null;
+                                           string PatientDescription1 = null;
+                                            foreach (var element in text_Button1)
                                             {
-
-                                                value.Click();
-                                                value.FindElementByName("Assign Left").Click();
-                                                deviceFound = true;
-
-                                                break;
-
+                                                if (counter1 == 3)
+                                                {
+                                                    PatientName1 = element.GetAttribute("AutomationId");
+                                                    PatientDescription1 = element.GetAttribute("Name");
+                                                    break;
+                                                }
+                                                  counter1 = counter1 + 1;
                                             }
 
+
+
+                                            lib.clickOnAutomationId(session, PatientDescription, PatientName);
+
+                                            /** Clicks on Fit patient button **/
+
+                                            Thread.Sleep(8000);
+                                            lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
+                                            stepName.Pass("Patient is clicked");
+                                            Thread.Sleep(10000);
+                                            session.Close();
+                                            //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
+                                            appCapabilities = new DesiredCapabilities();
+                                            appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
+                                            appCapabilities.SetCapability("deviceName", "WindowsPC");
+                                            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
+                                            Thread.Sleep(5000);
+                                            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                            Thread.Sleep(5000);
+                                            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                            Thread.Sleep(5000);
+                                            lib.clickOnAutomationName(session, "Assign Instruments");
+                                            session.FindElementByName("Back").Click();
+                                            Thread.Sleep(5000);
+                                            session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
+                                            Thread.Sleep(2000);
+
+                                            /** Select Noah link Wireless now, then click Connect.  **/
+
+                                            session.FindElementByName("Noahlink Wireless").Click();
+                                            lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+
+                                            Thread.Sleep(13000);
+                                            lib.clickOnAutomationName(session, "Assign Instruments");
+
+                                            Thread.Sleep(5000); // Initial wait before searching
+
+                                            var SN = session.FindElementsByClassName("ListBoxItem");
+
+                                            // Check if DeviceNo is already discovered
+
+                                            foreach (WindowsElement value in SN)
+                                            {
+                                                string S = value.Text;
+                                                if (S.Contains(DeviceNo) && S.Contains("Assign Left"))
+                                                {
+                                                    value.Text.Contains("Assign Left");
+                                                    // value.Click();
+                                                    value.FindElementByName("Assign Left").Click();
+                                                    break;
+                                                }
+                                            }
                                         }
 
+                                        catch
+                                        {
+                                        }
                                     }
-
-                                    // If device not found yet, click on the search button again
-
-                                    if (!deviceFound)
-
-                                    {
-
-                                        session.FindElementByAccessibilityId("SearchButton").Click();
-
-                                        Thread.Sleep(5000);
-
-                                        List = session.FindElementsByClassName("ListBoxItem");
-
-                                    }
-
-                                }
-
-                            }
-
-                            else
-
-                            {
-
-                                // Handle case where search button is not enabled within timeout
-
-                                Console.WriteLine("Search button not enabled within timeout.");
-
-                            }
-
-                        }
-
-                        if (!deviceFound)
-
-                        {
-
-                            // Handle timeout or device not found
-
-                            Console.WriteLine("Device not found within timeout.");
-
-                        }
-
-                    }
-
-                    //try
-                    //{
-                    //    if (session.FindElementByName("Unassign").Enabled)
-                    //    {
-                    //        lib.clickOnAutomationName(session, "Assign Instruments");
-                    //        Thread.Sleep(5000);
-                    //        var SN = session.FindElementsByClassName("ListBoxItem");
-                    //        Thread.Sleep(10000);
-
-                    //        /** The left side is assigned **/
-
-                    //        foreach (WindowsElement value in SN)
-
-                    //        {
-                    //            string S = value.Text;
-                    //            if (S.Contains(DeviceNo))
-                    //            {
-                    //                value.Text.Contains("Assign Left");
-                    //                //value.Click();
-                    //                value.FindElementByName("Assign Left").Click();
-
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    lib.clickOnAutomationName(session, "Assign Instruments");
-                    //    Thread.Sleep(5000);
-                    //    var SN = session.FindElementsByClassName("ListBoxItem");
-                    //    Thread.Sleep(5000);
-
-                    //    /** The left side is assigned **/
-
-                    //    foreach (WindowsElement value in SN)
-                    //    {
-                    //        string S = value.Text;
-                    //        if (S.Contains(DeviceNo))
-                    //        {
-                    //            value.Text.Contains("Assign Left");
-                    //            //value.Click();
-                    //            //value.FindElementByClassName("Button").Click();
-                    //            value.FindElementByName("Assign Left").Click();
-
-                    //        }
-                    //    }
-                    //    Thread.Sleep(5000);
-                    //}
+                                } 
+                            } while (!session.FindElementByName("Continue").Enabled);
+                                           
 
                     /** Clicks on Continue buttion **/
 
@@ -1396,27 +1350,18 @@ namespace MyNamespace
 
 
                 }
-
                 catch (Exception)
-
                 {
-
                     try
                     {
                         session.FindElementByAccessibilityId("WindowAutomationIds.CloseAction");
                         Thread.Sleep(5000);
                         lib.processKill("SmartFitSA");
-
                     }
-
                     catch
-
                     {
                         lib.processKill("SmartFitSA");
                     }
-
-
-
                     try
                     {
                         if (side.Equals("Left"))
@@ -1465,8 +1410,6 @@ namespace MyNamespace
                         counter = counter + 1;
                     }
 
-
-
                     lib.clickOnAutomationId(session, PatientDescription, PatientName);
 
                     /** Clicks on Fit patient button **/
@@ -1485,7 +1428,7 @@ namespace MyNamespace
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
+                    Thread.Sleep(20000);
 
                     session.FindElementByName("Back").Click();
                     Thread.Sleep(5000);
@@ -1632,7 +1575,7 @@ namespace MyNamespace
 
 
             //if (devName.Contains("RE961-DRWC"))
-            if(DeviceType.Equals("D1rechageableWired"))
+            if(DeviceType.Equals("D1rechargeableWired"))
             {
                 Console.WriteLine("This is When method");
                 // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -1996,7 +1939,7 @@ namespace MyNamespace
                         }
                         break;
                     }
-                    else if (element.Text =="Connection Error")
+                    else if (element.Text == "Connection Error")
                     {
                         stepName.Log(Status.Fail, "Connection Error");
                         MailMessage mailMessage = new MailMessage();
@@ -2187,8 +2130,9 @@ namespace MyNamespace
                         break;
                     }
                 }
-                catch (Exception e) {
-                throw new Exception(e.Message);
+                catch (Exception e)
+                {
+                
                 }
             }         
         }
@@ -2225,10 +2169,10 @@ namespace MyNamespace
           * Connects the HI device **/
 
         //[When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""]")]
-        [When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
-        public void WhenLaunchSandRAndAnd(string device, string DeviceNo, string DeviceType)
-        {
-                  
+        //[When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        [When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""and""([^""]*)""and ""([^""]*)""]")]
+        public void WhenLaunchSandRAndAndand(string device, string DeviceNo, string DeviceType, string side)
+        {          
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
@@ -2247,16 +2191,7 @@ namespace MyNamespace
 
             Thread.Sleep(10000);
 
-            //try
-            //{
-            //    session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
-
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //}
-
+            
             Thread.Sleep(5000);
 
             //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
@@ -2308,9 +2243,12 @@ namespace MyNamespace
                                 stepName.Log(Status.Info, sandRConnection);
                                 var btncls = session.FindElementByAccessibilityId("PART_Close");
                                 btncls.Click();
-                                Thread.Sleep(1000);
-                                 ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo);
-                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+                                Thread.Sleep(4000);
+
+
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo, side);
+
+                                session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
                             }
 
@@ -2320,14 +2258,7 @@ namespace MyNamespace
                                 session.FindElementByName("Search").Click();
                             }
 
-
-
-                        }
-
-
-
-                        //Thread.Sleep(5000);                
-
+                        }                           
 
                     }
                     catch (Exception)
@@ -2336,17 +2267,12 @@ namespace MyNamespace
                     }
 
                 } while (!session.FindElementByName("Disconnect").Displayed);
-
-
-
                 stepName.Log(Status.Pass, "Clicked on Search");
 
                 session = lib.waitForElement(session, "Model Name");
 
                 stepName.Log(Status.Pass, "Dook2 Dev");
-            }
-
-            
+            }        
         }
 
 
@@ -2394,7 +2320,7 @@ namespace MyNamespace
             string Dooku3Rechargeable = "[7].42.1.1 (Dooku3)";
 
             //if (device.Contains("RT962-DRW") || device.Contains("RT960-DRWC") || device.Contains("RU960-DRWC") || device.Contains("RE962-DRW") || device.Contains("RU988-DWC") || device.Contains("NX"))
-            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable")|| DeviceType.Equals("Wired")|| DeviceType.Equals("D1rechageableWired"))
+            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable")|| DeviceType.Equals("Wired")|| DeviceType.Equals("D1rechargeableWired"))
             {
                 session.FindElementByName("Device Info").Click();
                 Thread.Sleep(2000);
@@ -2930,14 +2856,9 @@ namespace MyNamespace
          *  Navigates to servies tab
          *  performs Restore operation with available captured data **/
 
-
-
-        // [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""]")]
-        [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
-        public void WhenPerformRestoreWithAboveCapturedImageAndAnd(string device, string DeviceNo, string DeviceType)
-        {
-           
- 
+        [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""and""([^""]*)"" and ""([^""]*)""]")]
+        public void WhenPerformRestoreWithAboveCapturedImageAndAndAnd(string device, string DeviceNo, string DeviceType, string side)
+        {           
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
@@ -3028,7 +2949,7 @@ namespace MyNamespace
                                     var btncls1 = session.FindElementByAccessibilityId("PART_Close");
                                     btncls1.Click();
                                     Thread.Sleep(1000);
-                                     ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo);
+                                    ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceNo, side);
                                      session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
                                 }
@@ -3038,16 +2959,9 @@ namespace MyNamespace
                                     session.SwitchTo().Window(session.WindowHandles.First());
                                     session.FindElementByName("Search").Click();
                                 }
-
-
-
                             }
 
-
-
                             //Thread.Sleep(5000);                
-
-
                         }
                         catch (Exception)
                         {
@@ -3290,7 +3204,7 @@ namespace MyNamespace
 
 
            // if (device.Contains("LT") || device.Contains("RE"))
-           if(DeviceType.Equals("Wired")|| DeviceType.Equals("D1rechageableWired"))
+           if(DeviceType.Equals("Wired")|| DeviceType.Equals("D1rechargeableWired"))
             {
                 //ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
                 Thread.Sleep(2000);
@@ -3356,8 +3270,6 @@ namespace MyNamespace
 
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    stepName.Fail(e.Message);
                 }
 
                 Thread.Sleep(10000);
@@ -3644,73 +3556,208 @@ namespace MyNamespace
                                 }
                                 catch (Exception ex) { }
                             }
-                                Console.WriteLine($"{workingDirectory.Value}");
-                            session = ModuleFunctions.sessionInitialize(slvPath.Value, workingDirectory.Value);
+                                //Console.WriteLine($"{workingDirectory.Value}");
+
+                            
+                           session = ModuleFunctions.sessionInitialize(slvPath.Value, workingDirectory.Value);
+                            
                             Thread.Sleep(5000);
 
 
                             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
                                
-
-                                Thread.Sleep(2000);
-
-                                string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-                                //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
-                                //if (device.Contains("RT"))
-                                //{
-                                //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
-                                //}
-                                //else if (device.Contains("RU"))
-                                //{
-                                //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
-
-                                //}
-                                //else
-                                //{
-                                //    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
-                                //}
-                                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
-
+                                                              
                                 FunctionLibrary lib = new FunctionLibrary();
-
-                                //session.SwitchTo().Window(session.WindowHandles.First());
-                                //session.SwitchTo().ActiveElement();
+                              
                                 Actions actions = new Actions(session);
-                                Thread.Sleep(5000);
-                                session.FindElementByAccessibilityId("FINDICON").Click();
-                                Thread.Sleep(15000);
-                                session.FindElementByAccessibilityId("FINDICON").Click();
-                                Thread.Sleep(2000);
 
-                                var Popup = session.FindElementByClassName("Popup");
-                                int height = Popup.Size.Height;
-                                var drag = Popup.FindElementsByClassName("Thumb");
-                                Actions action = new Actions(session);
-                                action.MoveToElement(drag[6]).Perform();
-                                action.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+                                var wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+
+                                //Thread.Sleep(10000);
+
+                                var cancelButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                cancelButton.Click();
+
+                                //wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+                                Thread.Sleep(10000);
+
+
+                                var DetectButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                DetectButton.Click();
+
+                                ////wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                ////cancelButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                ////cancelButton.Click();
+
+
+
+
+                                    //wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                
+                                
+
+
+                                    var Popup = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("Popup")));
+
+
+
+                                    int height = Popup.Size.Height;
+
+
+                                    var drag = Popup.FindElements(By.ClassName("Thumb"));
+
+                                    if (drag.Count >= 7)
+                                    {
+                                        actions.MoveToElement(drag[6]).Perform();
+                                        actions.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
+                                    }
+                                
+                              
 
                                 Thread.Sleep(15000);
 
                                 /** To select the Hi serial number **/
 
-                                var SN = session.FindElementsByClassName("TextBlock");
-
-                                foreach (WindowsElement value in SN)
-
+                                try
                                 {
-                                    string S = value.Text;
 
-                                    if (S == DeviceNo)
+                                    var dataGrid = session.FindElementByClassName("DataGrid");
+                                    ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
 
+                                    // Iterate through DataGridCell elements
+                                    foreach (var element in dataGridCells)
                                     {
-                                        value.Click();
+                                        if (element.Text == DeviceNo)
+                                        {
+
+                                            actions = new Actions(session);
+                                            actions.MoveToElement(element).Click().Perform();
+                                            // element.Click();
+                                            //break;
+                                        }
                                     }
 
                                 }
+                                catch (Exception ex)
+                                {
+
+                                }
+
+                                Thread.Sleep(3000);
+
+                                do
+                                {
+                                    if (session.FindElementByName("Connect").Enabled == false)
+                                    {
+
+                                        try
+                                        {
+                                            processKill("StorageLayoutViewer.exe");
+                                        }
+
+                                        catch (Exception e) { Console.WriteLine(e.Message); }
+
+                                        if (side.Equals("Left"))
+                                        {
+                                            Thread.Sleep(4000);
+
+                                            //if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
+                                            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                                            {
+
+                                                ModuleFunctions.socketA(session, test, DeviceType);
+                                            }
+                                            else if (side.Equals("Right"))
+                                            {
+                                                ModuleFunctions.socketB(session, test, DeviceType);
+                                            }
+                                        }
+
+                                        foreach (var slvLaunch in slv["SLV"])
+                                        {
+                                            if (device == slvLaunch.Key)
+                                            {
+                                                Console.WriteLine($"{slvLaunch.Value}");
+                                                foreach (var slvWorkingDirectory in slv["WorkingDirectory"])
+                                                {
+                                                    if (device == slvWorkingDirectory.Key)
+                                                    {
+                                                        Thread.Sleep(3000);
+                                                        Console.WriteLine($"{slvWorkingDirectory.Value}");
+                                                        session = ModuleFunctions.sessionInitialize(slvLaunch.Value, slvWorkingDirectory.Value);
+
+                                                        if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                                                        {
+
+                                                            actions = new Actions(session);
+
+                                                            wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                                            Thread.Sleep(5000);
 
 
+                                                            cancelButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                                            cancelButton.Click();
+
+                                                            wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                                            Thread.Sleep(10000);
+
+
+                                                            DetectButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                                            DetectButton.Click();
+
+
+                                                            wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+                                                            Popup = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("Popup")));
+
+                                                            height = Popup.Size.Height;
+
+
+                                                            drag = Popup.FindElements(By.ClassName("Thumb"));
+
+                                                            if (drag.Count >= 7)
+                                                            {
+                                                                actions.MoveToElement(drag[6]).Perform();
+                                                                actions.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
+                                                            }
+
+                                                            Thread.Sleep(15000);
+
+                                                            var GridCell = session.FindElementByClassName("DataGrid");
+                                                            ReadOnlyCollection<AppiumWebElement> GridCells = GridCell.FindElementsByClassName("DataGridCell");
+
+                                                            // Iterate through DataGridCell elements
+                                                            foreach (var element in GridCells)
+                                                            {
+                                                                if (element.Text == DeviceNo)
+                                                                {
+                                                                    actions = new Actions(session);
+                                                                    actions.MoveToElement(element).Click().Perform();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+                                } while (!session.FindElementByName("Connect").Enabled);
+
+                                session.SwitchTo().Window(session.WindowHandles[0]);
 
                                 lib.functionWaitForName(session, "Connect");
                                 lib.waitUntilElementExists(session, "File", 0);
@@ -3789,7 +3836,7 @@ namespace MyNamespace
                                 Thread.Sleep(3000);
                                 stepName.Pass("Writing Presets is done successfully.");
                             }
-                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
                             {
                                 //if (device.Contains("LT"))
                                 try

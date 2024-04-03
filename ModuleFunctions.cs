@@ -407,7 +407,7 @@ namespace AppiumWinApp
                                 lib.clickOnAutomationName(session, "OK");
                                 session.CloseApp();
                             }
-                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
                             {
                                 //if (device.Contains("LT"))
                                 //{
@@ -835,6 +835,7 @@ namespace AppiumWinApp
 
         public static void socketA(WindowsDriver<WindowsElement> session, ExtentTest test, string DeviceType)
 
+        
         {
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(10000);
@@ -1676,14 +1677,31 @@ namespace AppiumWinApp
 
         /*This is to take the dump the device image from storage layout*/
 
+        public static void processKill(string name)
+        {
+            Process[] processCollection = Process.GetProcesses();
+            foreach (Process proc in processCollection)
+            {
+                Console.WriteLine(proc);
+                if (proc.ProcessName == name)
+                {
+                    proc.Kill();
+                }
+            }
+        }
 
+        
         public static void takeDeviceDumpImage(WindowsDriver<WindowsElement> session, ExtentTest stepName, string device, String fileName, String side, string DeviceNo, string DeviceType)
         {
 
             Console.WriteLine("test");
             Thread.Sleep(5000);
+            string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+
+            FunctionLibrary lib = new FunctionLibrary();
 
             string jsonString = File.ReadAllText(configsettingpath);
+
             Dictionary<string, Dictionary<string, string>> slv = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(jsonString);
             //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             foreach (var slvPath in slv["SLV"])
@@ -1696,63 +1714,55 @@ namespace AppiumWinApp
                         if (device == workingDirectory.Key)
                         {
                             Thread.Sleep(3000);
-                            Console.WriteLine($"{workingDirectory.Value}");
-                            session = ModuleFunctions.sessionInitialize(slvPath.Value, workingDirectory.Value);
+                            //Console.WriteLine($"{workingDirectory.Value}");
+                            session=sessionInitialize(slvPath.Value, workingDirectory.Value);
 
                             /** To Connect the device( RT or RU) to Stroragelayout viewr **/
 
                             //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
                             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
-                                Thread.Sleep(5000);
-                                string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-
-                                //if (device.Contains("RT"))
-                                //{
-                                //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
-                                //}
-                                //else if (device.Contains("RU"))
-                                //{
-                                //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
-
-                                //}
-                                //else
-                                //{
-                                //    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
-                                //}
-                                //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
-                                FunctionLibrary lib = new FunctionLibrary();
+                              
                                 Actions actions = new Actions(session);
 
-                                //session.SwitchTo().Window(session.WindowHandles.First());
-                                //session.SwitchTo().ActiveElement();
-                                Thread.Sleep(2000);
-                                session.FindElementByAccessibilityId("FINDICON").Click();
+                                var wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                Thread.Sleep(5000);
+
+
+                                var cancelButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                cancelButton.Click();
+
+                                //wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
                                 Thread.Sleep(10000);
-                                session.FindElementByAccessibilityId("FINDICON").Click();
-                                Thread.Sleep(2000);
 
-                                var Popup = session.FindElementByClassName("Popup");
+                                var DetectButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                DetectButton.Click();
+
+
+                                //wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+                                var Popup = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("Popup")));
+
                                 int height = Popup.Size.Height;
-                                var drag = Popup.FindElementsByClassName("Thumb");
-                                Actions action = new Actions(session);
-                                action.MoveToElement(drag[6]).Perform();
-                                action.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
 
+
+                                var drag = Popup.FindElements(By.ClassName("Thumb"));
+
+                                if (drag.Count >= 7)
+                                {
+                                    actions.MoveToElement(drag[6]).Perform();
+                                    actions.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
+                                }
+                              
                                 Thread.Sleep(15000);
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                session.SwitchTo().ActiveElement();
-
-
-
+                             
                                 try
                                 {
-                                    //WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromSeconds(30));
-
-
-                                    //do
-                                    //{
-
+                                
                                     var dataGrid = session.FindElementByClassName("DataGrid");
                                     ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
 
@@ -1761,144 +1771,128 @@ namespace AppiumWinApp
                                     {
                                         if (element.Text == DeviceNo)
                                         {
-                                            element.Click();
-                                            break;
-                                        }
+
+                                            actions = new Actions(session);
+                                            actions.MoveToElement(element).Click().Perform();
+                                           // element.Click();
+                                            //break;
+                                        }                                   
                                     }
 
-                                    // Retry if the element is not found immediately
-                                    //wait.Until(driver => dataGrid.FindElementsByClassName("DataGridCell").Count > 0);
-
-
-
-                                    //} while (session.FindElementByName("Connect").Enabled);
                                 }
                                 catch (Exception ex)
                                 {
-                                    //WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromSeconds(30));
 
-                                    // Handle exceptions, log, or take a screenshot if needed
-                                    Console.WriteLine($"Exception: {ex.Message}");
-                                    // You can add more specific exception handling based on your requirements
-                                    try
-                                    {
-                                        session.CloseApp();
-
-                                    }
-                                    catch (Exception e) { Console.WriteLine(ex.Message); }
-
-                                    if (side.Equals("Left"))
-                                    {
-                                        Thread.Sleep(4000);
-
-                                        //if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
-                                        if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
-                                        {
-
-                                            ModuleFunctions.socketA(session, test, DeviceType);
-                                        }
-                                        else if (side.Equals("Right"))
-                                        {
-                                            ModuleFunctions.socketB(session, test, DeviceType);
-                                        }
-                                    }
-
-                                    Thread.Sleep(5000);
-                                    computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
-
-                                    //if (device.Contains("RT"))
-                                    //{
-                                    //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku2, config.workingdirectory.Dooku2);
-                                    //}
-                                    //else if (device.Contains("RU"))
-                                    //{
-                                    //    session = ModuleFunctions.sessionInitialize(config.slv.Dooku3, config.workingdirectory.Dooku3);
-
-                                    //}
-                                    //else
-                                    //{
-                                    //    session = ModuleFunctions.sessionInitialize(config.slv.Megnesium, config.workingdirectory.Megnesium);
-                                    //}
-
-                                    //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku2.9.78.1");
-                                    lib = new FunctionLibrary();
-                                    actions = new Actions(session);
-
-                                    Thread.Sleep(5000);
-                                    session.FindElementByAccessibilityId("FINDICON").Click();
-                                    Thread.Sleep(5000);
-                                    session.FindElementByAccessibilityId("FINDICON").Click();
-                                    Thread.Sleep(15000);
-                                    session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
-
-                                    var dataGrid = session.FindElementByClassName("DataGrid");
-                                    ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
-
-                                    // Iterate through DataGridCell elements
-                                    foreach (var element in dataGridCells)
-                                    {
-                                        if (element.Text == DeviceNo)
-                                        {
-                                            element.Click();
-                                            break;
-                                        }
-                                    }
                                 }
 
+                                Thread.Sleep(3000);
 
+                                    do
+                                    {
+                                        if (session.FindElementByName("Connect").Enabled == false)
+                                        {
+                                        
+                                        try
+                                        {
+                                            processKill("StorageLayoutViewer.exe");
+                                        }
+
+                                        catch (Exception e) { Console.WriteLine(e.Message); }
+
+                                            if (side.Equals("Left"))
+                                            {
+                                                Thread.Sleep(4000);
+
+                                                //if (device.Contains("RT") || device.Contains("NX") || device.Contains("C"))
+                                                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                                                {
+
+                                                    socketA(session, test, DeviceType);
+                                            }
+                                            else if (side.Equals("Right"))
+                                            {
+                                                socketB(session, test, DeviceType);
+                                            }
+                                        }
+
+                                        foreach (var slvLaunch in slv["SLV"])
+                                        {
+                                            if (device == slvLaunch.Key)
+                                            {
+                                                Console.WriteLine($"{slvLaunch.Value}");
+                                                foreach (var slvWorkingDirectory in slv["WorkingDirectory"])
+                                                {
+                                                    if (device == slvWorkingDirectory.Key)
+                                                    {
+                                                        Thread.Sleep(3000);
+                                                        Console.WriteLine($"{slvWorkingDirectory.Value}");
+                                                        session = sessionInitialize(slvLaunch.Value, slvWorkingDirectory.Value);
+
+                                                        if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                                                        {
+
+                                                            actions = new Actions(session);
+
+                                                            wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                                            Thread.Sleep(5000);
+
+
+                                                            cancelButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                                            cancelButton.Click();
+
+                                                            wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+
+                                                            Thread.Sleep(10000);
+
+
+                                                            DetectButton = wait.Until(ExpectedConditions.ElementToBeClickable(session.FindElementByAccessibilityId("FINDICON")));
+
+                                                            DetectButton.Click();
+
+
+                                                            wait = new WebDriverWait(session, TimeSpan.FromSeconds(10));
+                                                                Popup = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("Popup")));
+
+                                                                height = Popup.Size.Height;
+
+
+                                                                drag = Popup.FindElements(By.ClassName("Thumb"));
+
+                                                                if (drag.Count >= 7)
+                                                                {
+                                                                    actions.MoveToElement(drag[6]).Perform();
+                                                                    actions.ClickAndHold(drag[6]).MoveByOffset(0, height * 3).Release().Perform();
+
+                                                                }
+                                                            
+                                                                Thread.Sleep(15000);
+
+                                                                var GridCell = session.FindElementByClassName("DataGrid");
+                                                                ReadOnlyCollection<AppiumWebElement> GridCells = GridCell.FindElementsByClassName("DataGridCell");
+
+                                                                // Iterate through DataGridCell elements
+                                                                foreach (var element in GridCells)
+                                                                {
+                                                                    if (element.Text == DeviceNo)
+                                                                    {
+                                                                    actions = new Actions(session);
+                                                                    actions.MoveToElement(element).Click().Perform();
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+
+                                    } while (!session.FindElementByName("Connect").Enabled);
+                               
                                 session.SwitchTo().Window(session.WindowHandles[0]);
-
-                                //try
-                                //    {
-                                //        //do
-                                //        //{
-
-                                //        var dataGrid = session.FindElementByClassName("DataGrid");
-
-                                //        // Find all DataGridCell elements within the DataGrid
-                                //        var dataGridCells = session.FindElementsByClassName("DataGridCell");
-                                //        Thread.Sleep(6000);
-
-                                //        ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
-
-                                //        // Iterate through DataGridCell elements
-                                //        foreach (var element in data)
-                                //        {
-                                //            if (element.Text == DeviceNo)
-                                //            {
-                                //                element.Click();
-                                //                break;
-                                //            }
-                                //        }
-
-                                //    }
-                                //    catch
-                                //    {
-                                //        //do
-                                //        //{
-                                //            var dataGrid = session.FindElementByClassName("DataGrid");
-
-                                //        // Find all DataGridCell elements within the DataGrid
-                                //        var dataGridCells = session.FindElementsByClassName("DataGridCell");
-
-                                //        Thread.Sleep(6000);
-
-                                //        ReadOnlyCollection<AppiumWebElement> data = (ReadOnlyCollection<AppiumWebElement>)dataGrid.FindElementsByClassName("DataGridCell");
-
-                                //        // Iterate through DataGridCell elements
-                                //        foreach (var element in data)
-                                //        {
-                                //            if (element.Text == DeviceNo)
-                                //            {
-                                //                element.Click();
-                                //                break;
-                                //            }
-                                //        }
-
-                                //} while (session.FindElementByName("Connect").Enabled) ;
-                                //}
-
+                            
                                 lib.functionWaitForName(session, "Connect");
 
                                 lib.waitUntilElementExists(session, "File", 0);
@@ -1990,9 +1984,11 @@ namespace AppiumWinApp
                                         session.FindElementByAccessibilityId("buttonOk").Click();
                                     }
                                 }
-                                Thread.Sleep(150000);
+                                Thread.Sleep(200000);
+
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 session.SwitchTo().ActiveElement();
+
                                 try
                                 {
                                     if (session.WindowHandles.Count() > 1)
@@ -2041,7 +2037,7 @@ namespace AppiumWinApp
                             /** To Connect the device(LT) to Stroragelayout viewr **/
 
                             // if (device.Contains("LT"))
-                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
                             {
 
 
@@ -2050,11 +2046,9 @@ namespace AppiumWinApp
 
                                     if (session.FindElementByName("Channel").Displayed == true)
                                     {
-                                        string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                                         //session = ModuleFunctions.sessionInitialize(config.slv.Palpatine6, config.workingdirectory.Palpatine6);
 
                                         //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Palpatine6.7.4.21-RP-S");
-                                        FunctionLibrary lib = new FunctionLibrary();
                                         lib.waitUntilElementExists(session, "Channel", 0);
                                         var ext = session.FindElements(WorkFlowPageFactory.channel);
                                         ext[0].Click();
@@ -2199,15 +2193,13 @@ namespace AppiumWinApp
                                 }
                                 catch (Exception e)
                                 {
-                                    FunctionLibrary lib = new FunctionLibrary();
                                     InputSimulator sim = new InputSimulator();
-                                    string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                                     string storageLayOutDate = "WindowsForms10.Window.8.app.0.2804c64_r9_ad1";
 
                                     //session = ModuleFunctions.sessionInitialize(config.slv.Dooku1, config.workingdirectory.Dooku1);
                                     //session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1\\StorageLayoutViewer.exe", "C:\\Program Files (x86)\\ReSound\\Dooku1.1.20.1");
                                     Thread.Sleep(8000);
-                                    Actions actions = new Actions(session);
+                                    //Actions actions = new Actions(session);
                                     Thread.Sleep(4000);
 
                                     if (side.Equals("Left"))
@@ -2231,7 +2223,7 @@ namespace AppiumWinApp
                                     ext[0].Click();
                                     Thread.Sleep(2000);
                                     ext = session.FindElements(WorkFlowPageFactory.readHI);
-                                    actions = new Actions(session);
+                                    Actions actions = new Actions(session);
                                     actions.MoveToElement(ext[0]).Build().Perform();
                                     Thread.Sleep(2000);
                                     session.Keyboard.PressKey(Keys.Enter);
@@ -2524,42 +2516,45 @@ namespace AppiumWinApp
          * it tries again to get disover untill device get
          * detects to FDTS */
 
-        public static void discoveryFailed(WindowsDriver<WindowsElement> session, ExtentTest test, string textDir, string device, string side, string DeviceNo)
+        public static void discoveryFailed(WindowsDriver<WindowsElement> session, ExtentTest test, string textDir, string device, string side, string DeviceNo, string DeviceType)
 
         {
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             do
                 {
-                    //Console.WriteLine("Window name is" +session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text);
+                //Console.WriteLine("Window name is" +session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r7_ad1").Text);
 
-                        if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
 
+                {
+                    session.FindElementByName("Stop").Click();
+                    Thread.Sleep(3000);
+                    session.SwitchTo().Window(session.WindowHandles[0]);
+                    session.FindElementByName("Shutdown").Click();
+                    Thread.Sleep(3000);
+
+
+                   
+                        // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
+                        if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                         {
-                            session.FindElementByName("Stop").Click();
-                            Thread.Sleep(3000);
-                            session.SwitchTo().Window(session.WindowHandles[0]);
-                            session.FindElementByName("Shutdown").Click();
-                            Thread.Sleep(3000);
-
-
                             if (side.Equals("Left"))
-
-
                             {
-                                ModuleFunctions.socketA(session, test, device);
+                                ModuleFunctions.socketA(session, test, DeviceType);
                             }
                             else if (side.Equals("Right"))
                             {
-                                ModuleFunctions.socketB(session, test, device);
+                                ModuleFunctions.socketB(session, test, DeviceType);
                             }
                         }
+                }
 
-                        /** launching the FDTS **/
+                /** launching the FDTS **/
 
-                        try
+                try
                         {
-                            session = ModuleFunctions.launchApp(textDir + "\\LaunchFDTS.bat", textDir);
+                            session = launchApp(textDir + "\\LaunchFDTS.bat", textDir);
                         }
                         catch (Exception e)
                         {
@@ -2651,26 +2646,30 @@ namespace AppiumWinApp
         }
 
 
-        public static void Recovery(WindowsDriver<WindowsElement> session, ExtentTest stepname, string DeviceType, string DeviceNo)
+        public static void Recovery(WindowsDriver<WindowsElement> session, ExtentTest stepname, string DeviceType, string DeviceNo,string side)
         {
             FunctionLibrary lib = new FunctionLibrary();
+
 
             try
             {
                 if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
-                    ModuleFunctions.socketA(session, stepname, DeviceType);
-
-
+                    if (side.Equals("Left"))
+                    {
+                        socketA(session, stepname, DeviceType);
+                    }
+                    else if (side.Equals("Right"))
+                    {
+                        socketB(session, stepname, DeviceType);
+                    }
                 }
             }
             catch { }
 
-            //Thread.Sleep(10000);
-
             try
             {
-                session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
+                session = launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
 
             }
             catch (Exception e)
@@ -2680,7 +2679,7 @@ namespace AppiumWinApp
 
             //Thread.Sleep(5000);
 
-            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+            session = sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             stepname.Log(Status.Pass, "S&R Tool launched successfully");
             lib.waitUntilElementExists(session, "Device Info", 0);
             session.FindElementByName("Device Info").Click();
@@ -2703,49 +2702,11 @@ namespace AppiumWinApp
                 catch (Exception ex)
                 {
 
-                }
-
-
-                //do
-                //{
-                //    try
-                //    {
-                //        session.SwitchTo().Window(session.WindowHandles.First());
-
-                //        //if (session.FindElementByAccessibilityId("TextBox_1").Text)
-                //        //{
-
-                //        //}
-
-                //        if (session.FindElementByName("Discover").Text == "Discover")
-                //        {
-                //            session.SwitchTo().Window(session.WindowHandles.First());
-                //            session.FindElementByName("Search").Click();
-                //        }
-
-
-
-
-
-                //    }
-                //    catch (Exception)
-                //    {
-
-                //    }
-
-                //} while (!session.FindElementByName("Disconnect").Displayed);
-
-
-
+                }        
 
             }
 
         }
-
-
-
-
-
 
     } /**End of ModuleFunctions*/ 
     

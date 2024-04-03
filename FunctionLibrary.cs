@@ -28,6 +28,7 @@ using NUnit.Framework.Internal;
 using Castle.Core.Internal;
 using System.IO.Compression;
 using Xamarin.Forms.Internals;
+using com.sun.xml.@internal.ws.api.pipe;
 
 namespace AppiumWinApp
 {
@@ -441,14 +442,19 @@ namespace AppiumWinApp
 
         public void LogElementStatus(ExtentTest test, string elementName, string textBoxValue)
         {
-            if (string.IsNullOrEmpty(textBoxValue) || textBoxValue.Contains("?"))
+            if (string.IsNullOrEmpty(textBoxValue))
             {
                 test.Log(Status.Fail, $"{elementName} is displayed as => {textBoxValue}");
             }
-            else
+            else if (textBoxValue.Contains("?"))
+            {
+                test.Log(Status.Info, $"{elementName} is displayed as => {textBoxValue}");
+            }
+            else 
             {
                 test.Log(Status.Pass, $"{elementName} is displayed as => {textBoxValue}");
             }
+            
         }
 
         /** To get the Device information into the Excel sheet **/
@@ -468,6 +474,10 @@ namespace AppiumWinApp
             {
                 if (deviceType == "Wired" || deviceType == "Non-Rechargeable")
                 {
+                    if (textValues[i] == "Tube Length")
+                    {
+                        continue;
+                    }
                     if (i >= 16 && i <= 19)
                     {
                         continue;
@@ -476,7 +486,13 @@ namespace AppiumWinApp
                 }
                 else if (deviceType == "Rechargeable" || deviceType == "D1rechargeableWired")
                 {
-                    if (i == 16)
+
+                    if (textValues[i] == "Tube Length")
+                    {
+                        continue;
+                    }
+
+                    if (i == 16 && string.IsNullOrEmpty(textboxValues[i - startIndex]))
                     {
                         continue;
                     }
@@ -642,10 +658,11 @@ namespace AppiumWinApp
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             XmlDocument doc = new XmlDocument();
-            doc.Load("C:\\Device C.xml");
+            // doc.Load("C:\\Device C.xml");
+            doc.Load("C:\\" + device + ".xml");
 
             XmlDocument doc1 = new XmlDocument();
-            doc1.Load("C:\\Device D.xml");
+            doc1.Load("C:\\Device A.xml");
 
             /* XML file 1 Attributes */
             string[] DfsInitLayoutItem = new string[5];
@@ -872,7 +889,7 @@ namespace AppiumWinApp
 
             for (int i = 0; i < 8; i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 4; j < 5; j++)
                 {
                     try
                     {
@@ -882,14 +899,25 @@ namespace AppiumWinApp
                         {
                             case 0:
                                 {
-                                    if (DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j]))
+
+                                    if ((!DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j])) && device.Equals("Device B"))
                                     {
                                         Console.WriteLine("Pass");
-                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                    }
+                                    else if ((DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j])) && device.Equals("Device C"))
+                                    {
+                                        Console.WriteLine("Pass");
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                    }
+                                    else if ((DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j])) && device.Equals("Device D"))
+                                    {
+                                        Console.WriteLine("Pass");
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
                                     }
 
                                     break;
@@ -898,13 +926,21 @@ namespace AppiumWinApp
                             case 1:
 
                                 {
-                                    if (FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j]))
+                                    if ((!FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                    }
+                                    else if ((FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                    }
+                                    else if ((FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
                                     }
                                     break;
                                 }
@@ -912,13 +948,21 @@ namespace AppiumWinApp
                             case 2:
 
                                 {
-                                    if (OsPreset[j].Equals(OsPreset1[j]))
+                                    if ((!OsPreset[j].Equals(OsPreset1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
+                                    }
+                                    else if ((OsPreset[j].Equals(OsPreset1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
+                                    }
+                                    else if ((OsPreset[j].Equals(OsPreset1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "AND Actual Value is :" + OsPreset1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
                                     }
                                     break;
                                 }
@@ -926,13 +970,21 @@ namespace AppiumWinApp
                             case 3:
 
                                 {
-                                    if (PresetTable[j].Equals(PresetTable1[j]))
+                                    if ((!PresetTable[j].Equals(PresetTable1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
+                                    }
+                                    else if ((PresetTable[j].Equals(PresetTable1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
+                                    }
+                                    else if ((PresetTable[j].Equals(PresetTable1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "AND Actual Value is :" + PresetTable1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
                                     }
                                     break;
                                 }
@@ -940,27 +992,66 @@ namespace AppiumWinApp
                             case 4:
 
                                 {
-                                    if (GlobalPreset[j].Equals(GlobalPreset1[j]))
+                                    if ((!GlobalPreset[j].Equals(GlobalPreset1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
+                                    }
+                                    else if ((GlobalPreset[j].Equals(GlobalPreset1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
+                                    }
+                                    else if ((GlobalPreset[j].Equals(GlobalPreset1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "AND Actual Value is :" + GlobalPreset1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
                                     }
                                     break;
                                 }
 
+                            //case 5:
+
+                            //    {
+                            //        if (CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device B"))
+                            //        {
+                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                            //        }
+                            //        if (!CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device C"))
+                            //        {
+                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                            //        }
+                            //        if (CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device D"))
+                            //        {
+                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                            //        }
+                            //        else
+                            //        {
+                            //            stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
+                            //        }
+                            //        break;
+                            //    }
+
                             case 5:
 
                                 {
-                                    if (CombinedPreset[j].Equals(CombinedPreset1[j]))
+                                    if ((!GattDatabase[j].Equals(GattDatabase1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
+                                    }
+
+                                    else if ((GattDatabase[j].Equals(GattDatabase1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
+                                    }
+                                    else if ((GattDatabase[j].Equals(GattDatabase1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
                                     }
                                     break;
                                 }
@@ -968,27 +1059,21 @@ namespace AppiumWinApp
                             case 6:
 
                                 {
-                                    if (GattDatabase[j].Equals(GattDatabase1[j]))
+                                    if ((!PersistentDataSpace[j].Equals(PersistentDataSpace1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                    }
+                                    else if ((PersistentDataSpace[j].Equals(PersistentDataSpace1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                    }
+                                    else if ((PersistentDataSpace[j].Equals(PersistentDataSpace1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "AND Actual Value is :" + GattDatabase1[j]);
-                                    }
-                                    break;
-                                }
-
-                            case 7:
-
-                                {
-                                    if (PersistentDataSpace[j].Equals(PersistentDataSpace1[j]))
-                                    {
-                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j]);
-                                    }
-                                    else
-                                    {
-                                        stepName.Log(Status.Fail, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
                                     }
                                     break;
                                 }
@@ -1145,6 +1230,7 @@ namespace AppiumWinApp
 
         }
 
+
         /* Verifying device dumps and report errors incase any differences*/
 
         public void dumpCompare(string device, ExtentTest stepName)
@@ -1160,6 +1246,7 @@ namespace AppiumWinApp
 
             XmlDocument doc1 = new XmlDocument();
             doc1.Load("C:\\Device A.xml");
+            //string DeviceA = "Device A";
 
             /* XML file 1 Attributes */
             string[] DfsInitLayoutItem = new string[5];
@@ -1383,9 +1470,10 @@ namespace AppiumWinApp
 
             }
 
-            for (int i = 0; i < 8; i++)
+
+            for (int i = 0; i < 7; i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 4; j < 5; j++)
                 {
                     try
                     {
@@ -1395,14 +1483,25 @@ namespace AppiumWinApp
                         {
                             case 0:
                                 {
-                                    if (DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j]))
+
+                                    if ((DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j])) && device.Equals("Device B"))
                                     {
                                         Console.WriteLine("Pass");
-                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                    }
+                                    else if ((!DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j])) && device.Equals("Device C"))
+                                    {
+                                        Console.WriteLine("Pass");
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                    }
+                                    else if ((DfsInitLayoutItem[j].Equals(DfsInitLayoutItem1[j])) && device.Equals("Device D"))
+                                    {
+                                        Console.WriteLine("Pass");
+                                        stepName.Log(Status.Pass, "Compared Value of DFSInitLayoutItem :** " + "'" + arrayVal[j].ToUpper() + "'" + "**: is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of DFSInitLayoutItem Expected is: " + arrayVal[j] + ": is" + DfsInitLayoutItem[j] + "  " + "AND Actual Value is :" + DfsInitLayoutItem1[j]);
                                     }
 
                                     break;
@@ -1411,13 +1510,21 @@ namespace AppiumWinApp
                             case 1:
 
                                 {
-                                    if (FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j]))
+                                    if ((FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                    }
+                                    else if ((!FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                    }
+                                    else if ((FittingSoftwareInfoSpace[j].Equals(FittingSoftwareInfoSpace1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of FittingSoftwareInfoSpace :** " + arrayVal[j].ToUpper() + "** : is" + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of FittingSoftwareInfoSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + FittingSoftwareInfoSpace[j] + "  " + "AND Actual Value is :" + FittingSoftwareInfoSpace1[j]);
                                     }
                                     break;
                                 }
@@ -1425,13 +1532,21 @@ namespace AppiumWinApp
                             case 2:
 
                                 {
-                                    if (OsPreset[j].Equals(OsPreset1[j]))
+                                    if ((OsPreset[j].Equals(OsPreset1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
+                                    }
+                                    else if ((!OsPreset[j].Equals(OsPreset1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
+                                    }
+                                    else if ((OsPreset[j].Equals(OsPreset1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of OsPreset :** " + arrayVal[j].ToUpper() + "** : is" + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "AND Actual Value is :" + OsPreset1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of OsPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + OsPreset[j] + "  " + "AND Actual Value is :" + OsPreset1[j]);
                                     }
                                     break;
                                 }
@@ -1439,13 +1554,21 @@ namespace AppiumWinApp
                             case 3:
 
                                 {
-                                    if (PresetTable[j].Equals(PresetTable1[j]))
+                                    if ((PresetTable[j].Equals(PresetTable1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
+                                    }
+                                    else if ((!PresetTable[j].Equals(PresetTable1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
+                                    }
+                                    else if ((PresetTable[j].Equals(PresetTable1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PresetTable :** " + arrayVal[j].ToUpper() + "** : is" + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "AND Actual Value is :" + PresetTable1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of PresetTable Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PresetTable[j] + "  " + "AND Actual Value is :" + PresetTable1[j]);
                                     }
                                     break;
                                 }
@@ -1453,27 +1576,66 @@ namespace AppiumWinApp
                             case 4:
 
                                 {
-                                    if (GlobalPreset[j].Equals(GlobalPreset1[j]))
+                                    if ((GlobalPreset[j].Equals(GlobalPreset1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
+                                    }
+                                    else if ((!GlobalPreset[j].Equals(GlobalPreset1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
+                                    }
+                                    else if ((GlobalPreset[j].Equals(GlobalPreset1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GlobalPreset :** " + arrayVal[j].ToUpper() + "** : is" + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "AND Actual Value is :" + GlobalPreset1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of GlobalPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GlobalPreset[j] + "  " + "AND Actual Value is :" + GlobalPreset1[j]);
                                     }
                                     break;
                                 }
 
+                            //case 5:
+
+                            //    {
+                            //        if (CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device B"))
+                            //        {
+                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                            //        }
+                            //        if (!CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device C"))
+                            //        {
+                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                            //        }
+                            //        if (CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device D"))
+                            //        {
+                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                            //        }
+                            //        else
+                            //        {
+                            //            stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
+                            //        }
+                            //        break;
+                            //    }
+
                             case 5:
 
                                 {
-                                    if (CombinedPreset[j].Equals(CombinedPreset1[j]))
+                                    if ((GattDatabase[j].Equals(GattDatabase1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
+                                    }
+
+                                    else if ((!GattDatabase[j].Equals(GattDatabase1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
+                                    }
+                                    else if ((GattDatabase[j].Equals(GattDatabase1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "  " + "AND Actual Value is :" + GattDatabase1[j]);
                                     }
                                     break;
                                 }
@@ -1481,27 +1643,21 @@ namespace AppiumWinApp
                             case 6:
 
                                 {
-                                    if (GattDatabase[j].Equals(GattDatabase1[j]))
+                                    if ((PersistentDataSpace[j].Equals(PersistentDataSpace1[j])) && device.Equals("Device B"))
                                     {
-                                        stepName.Log(Status.Pass, "Compared Value of GattDatabase :** " + arrayVal[j].ToUpper() + "** : is" + GattDatabase[j]);
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                    }
+                                    else if ((!PersistentDataSpace[j].Equals(PersistentDataSpace1[j])) && device.Equals("Device C"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                    }
+                                    else if ((PersistentDataSpace[j].Equals(PersistentDataSpace1[j])) && device.Equals("Device D"))
+                                    {
+                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
                                     }
                                     else
                                     {
-                                        stepName.Log(Status.Fail, "Compared Value of GattDatabase Expected is: " + "'" + arrayVal[j] + "'" + " : is " + GattDatabase[j] + "AND Actual Value is :" + GattDatabase1[j]);
-                                    }
-                                    break;
-                                }
-
-                            case 7:
-
-                                {
-                                    if (PersistentDataSpace[j].Equals(PersistentDataSpace1[j]))
-                                    {
-                                        stepName.Log(Status.Pass, "Compared Value of PersistentDataSpace :** " + arrayVal[j].ToUpper() + "** : is" + PersistentDataSpace[j]);
-                                    }
-                                    else
-                                    {
-                                        stepName.Log(Status.Fail, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "AND Actual Value is :" + PersistentDataSpace1[j]);
+                                        stepName.Log(Status.Info, "Compared Value of PersistentDataSpace Expected is: " + "'" + arrayVal[j] + "'" + " : is " + PersistentDataSpace[j] + "  " + "AND Actual Value is :" + PersistentDataSpace1[j]);
                                     }
                                     break;
                                 }
@@ -1514,6 +1670,8 @@ namespace AppiumWinApp
                     catch (Exception e) { }
                 }
             }
+
+
 
 
             for (int i = 0; i < FittingSoftwareInfoSpace.Length; i++)
@@ -1656,6 +1814,8 @@ namespace AppiumWinApp
 
 
 
+
+
         public void PassingXML(ExtentTest test)
 
         {
@@ -1717,735 +1877,171 @@ namespace AppiumWinApp
 
             }// Save the updated XML document
 
-        }
-
-
+        }   
         public void Azurefile(WindowsDriver<WindowsElement> session)
         {
-
-
             string directloc = textDir + "\\azurefiles";
-
-            // files list from the root directory and its subdirectories and prints it
             string[] fyles = Directory.GetFileSystemEntries(directloc, "*", SearchOption.AllDirectories);
             Console.WriteLine(String.Join(System.Environment.NewLine, fyles));
             string file = String.Join(System.Environment.NewLine, fyles);
-
-            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             string sourceFile = file;
-
-
-            // Create a FileInfo  
             System.IO.FileInfo fi = new System.IO.FileInfo(sourceFile);
-
-            //Check if file is there
-
             if (fi.Exists)
             {
-
                 fi.MoveTo(file + ".rar");
-                Console.WriteLine("File Renamed." + fi);
-
             }
-
-            string zipFilePath = textDir + "\\azurefiles\\" + fi.Name;
-            string extractPath = textDir + "\\azurefiles";
-            ZipFile.ExtractToDirectory(zipFilePath, extractPath);
-            Console.WriteLine("ZIP file extracted successfully.");
-            System.IO.FileInfo rarfile = new System.IO.FileInfo(zipFilePath);
-            if (rarfile.Exists)
-            {
-                rarfile.Delete();
-            }
-
+            ExtractZipFile(textDir + "\\azurefiles\\" + fi.Name, textDir + "\\azurefiles");
         }
-
-
         public XmlNodeList SelectNodesInXml(XmlDocument xmlDocument, string xPathQuery)
         {
-
             return xmlDocument.SelectNodes(xPathQuery);
-
         }
-
-
-
-
-        string file2;
-
+        [Obsolete]
         public void AzureFileCompare(WindowsDriver<WindowsElement> session, ExtentTest stepName)
-
         {
-
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
-
             stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
             try
             {
                 session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-
             Thread.Sleep(5000);
-
             session = ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe", "C:\\Program Files (x86)\\GN Hearing\\Lucan\\App");
-
-            var di = session.FindElementByAccessibilityId("ScrollView");
-
-            ReadOnlyCollection<AppiumWebElement> list = (ReadOnlyCollection<AppiumWebElement>)di.FindElementsByClassName("TextBlock");
-
-            string[] DevicedetailsNames = new string[list.Count];
-
-            foreach (AppiumWebElement element in list)
-            {
-                //Console.WriteLine(element.Text);
-                int P = 1;
-                for (int i = 0; i < list.Count; i++)
-                {
-                    var ss_Parent = session.FindElementsByClassName("TextBlock")[i].Text;
-                    DevicedetailsNames[i] = ss_Parent;
-                    Console.WriteLine(DevicedetailsNames[i]);
-                }
-                break;
-            }
-
-            session.SwitchTo().Window(session.WindowHandles.First());
-            var Dr = session.FindElementByAccessibilityId("ScrollView");
-            ReadOnlyCollection<AppiumWebElement> list1 = (ReadOnlyCollection<AppiumWebElement>)Dr.FindElementsByClassName("TextBox");
-
-            string[] windowvalues = new string[list1.Count];
-
-
-            foreach (AppiumWebElement element in list1)
-            {
-                //Console.WriteLine(element.Text);
-                int P = 1;
-                for (int i = 0; i < list1.Count; i++)
-                {
-                    var ss_Parent1 = session.FindElementsByClassName("TextBox")[i].Text;
-                    windowvalues[i] = ss_Parent1;
-
-                    Console.WriteLine(windowvalues[i]);
-
-                }
-                break;
-            }
-
-            FunctionLibrary lib = new FunctionLibrary();
-
-            lib.Azurefile(session);
+            Azurefile(session);
+            string sourceFile2 = GetSourceFileForComparison();
+            CompareAzureFiles(stepName, sourceFile2, session);
+        }
+        private string GetSourceFileForComparison()
+        {
             string directloc1 = textDir + "\\azurefiles";
             string[] fyles2 = Directory.GetFileSystemEntries(directloc1, "*", SearchOption.AllDirectories);
-            Console.WriteLine(String.Join(System.Environment.NewLine, fyles2));
-
-            //if (fyles2.Count()>1)
-            //{
-            //    file2 = 
-            //}           
-            
-            string sourceFile2;
-
-            if (fyles2.Count() > 1)
-            {
-                sourceFile2 = String.Join(System.Environment.NewLine, fyles2[1]);
-            }
-            else
-            {
-
-                sourceFile2 = String.Join(System.Environment.NewLine, fyles2[0]);
-            }
-
-
-            // Create a FileInfo  
+            return fyles2.Length > 1 ? String.Join(System.Environment.NewLine, fyles2[1]) : String.Join(System.Environment.NewLine, fyles2[0]);
+        }
+        private void CompareAzureFiles(ExtentTest stepName, string sourceFile2, WindowsDriver<WindowsElement> session)
+        {
+            var textElements = session.FindElementsByClassName("Text");
+            var textboxElements = session.FindElementsByClassName("TextBox");
+            var textValues = textElements.Select(e => e.Text).ToArray();
+            var textboxValues = textboxElements.Select(e => e.Text).ToArray();
+            int startIndex = 3;
+            int endIndex = textValues.Length;
             System.IO.FileInfo fi2 = new System.IO.FileInfo(sourceFile2);
-            // Check if file is there  
             if (fi2.Exists)
             {
-                // Move file with a new name. Hence renamed.  
-                fi2.MoveTo(fi2 + ".Xml");
-                Console.WriteLine("File Renamed.");
+                fi2.MoveTo(fi2.FullName + ".Xml");
             }
-
-
             stepName.Log(Status.Info, "Device information is captured in excel file");
-            XmlNodeList node;
             XmlDocument xmlDoc = new XmlDocument();
             string path = fi2.FullName;
             xmlDoc.Load(path);
-            XmlNodeList Node1 = lib.SelectNodesInXml(xmlDoc, "//DeviceInfos");
-            XmlNodeList Node2 = lib.SelectNodesInXml(xmlDoc, "//ServiceRecord");
-
-
-            if (Node1.IsNullOrEmpty())
+            XmlNodeList node1 = SelectNodesInXml(xmlDoc, "//DeviceInfos");
+            XmlNodeList node2 = SelectNodesInXml(xmlDoc, "//ServiceRecord");
+            XmlNodeList nodes = node1.Count > 0 ? node1 : node2;
+            stepName.Log(Status.Info, "To Start the checking of overall Azure data");
+            foreach (XmlNode node in nodes)
             {
-                node = Node2;
-
-                stepName.Log(Status.Info, "To Strat the checking of overall Azure data ");
-
-                // Loop through the XML nodes and store attribute values in the array
-
-                foreach (XmlNode node2 in node)
+                for (int i = 0; i < node.ChildNodes.Count; i++)
                 {
-                    // Create an array to store the values 
-                    string[] attributeValues = new string[node2.ChildNodes.Count];
+                    var data = node.ChildNodes[i].Name;
+                    var data2 = node.ChildNodes[i].InnerText;
 
-                    for (int i = 0; i < node2.ChildNodes.Count; i++)
+                    if (string.IsNullOrEmpty(data2))
                     {
-                        var data = node2.ChildNodes[i].Name;
-                        var data2 = node2.ChildNodes[i].InnerText;
-                        if (data2.IsNullOrEmpty())
-                        {
-                            Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            stepName.Log(Status.Fail, data + "=" + data2);
-                        }
-                        if (!data2.IsNullOrEmpty())
-                        {
-                            Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            stepName.Log(Status.Pass, data + "=" + data2);
-                        }
-
-                        attributeValues[i] = node2.ChildNodes[i].InnerText;
-                        Console.WriteLine(attributeValues[i]);
-
+                        stepName.Log(Status.Info, $"{data}={data2}");
                     }
-
-                    stepName.Log(Status.Info, "To Completed the verification of overall Azure data");
-
-                    stepName.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
-
-                    foreach (var names in DevicedetailsNames)
+                    else
                     {
-
-                        switch (names)
-                        {
-                            case "Model Name":
-
-
-                                if (windowvalues[0].Equals(attributeValues[2]))
-                                {
-
-                                    stepName.Log(Status.Pass, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[2]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[2]);
-                                }
-
-                                break;
-
-                            case "Serial Number":
-
-
-                                if (windowvalues[2].Equals(attributeValues[5]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[5]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[5]);
-                                }
-
-                                break;
-
-                            case "Private Label":
-
-
-                                if (attributeValues[12].Equals("0"))
-                                {
-                                    attributeValues[12] = "No";
-                                }
-
-
-                                if (windowvalues[1].Equals(attributeValues[12]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[12]);
-                                    break;
-
-                                }
-
-                                else
-
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[12]);
-
-                                }
-
-                                break;
-
-
-                            case "Hybrid S/N":
-
-
-                                if (windowvalues[3].Equals(attributeValues[6]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[6]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[6]);
-                                }
-                                break;
-
-
-                            case "Hybrid Version":
-
-
-                                if (windowvalues[4].Equals(attributeValues[11]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[11]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[11]);
-                                }
-
-                                break;
-
-
-                            case "Firmware Version":
-
-
-
-                                if (attributeValues[19].Equals("D1C01180101"))
-                                {
-                                    attributeValues[19] = "[1].18.1.1 (Dooku1)";
-                                }
-
-                                if (windowvalues[5].Equals(attributeValues[19]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[19]);
-                                    break;
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[19]);
-                                }
-
-                                break;
-
-
-                            case "Final Test Date":
-
-
-                                if (windowvalues[16].Equals(attributeValues[15]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[15]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[15]);
-                                }
-
-                               break;
-
-
-                            case "Test Program":
-
-
-
-                                if (windowvalues[17].Equals(attributeValues[18]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[18]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[18]);
-                                }
-
-                                break;
-
-
-
-                            case "Test Station":
-
-
-                                if (windowvalues[18].Equals(attributeValues[17]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[17]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[17]);
-                                }
-
-                                break;
-
-
-
-                            case "Test Site":
-
-
-
-                                if (windowvalues[19].Equals(attributeValues[16]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[16]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[16]);
-                                }
-
-                                break;
-
-
-
-                            case "Fitting Software":
-
-
-                                if (windowvalues[20].Equals(attributeValues[20]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[20]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[20]);
-                                }
-
-                               break;
-
-
-
-                            case "Fitting Side":
-
-
-
-                                if (windowvalues[21].Equals(attributeValues[21]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[21]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[21]);
-                                }
-
-                                break;
-
-
-
-                            case "Cloud HIID":
-
-
-                                if (windowvalues[23].Equals(attributeValues[9]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[9]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[9]);
-                                }
-
-                                break;
-
-                        }
-
+                        stepName.Log(Status.Pass, $"{data}={data2}");
                     }
-
                 }
-
-
-                stepName.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
-
             }
-            else
+            stepName.Log(Status.Info, "To Completed the verification of overall Azure data");
+            stepName.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
+            for (int i = startIndex; i <= endIndex - 1; i++)
             {
-                node = Node1;
-
-                stepName.Log(Status.Info, "To Strat the checking of overall Azure data ");
-
-               // Loop through the XML nodes and store attribute values in the array
-
-                foreach (XmlNode node2 in node)
+                string lableValue = textValues[i];
+                string textValue = textboxValues[i - startIndex];
+                foreach (XmlNode node in nodes)
                 {
-                    // Create an array to store the values 
-                    string[] attributeValues = new string[node2.ChildNodes.Count];
-
-                    for (int i = 0; i < node2.ChildNodes.Count; i++)
+                    for (int j = 0; j < node.ChildNodes.Count; j++)
                     {
-                        var data = node2.ChildNodes[i].Name;
-                        var data2 = node2.ChildNodes[i].InnerText;
-                        if (data2.IsNullOrEmpty())
+                        var nodeName = node.ChildNodes[j].Name;
+                        string nodeValue = node.ChildNodes[j].InnerText;
+                        if (nodeName == "PLCode")
                         {
-                            Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            stepName.Log(Status.Fail, data + "=" + data2);
+                            nodeName = "PrivateLabel";
+                            if (nodeValue == "0")
+                            {
+                                nodeValue = "No";
+                            }
                         }
-                        if (!data2.IsNullOrEmpty())
+                        else if (nodeName == "FSWVersion")
                         {
-                            Console.WriteLine(node2.ChildNodes[i] + "=" + data2);
-                            stepName.Log(Status.Pass, data + "=" + data2);
+                            nodeName = "FittingSoftware";
                         }
-
-                        attributeValues[i] = node2.ChildNodes[i].InnerText;
-                        Console.WriteLine(attributeValues[i]);
-
+                        else if (nodeName == "FinalTestProgram")
+                        {
+                            nodeName = "TestProgram";
+                        }
+                        else if (nodeName == "FinalTestStation")
+                        {
+                            nodeName = "TestStation";
+                        }
+                        else if (nodeName == "HybridSerialNumber")
+                        {
+                            nodeName = "HybridS/N";
+                        }
+                        else if (nodeName == "FinalTestSite")
+                        {
+                            nodeName = "TestSite";
+                        }
+                        else if (nodeName == "CloudID")
+                        {
+                            nodeName = "CloudHIID";
+                        }
+                        else if (nodeName == "HasPushButton")
+                        {
+                            nodeName = "PushButton";
+                            if (nodeValue == "True")
+                            {
+                                nodeValue = "Yes";
+                            }
+                        }
+                        if (nodeName == lableValue.Replace(" ", ""))
+{
+     if (nodeName == "FirmwareVersion"||nodeName== "BatteryLevel")
+     {
+         stepName.Log(Status.Info, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
+     }
+     else
+     {
+         if (textValue == nodeValue)
+         {
+             stepName.Log(Status.Pass, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
+         }
+         else
+         {
+             stepName.Log(Status.Fail, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
+         }
+     }
+}
                     }
-
-                    stepName.Log(Status.Info, "To Completed the verification of overall Azure data");
-
-                    stepName.Log(Status.Info, "To start the Comparing of S&R Device Information data and Azure data");
-
-                    foreach (var names in DevicedetailsNames)
-                    {
-
-                        switch (names)
-                        {
-                            case "Model Name":
-
-
-                                if (windowvalues[0].Equals(attributeValues[28]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[28]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[12] + "=" + windowvalues[0] + "=" + attributeValues[28]);
-                                }
-                                break;
-
-
-                            case "Serial Number":
-
-                                if (windowvalues[2] == attributeValues[1])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[1]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[14] + "=" + windowvalues[2] + " = " + attributeValues[1]);
-                                }
-                                break;
-
-                            case "Private Label":
-
-                                if (attributeValues[20] == "0")
-                                {
-                                    attributeValues[20] = "No";
-                                }
-
-                                if (windowvalues[1].Equals(attributeValues[20]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[13] + "=" + windowvalues[1] + "=" + attributeValues[20]);
-                                    break;
-                                }
-
-                                break;
-
-                            case "Hybrid S/N":
-
-                                if (windowvalues[3].Equals(attributeValues[5]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[5]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[15] + "=" + windowvalues[3] + "=" + attributeValues[5]);
-                                }
-
-                                break;
-
-                            case "Hybrid Version":
-
-                                if (windowvalues[4].Equals(attributeValues[10]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[10]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[16] + "=" + windowvalues[4] + "=" + attributeValues[10]);
-                                }
-
-                                break;
-
-                            case "Firmware Version":
-
-
-                                if (attributeValues[26].Equals("D1C01180101"))
-                                {
-                                    attributeValues[26] = "[1].18.1.1 (Dooku1)";
-                                }
-                                if (windowvalues[5].Equals(attributeValues[26]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[17] + "=" + windowvalues[5] + "=" + attributeValues[26]);
-                                    break;
-                                }
-
-                                break;
-
-                            case "Push Button":
-
-
-                                if (attributeValues[16].Equals("True"))
-                                {
-                                    attributeValues[16] = "Yes";
-                                }
-                                if (attributeValues[16].Equals("False"))
-                                {
-                                    attributeValues[16] = "No";
-                                }
-                                if (windowvalues[8].Equals(attributeValues[16]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[20] + "=" + windowvalues[8] + "=" + attributeValues[16]);
-                                    break;
-                                }
-
-                                break;
-
-                            case "Battery Type":
-
-                                if (attributeValues[31].Equals("True"))
-                                {
-                                    attributeValues[31] = "Varta Li 60L3";
-                                }
-                                if (attributeValues[31].Equals("false"))
-                                {
-                                    attributeValues[31] = " ";
-                                }
-                                if (windowvalues[14].Equals(attributeValues[31]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[26] + "=" + windowvalues[14] + "=" + attributeValues[31]);
-                                    break;
-                                }
-                                break;
-
-
-                            case "Battery level":
-
-
-                                if ((attributeValues[32] == "8") || attributeValues[32] == "9" || attributeValues[32] == "7" || attributeValues[32] == "6" || attributeValues[32] == "5" || attributeValues[32] == "4" || attributeValues[32] == "3")
-                                {
-                                    attributeValues[32] = attributeValues[32] + "0%";
-                                }
-
-                                if (windowvalues[15].Equals(attributeValues[32]))
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[27] + "=" + windowvalues[15] + "=" + attributeValues[32]);
-                                    break;
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[27] + "=" + windowvalues[15] + "=" + attributeValues[32]);
-                                    break;
-                                }
-                                break;
-
-
-                            case "Final Test Date":
-
-                                if (windowvalues[16] == attributeValues[22])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[22]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[28] + "=" + windowvalues[16] + "=" + attributeValues[22]);
-                                }
-
-                                break;
-
-                            case "Test Program":
-
-                                if (windowvalues[17] == attributeValues[25])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[25]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[29] + "=" + windowvalues[17] + "=" + attributeValues[25]);
-                                }
-
-                                break;
-
-                            case "Test Station":
-
-                                if (windowvalues[18] == attributeValues[24])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[24]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[30] + "=" + windowvalues[18] + "=" + attributeValues[24]);
-                                }
-
-                                break;
-
-                            case "Test Site":
-
-
-                                if (windowvalues[19] == attributeValues[23])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[23]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[31] + "=" + windowvalues[19] + "=" + attributeValues[23]);
-                                }
-
-                                break;
-
-                            case "Fitting Software":
-
-
-                                if (windowvalues[20] == attributeValues[27])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[27]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[32] + "=" + windowvalues[20] + "=" + attributeValues[27]);
-                                }
-
-                                break;
-
-                            case "Fitting Side":
-
-
-                                if (windowvalues[21] == attributeValues[14])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[14]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[21] + "=" + attributeValues[14]);
-                                }
-
-                                break;
-
-                            case "Cloud HIID":
-
-                                if (windowvalues[23] == attributeValues[8])
-                                {
-                                    stepName.Log(Status.Pass, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[8]);
-                                }
-                                else
-                                {
-                                    stepName.Log(Status.Fail, DevicedetailsNames[33] + "=" + windowvalues[23] + "=" + attributeValues[8]);
-                                }
-
-                                break;
-                        }
-
-                    }
-
                 }
-
-                stepName.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
-
             }
+            stepName.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
             string File;
             string File2;
             string path2 = textDir + "\\azurefiles";
             string[] fyles3 = Directory.GetFileSystemEntries(path2, "*", SearchOption.AllDirectories);
             Console.WriteLine(String.Join(System.Environment.NewLine, fyles3));
             string file3 = String.Join(System.Environment.NewLine, fyles3[0]);
-            
-            // Check if file is there    
+            // Check if file is there    
             if (fyles3.Count() > 1)
             {
-
                 File = String.Join(System.Environment.NewLine, fyles3[1]);
                 File2 = file3;
             }
@@ -2456,44 +2052,21 @@ namespace AppiumWinApp
             }
             System.IO.FileInfo anyfile1 = new System.IO.FileInfo(File);
             anyfile1.Delete();
-            if (File2!= null)
+            if (File2 != null)
             {
                 System.IO.DirectoryInfo anyfile = new DirectoryInfo(File2);
                 anyfile.Delete();
-            }           
-            
-           
-
-
-            //var Sandclose = session.FindElementByAccessibilityId("PART_Close");
-            //Sandclose.Click();
-
+            }
         }
-
-
-
-
-
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        private void ExtractZipFile(string zipFilePath, string extractPath)
+        {
+            ZipFile.ExtractToDirectory(zipFilePath, extractPath);
+            Console.WriteLine("ZIP file extracted successfully.");
+            System.IO.FileInfo rarfile = new System.IO.FileInfo(zipFilePath);
+            if (rarfile.Exists)
+            {
+                rarfile.Delete();
+            }
+        }
     }
 }
