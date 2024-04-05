@@ -268,16 +268,31 @@ namespace AppiumWinApp.StepDefinitions
                 stepName.Log(Status.Pass, " Dump image taken for Device C ");
 
             }
+            else if (side.Equals("Device C"))
+            {
+
+
+                Thread.Sleep(4000);
+
+                // if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                {
+                    ModuleFunctions.socketB(session, test, DeviceType);
+                }
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo, DeviceType);
+                stepName.Log(Status.Pass, " Dump image taken for Device C ");
+
+            }
             else
             {
-                try
-                {
-                    if (System.IO.File.Exists(@"C:\Device C.xml"))
-                    {
-                        System.IO.File.Delete(@"C:\Device C.xml");
-                    }
-                }
-                catch (Exception e) { }
+                //try
+                //{
+                //    if (System.IO.File.Exists(@"C:\Device C.xml"))
+                //    {
+                //        System.IO.File.Delete(@"C:\Device C.xml");
+                //    }
+                //}
+                //catch (Exception e) { }
 
                 // if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") || device.Contains("C"))
                 if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
@@ -285,8 +300,8 @@ namespace AppiumWinApp.StepDefinitions
 
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo, DeviceType);
-                stepName.Log(Status.Pass, " Dump image taken for Device C ");
+                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device D", side, DeviceNo, DeviceType);
+                stepName.Log(Status.Pass, " Dump image taken for Device D ");
 
             }
 
@@ -471,7 +486,7 @@ namespace AppiumWinApp.StepDefinitions
                                     var btncls = session.FindElementByAccessibilityId("PART_Close");
                                     btncls.Click();
                                     Thread.Sleep(1000);
-                                    ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo);
+                                    ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo, side);
                                     session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
                                 }
@@ -537,7 +552,7 @@ namespace AppiumWinApp.StepDefinitions
             /** Identifying checkbox **/
 
             // if (device.Contains("LT") || device.Contains("RE"))
-            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
             {
 
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
@@ -547,7 +562,7 @@ namespace AppiumWinApp.StepDefinitions
             }
 
             session.FindElementByName("Services").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
             var res = session.FindElementsByClassName("Button");
             res[14].Click();
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
@@ -640,6 +655,20 @@ namespace AppiumWinApp.StepDefinitions
 
 
         }
+
+
+        [Then(@"\[Do the dump comparison between two devices in Swap dumps""([^""]*)""]")]
+        public void ThenDoTheDumpComparisonBetweenTwoDevicesInSwapDumps(string side)
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+
+            //ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            FunctionLibrary lib = new FunctionLibrary();
+            lib.dumpCompare1(side, test);
+
+        }
+
+
 
         /** Compares the dump image files **/
 

@@ -214,7 +214,7 @@ namespace AppiumWinApp.StepDefinitions
                                 var btncls = session.FindElementByAccessibilityId("PART_Close");
                                 btncls.Click();
                                 Thread.Sleep(1000);
-                                ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceLeftSlNo);
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceLeftSlNo,side);
                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
                             }
@@ -273,7 +273,7 @@ namespace AppiumWinApp.StepDefinitions
 
             /* Identifying checkbox */
             // if (device.Contains("LT") || device.Contains("RE"))
-            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
                 Thread.Sleep(2000);
@@ -282,7 +282,7 @@ namespace AppiumWinApp.StepDefinitions
             }
 
             session.FindElementByName("Services").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
             var res = session.FindElementsByClassName("Button");
             res[14].Click();       
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
@@ -350,7 +350,8 @@ namespace AppiumWinApp.StepDefinitions
         [When(@"\[Perform Restore with above captured image using SWAP with left ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPWithLeftAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
         {
-              
+
+
             FunctionLibrary lib = new FunctionLibrary();
 
             config = (appconfigsettings)_featureContext["config"];
@@ -370,9 +371,11 @@ namespace AppiumWinApp.StepDefinitions
                 }
             }
 
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
             //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+
 
 
 
@@ -456,7 +459,7 @@ namespace AppiumWinApp.StepDefinitions
                                 var btncls = session.FindElementByAccessibilityId("PART_Close");
                                 btncls.Click();
                                 Thread.Sleep(1000);
-                                ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo);
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo,side);
                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
 
                             }
@@ -515,7 +518,7 @@ namespace AppiumWinApp.StepDefinitions
 
 
             // if (device.Contains("LT") || device.Contains("RE"))
-            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechageableWired"))
+            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
                 Thread.Sleep(2000);
@@ -524,7 +527,7 @@ namespace AppiumWinApp.StepDefinitions
             }
 
             session.FindElementByName("Services").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
             var res = session.FindElementsByClassName("Button");
             res[14].Click();
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
@@ -630,7 +633,8 @@ namespace AppiumWinApp.StepDefinitions
         [When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceOfDumpDByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
-                   
+
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
