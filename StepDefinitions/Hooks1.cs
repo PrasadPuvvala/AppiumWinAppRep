@@ -37,7 +37,7 @@ namespace AppiumWinApp.StepDefinitions
             Console.WriteLine("BeforeScenario ran with Tag1");
         }
 
-       
+
 
         [BeforeScenario(Order = 1)]
         public void FirstBeforeScenario()
@@ -48,7 +48,6 @@ namespace AppiumWinApp.StepDefinitions
             //TODO: implement logic that has to run before executing each scenario
 
             Console.WriteLine("FirstBeforeScenario Run");
-
         }
 
         [AfterScenario]
@@ -58,15 +57,6 @@ namespace AppiumWinApp.StepDefinitions
 
             Console.WriteLine("AFter Scenario run");
         }
-        
-       
-
-        
-
     }
-
-
-
-
 
 }

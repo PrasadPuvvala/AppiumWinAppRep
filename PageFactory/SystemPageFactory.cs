@@ -30,17 +30,9 @@ namespace AppiumWinApp.PageFactory
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
 
-
-        
-       
-
-
-        public static void launchSystemSettings(String sideSelection,ExtentReports extent1, ExtentTest stepName)
+        public static void launchSystemSettings(String sideSelection, ExtentReports extent1, ExtentTest stepName)
         {
-            extent = extent1;
-            //test = extent1.CreateTest("Shiva");
-            // test = extent.CreateTest("Launch System Setting window to change the side");
-
+            extent = extent1;           
             String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
             Thread.Sleep(2000);
             DesiredCapabilities appCapabilities = new DesiredCapabilities();
@@ -51,12 +43,11 @@ namespace AppiumWinApp.PageFactory
             standardElements.test(session);
             SystemConfigurationSettings.systemConfig(session);
             systemSettingsPage.changeChannel(session, sideSelection);
-
             stepName.Log(Status.Pass, "Systems settings are set ");
 
         }
 
-        
+
         public partial class testElements : SystemPageFactory
         {
             public static WindowsElement password = session.FindElementByAccessibilityId("textBoxPassword");
@@ -65,11 +56,10 @@ namespace AppiumWinApp.PageFactory
 
         public partial class standardElements : testElements
         {
-
             public static void test(WindowsDriver<WindowsElement> session)
             {
-                Thread.Sleep(4000);                             
-                FunctionLibrary lib= new FunctionLibrary();
+                Thread.Sleep(4000);
+                FunctionLibrary lib = new FunctionLibrary();
                 lib.clickOnElementWithIdonly(session, "textBoxPassword");
                 password = session.FindElementByAccessibilityId("textBoxPassword");
                 continueButton = session.FindElementByAccessibilityId("buttonContinue");
@@ -87,16 +77,15 @@ namespace AppiumWinApp.PageFactory
         {
 
             public static WindowsElement systemSettings = session.FindElementByAccessibilityId("textBoxSystemSettings");
-
             public static void systemConfig(WindowsDriver<WindowsElement> session)
             {
-                FunctionLibrary lib= new FunctionLibrary();
+                FunctionLibrary lib = new FunctionLibrary();
                 lib.clickOnElementWithIdonly(session, "textBoxSystemSettings");
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
                 Thread.Sleep(4000);
             }
-                        
+
 
         }//SystemConfigurationSettings
 
@@ -112,7 +101,7 @@ namespace AppiumWinApp.PageFactory
             public static WindowsElement closeBtn = session.FindElementByAccessibilityId("Close");
             public static void changeChannel(WindowsDriver<WindowsElement> session, string sideSel)
             {
-                FunctionLibrary lib= new FunctionLibrary();
+                FunctionLibrary lib = new FunctionLibrary();
                 var expand = session.FindElementsByAccessibilityId("Expander");
                 expand[3].Click();
                 Thread.Sleep(2000);

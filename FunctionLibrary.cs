@@ -169,10 +169,8 @@ namespace AppiumWinApp
         /** Wait for the duplicate Id is enable **/
         public WindowsDriver<WindowsElement> functionWaitForIdduplicate(WindowsDriver<WindowsElement> session, string name)
         {
-
             try
             {
-
                 do
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
@@ -191,7 +189,6 @@ namespace AppiumWinApp
         /** Wait for the element name is enable **/
         public WindowsDriver<WindowsElement> waitForElement(WindowsDriver<WindowsElement> session, string name)
         {
-
             do
             {
                 try
@@ -241,7 +238,6 @@ namespace AppiumWinApp
 
                     do
                     {
-
                         try
                         {
                             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(90));
@@ -264,7 +260,6 @@ namespace AppiumWinApp
 
                     do
                     {
-
                         try
                         {
                             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
@@ -388,8 +383,6 @@ namespace AppiumWinApp
                 string secondPart = str.Substring(lastDotIndex + 1, str.Length - firstPart.Length - 1);
                 int timeTaken = 0;
 
-
-
                 if (result != null)
                 {
                     try
@@ -423,7 +416,7 @@ namespace AppiumWinApp
                     if (timeTaken < 41000)
                     {
                         Console.WriteLine(operationVar + " Operation performed in desired time");
-                         stepName.Pass(operationVar + " Desired Time : " + timeTaken);
+                        stepName.Pass(operationVar + " Desired Time : " + timeTaken);
                     }
                     else
                     {
@@ -450,16 +443,16 @@ namespace AppiumWinApp
             {
                 test.Log(Status.Info, $"{elementName} is displayed as => {textBoxValue}");
             }
-            else 
+            else
             {
                 test.Log(Status.Pass, $"{elementName} is displayed as => {textBoxValue}");
             }
-            
+
         }
 
         /** To get the Device information into the Excel sheet **/
 
-        public void getDeviceInfo(WindowsDriver<WindowsElement> session,ExtentTest test,string deviceType)
+        public void getDeviceInfo(WindowsDriver<WindowsElement> session, ExtentTest test, string deviceType)
         {
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
@@ -504,17 +497,15 @@ namespace AppiumWinApp
                 }
             }
 
+
             /*Excel */
 
 
             String textDir = Directory.GetCurrentDirectory();
-
             var path = textDir + "\\" + textboxValues[0] + ".xlsx";
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-                //Set some properties of the Excel document
                 excelPackage.Workbook.Properties.Author = "Test S&R Tool";
                 excelPackage.Workbook.Properties.Title = "Device Info Parameters";
                 excelPackage.Workbook.Properties.Subject = "Write in Excel";
@@ -524,7 +515,7 @@ namespace AppiumWinApp
 
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Sheet 1");
 
-                for ( int i = 0; i < textValues.Length; i++)
+                for (int i = 0; i < textValues.Length; i++)
                 {
                     worksheet.Cells[i + 1, 1].Value = textValues[i]; // Column= 1, Row =3
                 }
@@ -578,7 +569,6 @@ namespace AppiumWinApp
 
 
             String textDir = Directory.GetCurrentDirectory();
-
             var path = textDir + "\\" + strArrayVal[0] + "1" + ".xlsx";
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -599,17 +589,13 @@ namespace AppiumWinApp
                 for (i = 0; i < strArray.Length; i++)
                 {
                     worksheet.Cells[i + 1, 1].Value = strArray[i]; // Column= 1, Row =3
-
                 }
                 for (i = 0; i < strArrayVal.Length; i++)
                 {
                     // Column= 1, Row =3
 
                     worksheet.Cells[i + 4, 2].Value = strArrayVal[i]; //*adding data
-
-
                 }
-
 
                 //Save your file
 
@@ -1235,12 +1221,8 @@ namespace AppiumWinApp
 
         public void dumpCompare(string device, ExtentTest stepName)
         {
-
-
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
-
             stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
             XmlDocument doc = new XmlDocument();
             doc.Load("C:\\" + device + ".xml");
 
@@ -1365,10 +1347,7 @@ namespace AppiumWinApp
                         PersistentDataSpace[4] = node.InnerText;
                         Console.WriteLine(data);
                         break;
-
-
                 }
-
             }
 
             /****File 2 Reading values *****/
@@ -1464,10 +1443,7 @@ namespace AppiumWinApp
                         PersistentDataSpace1[4] = node.InnerText;
                         Console.WriteLine(data);
                         break;
-
-
                 }
-
             }
 
 
@@ -1477,8 +1453,6 @@ namespace AppiumWinApp
                 {
                     try
                     {
-
-
                         switch (i)
                         {
                             case 0:
@@ -1594,29 +1568,7 @@ namespace AppiumWinApp
                                     }
                                     break;
                                 }
-
-                            //case 5:
-
-                            //    {
-                            //        if (CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device B"))
-                            //        {
-                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
-                            //        }
-                            //        if (!CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device C"))
-                            //        {
-                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
-                            //        }
-                            //        if (CombinedPreset[j].Equals(CombinedPreset1[j]) && device.Equals("Device D"))
-                            //        {
-                            //            stepName.Log(Status.Pass, "Compared Value of CombinedPreset :** " + arrayVal[j].ToUpper() + "** : is" + CombinedPreset[j]);
-                            //        }
-                            //        else
-                            //        {
-                            //            stepName.Log(Status.Fail, "Compared Value of CombinedPreset Expected is: " + "'" + arrayVal[j] + "'" + " : is " + CombinedPreset[j] + "AND Actual Value is :" + CombinedPreset1[j]);
-                            //        }
-                            //        break;
-                            //    }
-
+                            
                             case 5:
 
                                 {
@@ -1661,18 +1613,11 @@ namespace AppiumWinApp
                                     }
                                     break;
                                 }
-
-
                         }
-
                     }
-
                     catch (Exception e) { }
                 }
             }
-
-
-
 
             for (int i = 0; i < FittingSoftwareInfoSpace.Length; i++)
             {
@@ -1683,7 +1628,6 @@ namespace AppiumWinApp
             foreach (var item in FittingSoftwareInfoSpace)
             {
                 string txt1 = item;
-
             }
             Console.WriteLine(data);
             Console.WriteLine(type);
@@ -1827,57 +1771,42 @@ namespace AppiumWinApp
                 // Load the XML document
 
                 XmlDocument doc = new XmlDocument();
-
                 doc.Load(filePath);                                                                                                                                                                                                       // Replace with the path to your XML file
 
                 // Select the nodes you want to update
 
                 XmlNodeList nodes = doc.SelectNodes("//TFSTestResultsSet");
-
                 foreach (XmlNode node in nodes)
 
                 {
                     // Update TestPlanID, TestSuiteID, and TestConfiguration
 
                     XmlNode testPlanIdNode = node.SelectSingleNode("TestPlanID");
-
                     XmlNode testSuiteIdNode = node.SelectSingleNode("TestSuitID");
-
                     XmlNode testConfigNode = node.SelectSingleNode("TestConfiguration");
 
-
                     if (testPlanIdNode != null)
-
                     {
-
-                        testPlanIdNode.InnerText = testPlanId;                                                                                      // Replace with the new TestPlanID value
-
+                        testPlanIdNode.InnerText = testPlanId; // Replace with the new TestPlanID value
                     }
-
 
                     if (testSuiteIdNode != null)
                     {
-
-                        testSuiteIdNode.InnerText = testSuiteId;                                                                                    // Replace with the new TestSuiteID value
-
+                        testSuiteIdNode.InnerText = testSuiteId; // Replace with the new TestSuiteID value
                     }
 
                     if (testConfigNode != null)
 
                     {
-
-                        testConfigNode.InnerText = testConfig;                                                                   // Replace with the new TestConfiguration value
-
+                        testConfigNode.InnerText = testConfig; // Replace with the new TestConfiguration value
                     }
-
                 }
-
 
                 doc.Save(filePath);
 
             }// Save the updated XML document
+        }
 
-        }   
         public void Azurefile(WindowsDriver<WindowsElement> session)
         {
             string directloc = textDir + "\\azurefiles";
@@ -1892,10 +1821,12 @@ namespace AppiumWinApp
             }
             ExtractZipFile(textDir + "\\azurefiles\\" + fi.Name, textDir + "\\azurefiles");
         }
+
         public XmlNodeList SelectNodesInXml(XmlDocument xmlDocument, string xPathQuery)
         {
             return xmlDocument.SelectNodes(xPathQuery);
         }
+
         [Obsolete]
         public void AzureFileCompare(WindowsDriver<WindowsElement> session, ExtentTest stepName)
         {
@@ -2012,26 +1943,27 @@ namespace AppiumWinApp
                             }
                         }
                         if (nodeName == lableValue.Replace(" ", ""))
-{
-     if (nodeName == "FirmwareVersion"||nodeName== "BatteryLevel")
-     {
-         stepName.Log(Status.Info, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
-     }
-     else
-     {
-         if (textValue == nodeValue)
-         {
-             stepName.Log(Status.Pass, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
-         }
-         else
-         {
-             stepName.Log(Status.Fail, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
-         }
-     }
-}
+                        {
+                            if (nodeName == "FirmwareVersion" || nodeName == "BatteryLevel")
+                            {
+                                stepName.Log(Status.Info, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
+                            }
+                            else
+                            {
+                                if (textValue == nodeValue)
+                                {
+                                    stepName.Log(Status.Pass, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
+                                }
+                                else
+                                {
+                                    stepName.Log(Status.Fail, $"S&R value = {lableValue}={textValue} => Azure value = {nodeName}={nodeValue}");
+                                }
+                            }
+                        }
                     }
                 }
             }
+
             stepName.Log(Status.Info, "Azure Xml data and S&R Device Info details Compared Successfully");
             string File;
             string File2;
@@ -2039,7 +1971,9 @@ namespace AppiumWinApp
             string[] fyles3 = Directory.GetFileSystemEntries(path2, "*", SearchOption.AllDirectories);
             Console.WriteLine(String.Join(System.Environment.NewLine, fyles3));
             string file3 = String.Join(System.Environment.NewLine, fyles3[0]);
+            
             // Check if file is there    
+            
             if (fyles3.Count() > 1)
             {
                 File = String.Join(System.Environment.NewLine, fyles3[1]);
