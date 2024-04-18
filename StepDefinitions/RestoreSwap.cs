@@ -32,7 +32,6 @@ using AventStack.ExtentReports.Reporter;
 using AventStack.ExtentReports.Model;
 using Microsoft.SqlServer.Management.Smo;
 
-//using AppiumWinApp.PageFactory;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -69,26 +68,22 @@ namespace AppiumWinApp.StepDefinitions
           * Connects the HI device
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
-        //[When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         [When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceLeftOfDumpBByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
-        {          
-       
+        {
+
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
-            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-          
+
             if (side.Equals("Left"))
             {
-               // if (device.Contains("RT") || device.Contains("C"))
-                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
                     ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
                 ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device B", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device B");
-
             }
         }
 
@@ -98,49 +93,31 @@ namespace AppiumWinApp.StepDefinitions
           * Perfrom restore operation using SWAP Option **/
 
 
-        //  [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
 
-        // [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
-        //[When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""and""<DeviceNo>]")]
         [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPOptionAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
         {
-            
+
             config = (appconfigsettings)_featureContext["config"];
             FunctionLibrary lib = new FunctionLibrary();
-
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
-            //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
-            if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
 
                 {
-                    ModuleFunctions.socketA(session, test, DeviceType); 
+                    ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
                 else if (side.Equals("Right"))
 
-
                 {
-                    ModuleFunctions.socketB(session, test, DeviceType); 
+                    ModuleFunctions.socketB(session, test, DeviceType);
                 }
             }
 
-            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
-
-            //try
-            //{
-            //    session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //}
-
 
             Thread.Sleep(8000);
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
@@ -151,13 +128,10 @@ namespace AppiumWinApp.StepDefinitions
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
 
 
-            // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
-
                 stepName.Log(Status.Pass, "Clicked on Discover.");
-
                 session.SwitchTo().Window(session.WindowHandles.First());
                 session.SwitchTo().ActiveElement();
 
@@ -173,30 +147,6 @@ namespace AppiumWinApp.StepDefinitions
 
                 }
 
-
-                //do
-                //{
-                //    try
-                //    {
-                //        session.SwitchTo().Window(session.WindowHandles.First());
-
-                //        if (session.FindElementByName("Discover").Text == "Discover")
-                //        {
-                //            session.SwitchTo().Window(session.WindowHandles.First());
-                //            session.FindElementByName("Search").Click();
-                //        }
-
-                //    }
-                //    catch (Exception)
-                //    {
-
-                //    }
-
-                //} while (!session.FindElementByName("Disconnect").Displayed);
-
-
-
-
                 do
                 {
                     try
@@ -206,7 +156,6 @@ namespace AppiumWinApp.StepDefinitions
 
                         while (session.FindElementByAccessibilityId("TextBox_1").Text != "Discovering wireless device...")
                         {
-
                             if (session.FindElementByAccessibilityId("TextBox_1").Text == Message || session.FindElementByAccessibilityId("TextBox_1").Text == "No wireless device could be found.")
                             {
                                 var sandRConnection = session.FindElementByAccessibilityId("TextBox_1").Text;
@@ -214,9 +163,8 @@ namespace AppiumWinApp.StepDefinitions
                                 var btncls = session.FindElementByAccessibilityId("PART_Close");
                                 btncls.Click();
                                 Thread.Sleep(1000);
-                                ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceLeftSlNo,side);
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, DeviceLeftSlNo, side);
                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-
                             }
 
                             if (session.FindElementByName("Discover").Text == "Discover")
@@ -224,15 +172,7 @@ namespace AppiumWinApp.StepDefinitions
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 session.FindElementByName("Search").Click();
                             }
-
-
-
                         }
-
-
-
-                        //Thread.Sleep(5000);                
-
 
                     }
                     catch (Exception)
@@ -244,13 +184,13 @@ namespace AppiumWinApp.StepDefinitions
 
                 stepName.Log(Status.Pass, "Clicked on Search");
 
-                    session = lib.waitForElement(session, "Model Name");
+                session = lib.waitForElement(session, "Model Name");
 
-                    stepName.Log(Status.Pass, "Dook2 Dev");
+                stepName.Log(Status.Pass, "Dook2 Dev");
 
             }
 
-           
+
             session.FindElementByName("Settings").Click();
             Thread.Sleep(10000);
             var ele = session.FindElementsByClassName("ComboBox");
@@ -268,11 +208,10 @@ namespace AppiumWinApp.StepDefinitions
 
             Thread.Sleep(2000);
             WindowsElement RightSide = session.FindElementByName("Left");
-            RightSide.Click();        
+            RightSide.Click();
             Thread.Sleep(5000);
 
             /* Identifying checkbox */
-            // if (device.Contains("LT") || device.Contains("RE"))
             if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
@@ -284,7 +223,7 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByName("Services").Click();
             Thread.Sleep(10000);
             var res = session.FindElementsByClassName("Button");
-            res[14].Click();       
+            res[14].Click();
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");
             lib.clickOnElementWithIdonly(session, "PasswordBox");
 
@@ -300,14 +239,12 @@ namespace AppiumWinApp.StepDefinitions
             Thread.Sleep(2000);
             session.FindElementByName("Login").Click();
             Thread.Sleep(4000);
-            lib.waitUntilElementExists(session, "textBoxSerialNumber",1);
+            lib.waitUntilElementExists(session, "textBoxSerialNumber", 1);
             session.FindElementByAccessibilityId("textBoxSerialNumber").SendKeys(DeviceLeftSlNo);
             session = lib.functionWaitForId(session, "buttonFind");
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            //stepName.Log(Status.Pass, "Restore is successful.");
-       
 
             try
             {
@@ -320,7 +257,6 @@ namespace AppiumWinApp.StepDefinitions
             }
 
             var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
-            //session = lib.functionWaitForName(session, "");
             var text = session.FindElementByAccessibilityId("textBlockMessage");
 
             if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
@@ -334,7 +270,6 @@ namespace AppiumWinApp.StepDefinitions
             }
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "OK");
-            //stepName.Log(Status.Pass, "Restore is successful.");
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
             btncls1.Click();
             Thread.Sleep(1000);
@@ -356,8 +291,7 @@ namespace AppiumWinApp.StepDefinitions
 
             config = (appconfigsettings)_featureContext["config"];
 
-           // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
-           if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
 
@@ -365,7 +299,7 @@ namespace AppiumWinApp.StepDefinitions
                     ModuleFunctions.socketA(session, test, DeviceType);
                 }
 
-                else if(side.Equals("Right"))
+                else if (side.Equals("Right"))
                 {
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
@@ -373,10 +307,7 @@ namespace AppiumWinApp.StepDefinitions
 
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
-            //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
-
 
 
             try
@@ -392,13 +323,12 @@ namespace AppiumWinApp.StepDefinitions
 
             Thread.Sleep(8000);
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-            Thread.Sleep(2000);         
+            Thread.Sleep(2000);
             session.FindElementByName("Device Info").Click();
             Thread.Sleep(2000);
 
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
 
-            // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX"))
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
@@ -419,29 +349,6 @@ namespace AppiumWinApp.StepDefinitions
                 {
                 }
 
-
-                //do
-                //{
-                //    try
-                //    {
-                //        session.SwitchTo().Window(session.WindowHandles.First());
-
-                //        if (session.FindElementByName("Discover").Text == "Discover")
-                //        {
-
-                //            session.SwitchTo().Window(session.WindowHandles.First());
-                //            session.FindElementByName("Search").Click();
-                //        }
-
-                //    }
-                //    catch (Exception)
-                //    {
-
-                //    }
-
-                //} while (!session.FindElementByName("Disconnect").Displayed);
-
-
                 do
                 {
                     try
@@ -459,9 +366,8 @@ namespace AppiumWinApp.StepDefinitions
                                 var btncls = session.FindElementByAccessibilityId("PART_Close");
                                 btncls.Click();
                                 Thread.Sleep(1000);
-                                ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo,side);
+                                ModuleFunctions.Recovery(session, stepName, DeviceType, deviceSlNo, side);
                                 session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-
                             }
 
                             if (session.FindElementByName("Discover").Text == "Discover")
@@ -469,15 +375,7 @@ namespace AppiumWinApp.StepDefinitions
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 session.FindElementByName("Search").Click();
                             }
-
-
-
                         }
-
-
-
-                        //Thread.Sleep(5000);                
-
 
                     }
                     catch (Exception)
@@ -488,9 +386,7 @@ namespace AppiumWinApp.StepDefinitions
                 } while (!session.FindElementByName("Disconnect").Displayed);
 
                 stepName.Log(Status.Pass, "Clicked on Search");
-
                 session = lib.waitForElement(session, "Model Name");
-
                 stepName.Log(Status.Pass, "Dook2 Dev");
             }
 
@@ -499,7 +395,7 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByName("Settings").Click();
             Thread.Sleep(4000);
             var ele = session.FindElementsByClassName("ComboBox");
-          
+
             try
             {
                 do
@@ -509,15 +405,13 @@ namespace AppiumWinApp.StepDefinitions
             }
             catch (Exception e) { }
 
-            ele[2].Click();       
+            ele[2].Click();
             WindowsElement RightSide = session.FindElementByName("Right");
             RightSide.Click();
             Thread.Sleep(5000);
 
             /* Identifying checkbox */
 
-
-            // if (device.Contains("LT") || device.Contains("RE"))
             if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
             {
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
@@ -550,11 +444,9 @@ namespace AppiumWinApp.StepDefinitions
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             session = lib.waitForElement(session, "SELECT");
-            //stepName.Log(Status.Pass, "Restore is successful.");
-
 
             try
-            {               
+            {
                 session = lib.functionWaitForId(session, "radioButtonRestoreAfterRepairOrSwap");
                 session = lib.functionWaitForName(session, "RESTORE");
             }
@@ -563,7 +455,6 @@ namespace AppiumWinApp.StepDefinitions
             }
 
             var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
-            //session = lib.functionWaitForName(session, "");
             var text = session.FindElementByAccessibilityId("textBlockMessage");
 
             if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
@@ -577,11 +468,9 @@ namespace AppiumWinApp.StepDefinitions
                 stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
             }
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-
             session = lib.waitForElement(session, "OK");
-           // stepName.Log(Status.Pass, "Restore is successful.");         
             var btncls1 = session.FindElementByAccessibilityId("PART_Close");
-            btncls1.Click();          
+            btncls1.Click();
         }
 
 
@@ -590,17 +479,14 @@ namespace AppiumWinApp.StepDefinitions
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
 
-        //[When(@"\[Get the dump of connected device of left DumpC by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         [When(@"\[Get the dump of connected device of left DumpC by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceOfLeftDumpCByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
-           //test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (side.Equals("Left"))
             {
-               // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
-                if(DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
                     ModuleFunctions.socketA(session, test, DeviceType);
                 }
@@ -612,8 +498,7 @@ namespace AppiumWinApp.StepDefinitions
             else if (side.Equals("Right"))
             {
 
-                //if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
-                if(DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
@@ -629,19 +514,16 @@ namespace AppiumWinApp.StepDefinitions
           * Connects the HI device
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
-        //[When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         [When(@"\[Get the dump of connected device of DumpD by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenGetTheDumpOfConnectedDeviceOfDumpDByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
 
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
-            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (side.Equals("Right"))
             {
-               // if (device.Contains("RT") || device.Contains("RU") || device.Contains("NX") || device.Contains("C"))
-                if(DeviceType.Equals("Non-Rechargeable")|| DeviceType.Equals("Rechargeable"))
+                if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
@@ -654,14 +536,12 @@ namespace AppiumWinApp.StepDefinitions
         }
 
 
-        
+
         [Then(@"\[Do the dump comparison between two device DeviceC and DeviceD dumps(.*)]")]
         public void ThenDoTheDumpComparisonBetweenTwoDeviceDeviceCAndDeviceDDumps(string side)
         {
 
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
-            // test = extent.CreateTest(ScenarioStepContext.Current.StepInfo.Text.ToString());
-            //ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             lib.dumpCompare1(side, test);
         }

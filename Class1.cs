@@ -6,7 +6,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using TechTalk.SpecFlow;
-//using RelevantCodes.ExtentReports;
 
 
 namespace AppiumWinApp
@@ -23,28 +22,15 @@ namespace AppiumWinApp
         public void SetupReporting()
         {
             htmlReporter = new ExtentHtmlReporter("F:\\Winium\\AppiumWinApp\\report.html");
-
             htmlReporter.LoadConfig("F:\\Winium\\AppiumWinApp\\AppiumWinApp\\ExtentConfig.xml");
-            //htmlReporter.MasterConfig().Theme = Theme.Dark;
-
-            /* htmlReporter.Configuration().DocumentTitle = "JoesDocument";
-
-             htmlReporter.Configuration().ReportName = "JoesReport";
- */
-            /*htmlReporter.Configuration().JS = "$('.brand-logo').text('test image').prepend('<img src=@"file:///D:\Users\jloyzaga\Documents\FrameworkForJoe\FrameworkForJoe\Capgemini_logo_high_res-smaller-2.jpg"> ')";*/
-            //  htmlReporter.Configuration().JS = "$('.brand-logo').text('').append('<img src=D:\\Users\\jloyzaga\\Documents\\FrameworkForJoe\\FrameworkForJoe\\Capgemini_logo_high_res-smaller-2.jpg>')";
             extent = new ExtentReports();
-
             extent.AttachReporter(htmlReporter);
-
-
         }
 
         [SetUp]
         public void InitBrowser()
         {
-            /*driver = new ChromeDriver();
-            driver.Manage().Window.Maximize();*/
+
         }
 
         [Test]

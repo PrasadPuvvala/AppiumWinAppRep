@@ -8,7 +8,7 @@ namespace AppiumWinApp
     {
         public Algo algo { get; set; }
         public SLV slv { get; set; }
-        public  WorkingDirectory workingdirectory { get; set; }
+        public WorkingDirectory workingdirectory { get; set; }
         public ApplicationPath ApplicationPath { get; set; }
         public TestEnvironment TestEnvironment { get; set; }
     }
@@ -21,7 +21,6 @@ namespace AppiumWinApp
         public string Dooku2 { get; set; } = String.Empty;
         public string Dooku3 { get; set; } = String.Empty;
         public string Megnesium { get; set; } = String.Empty;
-
     }
 
     public class SLV
@@ -31,7 +30,6 @@ namespace AppiumWinApp
         public string Dooku2 { get; set; } = String.Empty;
         public string Dooku3 { get; set; } = String.Empty;
         public string Megnesium { get; set; } = String.Empty;
-
     }
 
     public class WorkingDirectory
@@ -41,9 +39,9 @@ namespace AppiumWinApp
         public string Dooku2 { get; set; } = String.Empty;
         public string Dooku3 { get; set; } = String.Empty;
         public string Megnesium { get; set; } = String.Empty;
-        public string FDTS { get; set; } = String.Empty;    
-        public string SandR { get; set; } = String.Empty;    
-        public string TestRuntime { get; set; } = String.Empty;    
+        public string FDTS { get; set; } = String.Empty;
+        public string SandR { get; set; } = String.Empty;
+        public string TestRuntime { get; set; } = String.Empty;
     }
     public class ApplicationPath
     {
