@@ -172,13 +172,24 @@ namespace AppiumWinApp.StepDefinitions
 
             if (side.Equals("Right"))
             {
+                stepName.Log(Status.Pass, "Communication channel selected to Left");
+
                 WindowsElement RightSide = session.FindElementByName("Right");
                 RightSide.Click();
+
+                stepName.Log(Status.Pass, "Communication channel chanted to Right");
+
             }
             else
             {
+
+                stepName.Log(Status.Pass, "Communication channel selected to Right");
+
                 WindowsElement LeftSide = session.FindElementByName("Left");
                 LeftSide.Click();
+
+                stepName.Log(Status.Pass, "Communication channel chanted to Left");
+
             }
 
             /** Identifying checkbox **/
@@ -198,7 +209,7 @@ namespace AppiumWinApp.StepDefinitions
 
             session.FindElementByName("Services").Click();
             session.CloseApp();
-            stepName.Log(Status.Pass, "Communication channel chanted to " + side);
+           // stepName.Log(Status.Pass, "Communication channel chanted to " +side);
 
         }
 
@@ -223,7 +234,7 @@ namespace AppiumWinApp.StepDefinitions
 
                     ModuleFunctions.socketA(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device A", side, DeviceNo, DeviceType);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device A", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device A ");
 
             }
@@ -237,7 +248,7 @@ namespace AppiumWinApp.StepDefinitions
                 {
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device B", side, DeviceNo, DeviceType);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device B", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device B ");
 
             }
@@ -252,7 +263,7 @@ namespace AppiumWinApp.StepDefinitions
                 {
                     ModuleFunctions.socketC(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo, DeviceType);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device C", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device C ");
 
             }
@@ -266,7 +277,7 @@ namespace AppiumWinApp.StepDefinitions
                 {
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device C", side, DeviceNo, DeviceType);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device C", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device C ");
 
             }
@@ -278,7 +289,7 @@ namespace AppiumWinApp.StepDefinitions
 
                     ModuleFunctions.socketB(session, test, DeviceType);
                 }
-                ModuleFunctions.takeDeviceDumpImage(session, test, device, "Device D", side, DeviceNo, DeviceType);
+                ModuleFunctions.takeDeviceDumpImage(session, stepName, device, "Device D", side, DeviceNo, DeviceType);
                 stepName.Log(Status.Pass, " Dump image taken for Device D ");
 
             }
