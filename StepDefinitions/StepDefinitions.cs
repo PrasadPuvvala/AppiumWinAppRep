@@ -392,7 +392,7 @@ namespace MyNamespace
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "\\index.html");
+            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
             extent.Flush();
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
@@ -694,7 +694,7 @@ namespace MyNamespace
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
                     session.SwitchTo().ActiveElement();
-                    if (device.Contains("RT") || device.Contains("NX") || device.Contains("RU") && device.Contains("C"))
+                    if (DeviceType.Equals("Rechargeable"))
                     {
                         session.SwitchTo().ActiveElement();
                         lib.waitUntilElementExists(session, "testParameter-Multiple-BatteryType", 1);
@@ -1009,7 +1009,7 @@ namespace MyNamespace
 
                     /** Clicks on Fit patient button **/
 
-                    Thread.Sleep(8000);
+                    Thread.Sleep(10000);
                     lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
                     stepName.Pass("Patient is clicked");
                     Thread.Sleep(10000);
@@ -3102,11 +3102,11 @@ namespace MyNamespace
         [When(@"\[Open Capture and Restore report and log info in report]")]
         public void WhenOpenCaptureAndRestoreReportAndLogInfoInReport()
         {
-            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+           // ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** This is to check if Capture and Restore files are existing **/
 
-            if (computer_name.Equals("FSWIRAY80"))
+            if (computer_name.Equals("FSWIRAY80") || computer_name.Equals("FSWIRAY112"))
             {
                 ModuleFunctions.verifyIfReportsExisted(test);
 
@@ -3116,7 +3116,7 @@ namespace MyNamespace
 
                 foreach (Process proc in processCollection)
                 {
-                    if (computer_name.Equals("FSWIRAY80"))
+                    if (computer_name.Equals("FSWIRAY80") || computer_name.Equals("FSWIRAY112"))
                     {
                         if (proc.ProcessName == "msedge")
                         {
@@ -3134,6 +3134,8 @@ namespace MyNamespace
                     }
                 }
             }
+
+
 
             Thread.Sleep(8000);
         }
@@ -3310,6 +3312,9 @@ namespace MyNamespace
                                 } while (!session.FindElementByName("Connect").Enabled);
 
                                 session.SwitchTo().Window(session.WindowHandles[0]);
+
+                                Thread.Sleep(7000);
+
 
                                 lib.functionWaitForName(session, "Connect");
                                 lib.waitUntilElementExists(session, "File", 0);

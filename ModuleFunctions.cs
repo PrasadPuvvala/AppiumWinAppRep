@@ -144,24 +144,23 @@ namespace AppiumWinApp
 
         public static void verifyIfReportsExisted(ExtentTest test)
         {
+            Thread.Sleep(3000);
 
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             string dir = "C:\\CaptureBase\\Reports";
-            string filename = null;
-
             string today = DateTime.Now.ToString("yyyy-MM-dd");
 
+            // Get all PDF files in the directory for today's date
             string[] files = Directory.GetFiles(dir + "\\" + today);
 
             foreach (string file in files)
             {
                 Console.WriteLine(Path.GetFileName(file));
-                filename = file;
+                string filename = file;
                 var splitVal = filename.Split("-");
 
                 switch (splitVal[3])
-
                 {
                     case "capture report":
 
@@ -177,36 +176,38 @@ namespace AppiumWinApp
                             IEnumerable<System.Drawing.Image> Images = pdf.ExtractImagesFromPage(index);
                             // Taking a string
                             String str = Text;
-                            // This is to capture all the lable names and write them to report
+                            // This is to capture all the label names and write them to the report
                             String[] seperator = { "Capture Report Capture specification" };
                             // using the method
-                            String[] strlist = str.Split(seperator,
-                               StringSplitOptions.RemoveEmptyEntries);
+                            String[] strlist = str.Split(seperator, StringSplitOptions.RemoveEmptyEntries);
 
                             foreach (String s in strlist)
                             {
                                 Console.WriteLine(s);
                             }
 
-                            String[] seperatorLables = { "\r\n" };
-                            String[] lableNames = strlist[0].Split("\r\n");
-
-                            foreach (String s in lableNames)
+                            if (strlist.Length >= 2)
                             {
-                                stepName.Log(Status.Pass, s + " is found.");
+                                String[] seperatorLables = { "\r\n" };
+                                String[] lableNames = strlist[0].Split(seperatorLables, StringSplitOptions.RemoveEmptyEntries);
+
+                                foreach (String s in lableNames)
+                                {
+                                    stepName.Log(Status.Pass, s + " is found.");
+                                }
+
+                                // This is to write label values in the report
+                                String[] spearator1 = { " " };
+
+                                String[] reportValues = strlist[1].Split(spearator1, StringSplitOptions.RemoveEmptyEntries);
+                                foreach (String s in reportValues)
+                                {
+                                    stepName.Log(Status.Pass, s + " is found.");
+
+                                }
                             }
-                            //This is to write lable values in the report
-                            String[] spearator1 = { " " };
-
-                            String[] reportValues = strlist[1].Split(spearator1,
-                               StringSplitOptions.RemoveEmptyEntries);
-                            foreach (String s in reportValues)
-                            {
-                                stepName.Log(Status.Pass, s + " is found.");
-
-                            }
-
                         }
+                        File.Delete(filename);
                         break;
 
                     case "restoration report":
@@ -217,11 +218,9 @@ namespace AppiumWinApp
 
                         // open a 128 bit encrypted PDF
                         pdf = PdfDocument.FromFile(filename, "password");
-                        //Get all text to put in a search index
                         AllText = pdf.ExtractAllText();
-                        //Get all Images
                         AllImages = pdf.ExtractAllImages();
-                        //Or even find the precise text and images for each page in the document
+                        // Or even find the precise text and images for each page in the document
                         for (var index = 0; index < pdf.PageCount; index++)
                         {
                             int PageNumber = index + 1;
@@ -231,32 +230,148 @@ namespace AppiumWinApp
                             String str = Text;
                             String[] spearator = { "Restoration Report (original device or clone)" };
                             // using the method
-                            String[] strlist = str.Split(spearator,
-                               StringSplitOptions.RemoveEmptyEntries);
+                            String[] strlist = str.Split(spearator, StringSplitOptions.RemoveEmptyEntries);
+
                             foreach (String s in strlist)
                             {
                                 Console.WriteLine(s);
                             }
-                            String[] seperatorLables = { "\r\n" };
-                            String[] lableNames = strlist[0].Split("\r\n");
-                            foreach (String s in lableNames)
-                            {
-                                stepName.Log(Status.Pass, s + " is found.");
-                            }
-                            //This is to write lable values in the report
-                            String[] spearator1 = { " " };
-                            String[] reportValues = strlist[1].Split(spearator1,
-                               StringSplitOptions.RemoveEmptyEntries);
-                            foreach (String s in reportValues)
-                            {
-                                stepName.Log(Status.Pass, s + " is found.");
 
-                            }
+                            if (strlist.Length >= 2)
+                            {
+                                String[] seperatorLables = { "\r\n" };
+                                String[] lableNames = strlist[0].Split(seperatorLables, StringSplitOptions.RemoveEmptyEntries);
+                                foreach (String s in lableNames)
+                                {
+                                    stepName.Log(Status.Pass, s + " is found.");
+                                }
+                                // This is to write label values in the report
+                                String[] spearator1 = { " " };
+                                String[] reportValues = strlist[1].Split(spearator1, StringSplitOptions.RemoveEmptyEntries);
+                                foreach (String s in reportValues)
+                                {
+                                    stepName.Log(Status.Pass, s + " is found.");
 
+                                }
+                            }
                         }
+                        File.Delete(filename);
                         break;
                 }
             }
+
+            //string dir = "C:\\CaptureBase\\Reports";
+            //string filename = null;
+
+            //string today = DateTime.Now.ToString("yyyy-MM-dd");
+
+            //string[] files = Directory.GetFiles(dir + "\\" + today);
+
+            //foreach (string file in files)
+            //{
+            //    Console.WriteLine(Path.GetFileName(file));
+            //    filename = file;
+            //    var splitVal = filename.Split("-");
+
+            //    switch (splitVal[3])
+
+            //    {
+            //        case "capture report":
+
+            //            stepName.Log(Status.Pass, "!!!!****Capture report generated****!!!!");
+            //            stepName.Log(Status.Pass, "File Name :" + filename);
+            //            var pdf = PdfDocument.FromFile(filename, "password");
+            //            string AllText = pdf.ExtractAllText();
+            //            IEnumerable<System.Drawing.Image> AllImages = pdf.ExtractAllImages();
+            //            for (var index = 0; index < pdf.PageCount; index++)
+            //            {
+            //                int PageNumber = index + 1;
+            //                string Text = pdf.ExtractTextFromPage(index);
+            //                IEnumerable<System.Drawing.Image> Images = pdf.ExtractImagesFromPage(index);
+            //                // Taking a string
+            //                String str = Text;
+            //                // This is to capture all the lable names and write them to report
+            //                String[] seperator = { "Capture Report Capture specification" };
+            //                // using the method
+            //                String[] strlist = str.Split(seperator,
+            //                   StringSplitOptions.RemoveEmptyEntries);
+
+            //                foreach (String s in strlist)
+            //                {
+            //                    Console.WriteLine(s);
+            //                }
+
+            //                String[] seperatorLables = { "\r\n" };
+            //                String[] lableNames = strlist[0].Split("\r\n");
+
+            //                foreach (String s in lableNames)
+            //                {
+            //                    stepName.Log(Status.Pass, s + " is found.");
+            //                }
+            //                //This is to write lable values in the report
+            //                String[] spearator1 = { " " };
+
+            //                String[] reportValues = strlist[1].Split(spearator1,
+            //                   StringSplitOptions.RemoveEmptyEntries);
+            //                foreach (String s in reportValues)
+            //                {
+            //                    stepName.Log(Status.Pass, s + " is found.");
+
+            //                }
+
+            //            }
+            //            File.Delete(filename);
+            //            break;
+
+            //        case "restoration report":
+
+            //            stepName.Log(Status.Pass, "!!!!****Restoration report generated****!!!!");
+            //            stepName.Log(Status.Pass, "File Name +" + filename);
+            //            // Extracting Image and Text content from Pdf Documents
+
+            //            // open a 128 bit encrypted PDF
+            //            pdf = PdfDocument.FromFile(filename, "password");
+            //            //Get all text to put in a search index
+            //            AllText = pdf.ExtractAllText();
+            //            //Get all Images
+            //            AllImages = pdf.ExtractAllImages();
+            //            //Or even find the precise text and images for each page in the document
+            //            for (var index = 0; index < pdf.PageCount; index++)
+            //            {
+            //                int PageNumber = index + 1;
+            //                string Text = pdf.ExtractTextFromPage(index);
+            //                IEnumerable<System.Drawing.Image> Images = pdf.ExtractImagesFromPage(index);
+            //                // Taking a string
+            //                String str = Text;
+            //                String[] spearator = { "Restoration Report (original device or clone)" };
+            //                // using the method
+            //                String[] strlist = str.Split(spearator,
+            //                   StringSplitOptions.RemoveEmptyEntries);
+            //                foreach (String s in strlist)
+            //                {
+            //                    Console.WriteLine(s);
+            //                }
+            //                String[] seperatorLables = { "\r\n" };
+            //                String[] lableNames = strlist[0].Split("\r\n");
+            //                foreach (String s in lableNames)
+            //                {
+            //                    stepName.Log(Status.Pass, s + " is found.");
+            //                }
+            //                //This is to write lable values in the report
+            //                String[] spearator1 = { " " };
+            //                String[] reportValues = strlist[1].Split(spearator1,
+            //                   StringSplitOptions.RemoveEmptyEntries);
+            //                foreach (String s in reportValues)
+            //                {
+            //                    stepName.Log(Status.Pass, s + " is found.");
+
+            //                }
+
+            //            }
+            //            File.Delete(filename);
+            //            break;
+            //    }
+            //}
         } /*End of verifyIfReportExisted*/
 
 
@@ -997,6 +1112,10 @@ namespace AppiumWinApp
                     Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(8000);
+                    session.Keyboard.SendKeys("a");
+                    Thread.Sleep(8000);
+                    session.Keyboard.SendKeys(Keys.Enter);
+                    Thread.Sleep(8000);
                     session.Keyboard.SendKeys("b");
                     Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
@@ -1652,6 +1771,8 @@ namespace AppiumWinApp
                                     var dataGrid = session.FindElementByClassName("DataGrid");
                                     ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
 
+
+                                 
                                     // Iterate through DataGridCell elements
                                     foreach (var element in dataGridCells)
                                     {
@@ -1738,7 +1859,7 @@ namespace AppiumWinApp
 
                                                             var GridCell = session.FindElementByClassName("DataGrid");
                                                             ReadOnlyCollection<AppiumWebElement> GridCells = GridCell.FindElementsByClassName("DataGridCell");
-
+                                                           // Thread.Sleep(7000);
                                                             // Iterate through DataGridCell elements
                                                             foreach (var element in GridCells)
                                                             {
@@ -1759,6 +1880,7 @@ namespace AppiumWinApp
                                 } while (!session.FindElementByName("Connect").Enabled);
 
                                 session.SwitchTo().Window(session.WindowHandles[0]);
+                                Thread.Sleep(7000);
 
                                 lib.functionWaitForName(session, "Connect");
 
