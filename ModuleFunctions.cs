@@ -1779,7 +1779,8 @@ namespace AppiumWinApp
                                         if (element.Text == DeviceNo)
                                         {
                                             actions = new Actions(session);
-                                            actions.MoveToElement(element).Click().Perform();                                           
+                                            actions.MoveToElement(element).Click().Perform();
+                                            stepName.Log(Status.Info, "Device selected successfully..");
                                         }
                                     }
 
@@ -1867,6 +1868,8 @@ namespace AppiumWinApp
                                                                 {
                                                                     actions = new Actions(session);
                                                                     actions.MoveToElement(element).Click().Perform();
+
+                                                                    stepName.Log(Status.Info, "Device selected successfully..");
                                                                 }
                                                             }
                                                         }
@@ -1882,7 +1885,7 @@ namespace AppiumWinApp
                                 session.SwitchTo().Window(session.WindowHandles[0]);
                                 Thread.Sleep(7000);
 
-                                lib.functionWaitForName(session, "Connect");
+                                lib.functionWaitForName(session, "Connect");             
 
                                 lib.waitUntilElementExists(session, "File", 0);
                                 Thread.Sleep(4000);
@@ -1896,6 +1899,7 @@ namespace AppiumWinApp
                                 session.Keyboard.PressKey(Keys.Enter);
                                 Thread.Sleep(5000);
 
+                                stepName.Log(Status.Info, "Device connected successfully..");
                                 /** Click on Uncheck button **/
 
                                 session.FindElementByName("Uncheck All").Click();
@@ -1997,15 +2001,21 @@ namespace AppiumWinApp
                                         simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
                                         Thread.Sleep(2000);
                                         simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                        Thread.Sleep(2000); 
+                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                        Thread.Sleep(2000); 
+                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                        Thread.Sleep(2000); 
+                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
                                         Thread.Sleep(2000);
                                         Thread.Sleep(2000);
                                         simu.Keyboard.KeyPress(VirtualKeyCode.UP);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                                        Thread.Sleep(2000); 
+                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                        Thread.Sleep(2000); 
+                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                        Thread.Sleep(2000); 
+                                        simu.Keyboard.KeyPress(VirtualKeyCode.RETURN);
                                         Thread.Sleep(2000);
                                         session.SwitchTo().Window(session.WindowHandles.First());
                                         session.SwitchTo().ActiveElement();
@@ -2016,6 +2026,8 @@ namespace AppiumWinApp
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 Thread.Sleep(2000);
                                 session.FindElementByName("OK").Click();
+
+                                stepName.Log(Status.Info, "Device dump image process done successfully..");
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 Thread.Sleep(2000);
                                 session.CloseApp();

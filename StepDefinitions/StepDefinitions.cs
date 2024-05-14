@@ -44,20 +44,17 @@ namespace MyNamespace
     [Binding]
     public class StepDefinitions
     {
-
-        public static appconfigsettings config;
-        static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
-        + Path.DirectorySeparatorChar + "appconfig.json";
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
         private readonly ScenarioContext _scenarioContext;
         public static WindowsDriver<WindowsElement> session;
         private string ApplicationPath = null;
         protected static IOSDriver<IOSElement> AlarmClockSession;   // Temporary placeholder until Windows namespace exists
         protected static IOSDriver<IOSElement> DesktopSession;
-        private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
-        private static ExtentTest test;
-
+        private ExtentTest test;
+        public static appconfigsettings config;
+        static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
+      + Path.DirectorySeparatorChar + "appconfig.json";
+        public static String textDir = Directory.GetCurrentDirectory();
         public TestContext TestContext { get; set; }
 
         /*   declaration and initialization of a string variable */
@@ -65,7 +62,6 @@ namespace MyNamespace
         public static string workFlowProductSelection = "treeView";
         public static string storageLayOutDate = "WindowsForms10.Window.8.app.0.2804c64_r9_ad1";
         public static string algoTestProp = "";
-        public static String textDir = Directory.GetCurrentDirectory();
         string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
         String user_name = Environment.UserName;
 
@@ -75,359 +71,19 @@ namespace MyNamespace
         }
 
 
-
-        [BeforeFeature]
-
-        public static void beforeFeature()
-        {
-            config = new appconfigsettings();
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.AddJsonFile(configsettingpath);
-            IConfigurationRoot configuration = builder.Build();
-            configuration.Bind(config);
-            FeatureContext.Current["config"] = config;
-            Console.WriteLine("This is BeforeFetaure method");
-            htmlReporter = new ExtentHtmlReporter(textDir + "\\report.html");
-            htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
-            htmlReporter.Config.ReportName = "SandR Regression Test - Prasad PSSNV";
-            htmlReporter.Config.EnableTimeline = true;
-            htmlReporter.Config.DocumentTitle = "S and R Report";
-            extent = new ExtentReports();
-            extent.AttachReporter(htmlReporter);
-            ModuleFunctions.callbyextentreport(extent);
-            ModuleFunctions.callbyAlgoTestLabVariables(config);
-
-
-            /* Reading CSV file to get device names */
-
-            String[] csvVal = FunctionLibrary.readCSVFile();
-
-            /*Launch Socket Driver*/
-
-
-        }
-
-
-        [BeforeScenario]
-
-        public static void BeforeScenario()
-
-        {         
-            ProcessStartInfo psi = new ProcessStartInfo(config.TestEnvironment.WinAppDriverPath);
-            psi.UseShellExecute = true;
-            psi.Verb = "runas"; // run as administrator
-            Process.Start(psi);
-            string test1 = ScenarioContext.Current.ScenarioInfo.Title;
-            test = extent.CreateTest(test1.ToString());
-            ScenarioContext.Current["extentTest"] = test;
-
-            // Read the scenario title to run from the configuration file //
-            List<string> scenariosToRun = ReadScenariosToRunFromConfig();
-
-            string currentScenarioTitle = ScenarioContext.Current.ScenarioInfo.Title;
-
-            Console.WriteLine($"Starting scenario: {currentScenarioTitle}");
-
-            if (scenariosToRun == null || scenariosToRun.Contains(currentScenarioTitle, StringComparer.OrdinalIgnoreCase))
-            {
-                // Continue with the scenario execution.
-            }
-            else
-            {
-                Console.WriteLine($"Scenario '{currentScenarioTitle}' not found or not configured to run. Skipping...");
-                ScenarioContext.Current.Pending();
-            }
-
-            /*Extract the TestcseId from the Scenario Context*/
-
-            Console.WriteLine("Starting " + ScenarioContext.Current.ScenarioInfo.Title);
-
-            string test2 = ScenarioContext.Current.ScenarioInfo.Title;
-            string pattern = @"Case ID (\d+)";
-
-            Match match = Regex.Match(test2, pattern);
-            string testcaseID = "";
-
-            if (match.Success)
-
-            {
-                testcaseID = match.Groups[1].Value;
-                ScenarioContext.Current.Set(testcaseID, "TestCaseID");
-
-            }
-
-            Console.WriteLine("Test Case ID: " + testcaseID);
-
-            /*Update XML files with TestPlan,TestSuite,TestConfig*/
-
-            FunctionLibrary lib = new FunctionLibrary();
-
-            //lib.PassingXML(test);
-
-        }
-
-
-        private static List<string> ReadScenariosToRunFromConfig()
-
-        {
-            string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ScenarioConfig.json");
-
-            if (!File.Exists(configFilePath))
-            {
-                Console.WriteLine($"Config file not found at {configFilePath}. No scenarios will be skipped.");
-                return null;
-            }
-
-            try
-            {
-                string jsonContent = File.ReadAllText(configFilePath);
-                JObject config = JObject.Parse(jsonContent);
-
-                JArray scenarios = config["Scenarios"] as JArray;
-
-                if (scenarios != null && scenarios.Any())
-
-                {
-                    return scenarios.Select(s => s.ToString()).ToList();
-
-                }
-
-                Console.WriteLine("No scenarios found in the config file.");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error reading config file: {ex.Message}. No scenarios will be skipped.");
-                return null;
-            }
-        }
-
-
-        [AfterScenario]
-
-        [Then(@"\[done]")]
-        public void ThenDone()
-
-        {
-
-            //stopWinappdriver();
-
-            //Console.WriteLine("This is Done method");
-            //var scenarioContext = ScenarioContext.Current;
-            //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
-            //var testcaseId = scenarioContext.Get<string>("TestCaseID");
-
-            //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
-
-
-            //foreach (var xmlFile in xmlFiles)
-            //{
-            //    XDocument xmlDoc = XDocument.Load(xmlFile);
-
-
-            //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
-            //    {
-            //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
-
-            //        if (elementTestCaseID == testcaseId)
-            //        {
-
-            //            var elementTestStatus = testResultSetElement.Element("TestStatus");
-            //            if (elementTestStatus != null)
-            //            {
-            //                elementTestStatus.Value = testStatus;
-            //            }
-            //        }
-            //    }
-
-            //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
-            //}
-
-
-
-            //{
-
-            //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
-
-            //    string xmlFolderPath = Path.Combine(projectPath, "XML");
-
-            //    string keyToUpdate = "WorkFlowsXMLsPath";
-            //    string valueToUpdate = xmlFolderPath;
-
-            //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
-
-            //    foreach (var configFile in configFiles)
-            //    {
-            //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
-            //    }
-            //}
-
-            //static void UpdateAppSettingValue(string configFilePath, string key, string value)
-            //{
-            //    try
-            //    {
-            //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
-            //        {
-            //            ExeConfigFilename = configFilePath
-            //        };
-            //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
-
-            //        if (config.AppSettings.Settings[key] != null)
-            //        {
-            //            config.AppSettings.Settings[key].Value = value;
-            //            config.Save(ConfigurationSaveMode.Modified);
-            //            ConfigurationManager.RefreshSection("appSettings");
-
-            //            string updatedValue = ConfigurationManager.AppSettings[key];
-            //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
-            //        }
-            //        else
-            //        {
-            //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
-            //    }
-            //}
-
-            //try
-
-            //{
-            //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
-
-            //    if (System.IO.File.Exists(agentPath))
-            //    {
-            //        ProcessStartInfo startInfo = new ProcessStartInfo
-            //        {
-            //            FileName = agentPath,
-            //            UseShellExecute = false,
-            //            RedirectStandardOutput = true,
-            //            RedirectStandardError = true,
-            //            CreateNoWindow = true
-            //        };
-
-            //        Process process = new Process
-            //        {
-            //            StartInfo = startInfo
-            //        };
-
-            //        process.Start();
-            //        process.WaitForExit(); // Optionally wait for the process to complete
-
-            //        string standardOutput = process.StandardOutput.ReadToEnd();
-            //        string standardError = process.StandardError.ReadToEnd();
-
-            //        Console.WriteLine("Standard Output:");
-            //        Console.WriteLine(standardOutput);
-
-            //        Console.WriteLine("Standard Error:");
-            //        Console.WriteLine(standardError);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("TFS agent executable not found at the specified path.");
-            //    }
-            //}
-
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("An error occurred: " + ex.Message);
-            //}
-
-            //processKill("SmartFit");
-            //processKill("SmartFitSA");
-            //processKill("Camelot.WorkflowRuntime");
-            //processKill("Camelot.SystemInfobar");
-            //processKill("Lucan.App.UI");
-            //processKill("StorageLayoutViewer");
-            //processKill("WinAppDriver.exe");
-
-            string[] processesToKill = { "SmartFit", "SmartFitSA", "Camelot.WorkflowRuntime", "Camelot.SystemInfobar", "Lucan.App.UI", "StorageLayoutViewer" };
-            foreach (string processName in processesToKill)
-            {
-                processKill(processName);
-            }
-        }
-
-        public void processKill(string name)
-        {
-            Process[] processCollection = Process.GetProcesses();
-            foreach (Process proc in processCollection)
-            {
-                Console.WriteLine(proc);
-                if (proc.ProcessName == name)
-                {
-                    proc.Kill();
-                }
-            }
-        }
-
-        [AfterFeature]
-        public static void afterFeature()
-        {
-            Console.WriteLine("This is AfterFeature method");
-            extent.Flush();
-        }
-
-        [AfterStep]
-        [Obsolete]
-        public void AfterEachStep()
-        {
-            var stepType = ScenarioStepContext.Current.StepInfo.StepDefinitionType.ToString();
-            if (ScenarioContext.Current.TestError != null)
-            {
-                if (stepType == "Given")
-                    test.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
-                if (stepType == "When")
-                    test.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
-                if (stepType == "Then")
-                    test.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
-                if (stepType == "And")
-                    test.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
-            }
-        }
-
-        [AfterTestRun]
-        public static void AfterTestRun()
-        {
-            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
-            extent.Flush();
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
-            mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
-            mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
-            mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
-            mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
-            mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
-            mailMessage.Subject = "S&R Automation Report";
-            mailMessage.Body = "Please find the attached S&R Automation Report.";
-            Attachment attachment = new Attachment(reportPath);
-            mailMessage.Attachments.Add(attachment);
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
-            smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
-            smtpClient.EnableSsl = true; // Enable SSL/TLS
-            smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
-            smtpClient.Send(mailMessage);
-        }
-
-        [OneTimeTearDown]
-        public void GenerateReport()
-        {
-        }
-
-
         /** This is used for launching the FDTS
           * Passes the HI Serial number
           * perfrom Flashing and close the FDTS **/
 
 
         [Given(@"Launch FDTS WorkFlow And Flash Device ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""")]
+        [Obsolete]
         public void GivenLaunchFDTSWorkFlowAndFlashDeviceAndAndAndAnd(string device, string DeviceNo, string flashHIWithSlno, string side, string DeviceType)
         {
 
             Console.WriteLine("This is Given method");
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
 
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
@@ -941,11 +597,13 @@ namespace MyNamespace
 
 
         [When(@"\[Create a Patient and Fitting HI In FSW ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        [Obsolete]
         public void WhenCreateAPatientAndFittingHIInFSWAndAndAndAnd(string alterValue, string device, string DeviceNo, string side, string DeviceType)
         {
-
             string devName = device;
             FunctionLibrary lib = new FunctionLibrary();
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
@@ -1044,7 +702,7 @@ namespace MyNamespace
 
                             lib.clickOnAutomationName(session, "Assign Instruments");
 
-                            Thread.Sleep(5000); // Initial wait before searching
+                            Thread.Sleep(10000); // Initial wait before searching
 
                             var SN = session.FindElementsByClassName("ListBoxItem");
 
@@ -1053,9 +711,8 @@ namespace MyNamespace
                             foreach (WindowsElement value in SN)
                             {
                                 string S = value.Text;
-                                if (S.Contains(DeviceNo) && S.Contains("Assign Left"))
+                                if (S.Contains(DeviceNo))
                                 {
-                                    value.Text.Contains("Assign Left");
                                     value.FindElementByName("Assign Left").Click();
                                     break;
                                 }
@@ -1072,8 +729,8 @@ namespace MyNamespace
                     {
                         if (session.FindElementByName("Continue").Enabled == false)
                         {
-                            processKill("SmartFitSA");
-                            processKill("SmartFit");
+                            lib.processKill("SmartFitSA");
+                            lib.processKill("SmartFit");
                             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
                                 Console.WriteLine("This is When method");
@@ -1157,7 +814,7 @@ namespace MyNamespace
                                     lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
                                     Thread.Sleep(13000);
                                     lib.clickOnAutomationName(session, "Assign Instruments");
-                                    Thread.Sleep(5000); // Initial wait before searching
+                                    Thread.Sleep(15000); // Initial wait before searching
                                     var SN = session.FindElementsByClassName("ListBoxItem");
 
                                     // Check if DeviceNo is already discovered
@@ -1165,9 +822,8 @@ namespace MyNamespace
                                     foreach (WindowsElement value in SN)
                                     {
                                         string S = value.Text;
-                                        if (S.Contains(DeviceNo) && S.Contains("Assign Left"))
+                                        if (S.Contains(DeviceNo))
                                         {
-                                            value.Text.Contains("Assign Left");
                                             value.FindElementByName("Assign Left").Click();
                                             break;
                                         }
@@ -1378,8 +1034,8 @@ namespace MyNamespace
                         smtpClient.EnableSsl = true; // Enable SSL/TLS
                         smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
                         smtpClient.Send(mailMessage);
-                        processKill("SmartFit");
-                        processKill("SmartFitSA");
+                        lib.processKill("SmartFit");
+                        lib.processKill("SmartFitSA");
                         break;
                     }
                     else if (element.Text == "Connection")
@@ -1566,8 +1222,8 @@ namespace MyNamespace
                         smtpClient.EnableSsl = true; // Enable SSL/TLS
                         smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
                         smtpClient.Send(mailMessage);
-                        processKill("SmartFit");
-                        processKill("SmartFitSA");
+                        lib.processKill("SmartFit");
+                        lib.processKill("SmartFitSA");
                         break;
                     }
                     else
@@ -1752,6 +1408,7 @@ namespace MyNamespace
         [When(@"\[Cleaning up Capture and Restore Reports Before Launch SandR]")]
         public void WhenCleaningUpCaptureAndRestoreReportsBeforeLaunchSandR()
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             try
@@ -1782,6 +1439,8 @@ namespace MyNamespace
         [When(@"\[Launch SandR ""([^""]*)"" and ""([^""]*)""and""([^""]*)""and ""([^""]*)""]")]
         public void WhenLaunchSandRAndAndand(string device, string DeviceNo, string DeviceType, string side)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
 
@@ -1880,6 +1539,7 @@ namespace MyNamespace
         [When(@"\[Go to Device Info tab and capture device info in excel then verify the device information is shown correctly ""([^""]*)""]")]
         public void WhenGoToDeviceInfoTabAndCaptureDeviceInfoInExcelThenVerifyTheDeviceInformationIsShownCorrectly(string deviceType)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** Getting Device Info from Info tab **/
@@ -1899,6 +1559,7 @@ namespace MyNamespace
         [Then(@"\[Compare firmware version is upgraded successfully ""([^""]*)""and""([^""]*)""]")]
         public void ThenCompareFirmwareVersionIsUpgradedSuccessfullyAnd(string device, string DeviceType)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(2000);
@@ -1976,6 +1637,7 @@ namespace MyNamespace
         [Then(@"\[Compare firmware version is downgraded successfully ""([^""]*)""]")]
         public void ThenCompareFirmwareVersionIsDowngradedSuccessfully(string device)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(2000);
@@ -2039,6 +1701,7 @@ namespace MyNamespace
         [When(@"\[Come back to Settings and wait till controls enabled]")]
         public void WhenComeBackToSettingsAndWaitTillControlsEnabled()
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(2000);
@@ -2056,7 +1719,7 @@ namespace MyNamespace
         [Given(@"\[Download and verify azure storage files ""([^""]*)"" and ""([^""]*)""]")]
         public async Task GivenDownloadAndVerifyAzureStorageFilesAsync(string scenarioTitle, string DeviceNo)
         {
-            
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             string path2 = textDir + "\\azurefiles";
             if (Directory.Exists(path2))
             {
@@ -2152,6 +1815,7 @@ namespace MyNamespace
         [When(@"\[Clicks on disconnect and verify device information is cleared ""([^""]*)""]")]
         public void WhenClicksOnDisconnectAndVerifyDeviceInformationIsCleared(string deviceType)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             lib = new FunctionLibrary();
@@ -2171,6 +1835,8 @@ namespace MyNamespace
         [When(@"\[Perform Capture""([^""]*)""and""([^""]*)""]")]
         public void WhenPerformCaptureand(string device, string DeviceType)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             session = lib.functionWaitForName(session, "Capture");
@@ -2233,6 +1899,8 @@ namespace MyNamespace
         public void WhenPerformCaptureWithListeningTestSettings()
 
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             session = lib.functionWaitForName(session, "Capture");
@@ -2346,6 +2014,7 @@ namespace MyNamespace
         [When(@"\[Go to logs and verify capturing time]")]
         public void WhenGoToLogsAndVerifyCapturingTime()
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(4000);
@@ -2367,7 +2036,7 @@ namespace MyNamespace
         [When(@"\[Launch algo and alter ADL value ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenLaunchAlgoAndAlterADLValueAndAnd(string device, string DeviceNo, string DeviceType)
         {
-
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             /** Algo Tet Lab **/
@@ -2386,6 +2055,8 @@ namespace MyNamespace
         [When(@"\[Perform Restore with above captured image ""([^""]*)"" and ""([^""]*)""and""([^""]*)"" and ""([^""]*)""]")]
         public void WhenPerformRestoreWithAboveCapturedImageAndAndAnd(string device, string DeviceNo, string DeviceType, string side)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
@@ -2529,6 +2200,8 @@ namespace MyNamespace
         [Then(@"\[Close SandR tool]")]
         public void ThenCloseSandRTool()
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
             var btncls = session.FindElementByAccessibilityId("PART_Close");
@@ -2548,6 +2221,7 @@ namespace MyNamespace
         [When(@"\[Launch algo lab and check the ADL value ""([^""]*)"" and ""([^""]*)""and ""([^""]*)""]")]
         public void WhenLaunchAlgoLabAndCheckTheADLValueAndAnd(string device, string DeviceNo, string DeviceType)
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
 
@@ -2564,7 +2238,8 @@ namespace MyNamespace
         [Then(@"\[Launch FSW and check the added programs ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void ThenLaunchFSWAndCheckTheAddedProgramsAndAndAnd(string device, string DeviceNo, string side, string DeviceType)
         {
-
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             Console.WriteLine("This is When method");
 
@@ -2692,8 +2367,8 @@ namespace MyNamespace
                     {
                         if (session.FindElementByName("Continue").Enabled == false)
                         {
-                            processKill("SmartFitSA");
-                            processKill("SmartFit");
+                            lib.processKill("SmartFitSA");
+                            lib.processKill("SmartFit");
                             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
                                 Console.WriteLine("This is When method");
@@ -3089,6 +2764,7 @@ namespace MyNamespace
         [When(@"\[Go to log file for verifying Restore time]")]
         public void WhenGoToLogFileForVerifyingRestoreTime()
         {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             Thread.Sleep(1000);
             string path = (@"C:\Users\Public\Documents\Camelot\Logs\" + computer_name + "-" + user_name + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");
@@ -3102,8 +2778,6 @@ namespace MyNamespace
         [When(@"\[Open Capture and Restore report and log info in report]")]
         public void WhenOpenCaptureAndRestoreReportAndLogInfoInReport()
         {
-           // ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-
             /** This is to check if Capture and Restore files are existing **/
 
             if (computer_name.Equals("FSWIRAY80") || computer_name.Equals("FSWIRAY112"))
@@ -3149,7 +2823,7 @@ namespace MyNamespace
         [When(@"\[Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
         public void WhenVerifyStorageLayoutScenarioByChangingDateAndConfirmCloudIconAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
-
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             Thread.Sleep(5000);
             string jsonString = File.ReadAllText(configsettingpath);
@@ -3232,7 +2906,7 @@ namespace MyNamespace
                                         string[] processesToKill = { "StorageLayoutViewer" };
                                         foreach (string processName in processesToKill)
                                         {
-                                            processKill(processName);
+                                            lib.processKill(processName);
                                         }
 
 
