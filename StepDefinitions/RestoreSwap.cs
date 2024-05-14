@@ -69,6 +69,7 @@ namespace AppiumWinApp.StepDefinitions
           * Saves the dump images by checking all 'OS' nodes using Storagelayoutviewer **/
 
         [When(@"\[Get the dump of connected device left of DumpB by storage layout ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        [Obsolete]
         public void WhenGetTheDumpOfConnectedDeviceLeftOfDumpBByStorageLayoutAndAndAnd(string device, string side, string DeviceNo, string DeviceType)
         {
 
@@ -95,6 +96,7 @@ namespace AppiumWinApp.StepDefinitions
 
 
         [When(@"\[Perform Restore with above captured image using SWAP option ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        [Obsolete]
         public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPOptionAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
         {
 
@@ -283,6 +285,7 @@ namespace AppiumWinApp.StepDefinitions
 
         //[When(@"\[Perform Restore with above captured image using SWAP with left ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""]")]
         [When(@"\[Perform Restore with above captured image using SWAP with left ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)"" and ""([^""]*)""and""([^""]*)""]")]
+        [Obsolete]
         public void WhenPerformRestoreWithAboveCapturedImageUsingSWAPWithLeftAndAndAndAnd(string deviceSlNo, string DeviceLeftSlNo, string device, string side, string DeviceType)
         {
 
