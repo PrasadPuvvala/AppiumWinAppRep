@@ -38,6 +38,8 @@ using Environment = System.Environment;
 using File = System.IO.File;
 using AventStack.ExtentReports.Gherkin.Model;
 using System.Collections.ObjectModel;
+using com.sun.rowset.@internal;
+using com.sun.tools.corba.se.idl.constExpr;
 
 namespace MyNamespace
 {
@@ -65,10 +67,14 @@ namespace MyNamespace
         string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
         String user_name = Environment.UserName;
 
+        public static string screenshot = string.Empty;
+
         public StepDefinitions(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
         }
+
+      
 
 
         /** This is used for launching the FDTS
@@ -263,6 +269,35 @@ namespace MyNamespace
                         element.Click();
                     }
                 }
+                else if (device.Contains("ITC"))
+                {
+                    var elements = Enumerable.Range(1, 10).Select(index => $"{devName} [{index}]").Select(elementName =>
+                    {
+                        try
+                        {
+                            return session.FindElementByName(elementName);
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                    }).Where(element => element != null);
+
+                    foreach (var element in elements)
+                    {
+                        element.Click();
+                        Actions a = new Actions(session);
+                        a.MoveToElement(element).DoubleClick().Build().Perform();
+                    }
+
+                    Thread.Sleep(2000);
+
+                    session.FindElementByName("Final").Click();
+
+                    Thread.Sleep(2000);
+
+
+                }
                 else
                 {
                     var elements = Enumerable.Range(1, 9).Select(index => $"{devName} [{index}] (Final)").Select(elementName =>
@@ -294,6 +329,18 @@ namespace MyNamespace
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(30000);
                 session.SwitchTo().Window(session.WindowHandles[0]);
+
+                try
+                {
+                    if(session.FindElementByName("Specify Parameters").Displayed)
+                    {
+                        session.FindElementByName("Continue >>").Click();
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
 
                 try
                 {
@@ -671,18 +718,18 @@ namespace MyNamespace
                     lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
                     stepName.Pass("Patient is clicked");
                     Thread.Sleep(10000);
-                    session.Close();
+                    //session.Close();
                     appCapabilities = new DesiredCapabilities();
                     appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                     appCapabilities.SetCapability("deviceName", "WindowsPC");
                     appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                     Thread.Sleep(5000);
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
+                    //Thread.Sleep(5000);
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(10000);
+                    //Thread.Sleep(10000);
                     lib.clickOnAutomationName(session, "Assign Instruments");
-                    session.FindElementByName("Back").Click();
+                    //session.FindElementByName("Back").Click();
                     Thread.Sleep(5000);
                     session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
                     Thread.Sleep(2000);
@@ -690,7 +737,7 @@ namespace MyNamespace
                     /** Select Noah link Wireless now, then click Connect.  **/
 
                     session.FindElementByName("Noahlink Wireless").Click();
-                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                    //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
 
 
                     Thread.Sleep(13000);
@@ -792,7 +839,7 @@ namespace MyNamespace
                                     lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
                                     stepName.Pass("Patient is clicked");
                                     Thread.Sleep(10000);
-                                    session.Close();
+                                    //session.Close();
                                     appCapabilities = new DesiredCapabilities();
                                     appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                                     appCapabilities.SetCapability("deviceName", "WindowsPC");
@@ -803,7 +850,7 @@ namespace MyNamespace
                                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                                     Thread.Sleep(5000);
                                     lib.clickOnAutomationName(session, "Assign Instruments");
-                                    session.FindElementByName("Back").Click();
+                                    //session.FindElementByName("Back").Click();
                                     Thread.Sleep(5000);
                                     session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
                                     Thread.Sleep(2000);
@@ -811,7 +858,7 @@ namespace MyNamespace
                                     /** Select Noah link Wireless now, then click Connect.  **/
 
                                     session.FindElementByName("Noahlink Wireless").Click();
-                                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                                    //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
                                     Thread.Sleep(13000);
                                     lib.clickOnAutomationName(session, "Assign Instruments");
                                     Thread.Sleep(15000); // Initial wait before searching
@@ -841,13 +888,14 @@ namespace MyNamespace
                     /** Clicks on Continue buttion **/
 
                     lib.clickOnAutomationName(session, "Continue");
+
                     Thread.Sleep(4000);
 
-                    try
-                    {
-                        lib.clickOnAutomationName(session, "Continue");
-                    }
-                    catch { }
+                    //try
+                    //{
+                    //    lib.clickOnAutomationName(session, "Continue");
+                    //}
+                    //catch { }
 
 
                 }
@@ -971,7 +1019,7 @@ namespace MyNamespace
                 lib.waitForIdToBeClickable(session, "StandAloneAutomationIds.DetailsAutomationIds.FitAction");
                 stepName.Pass("Patient is clicked");
                 Thread.Sleep(10000);
-                session.Close();
+                //session.Close();
                 appCapabilities = new DesiredCapabilities();
                 appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                 appCapabilities.SetCapability("deviceName", "WindowsPC");
@@ -1184,7 +1232,7 @@ namespace MyNamespace
                                 try
                                 {
                                     Thread.Sleep(2000);
-                                    lib.clickOnElementWithIdonly(session, "SkipButton");
+                                    lib.clickOnAutomationName(session, "Skip & Save");
                                 }
                                 catch (Exception)
                                 {
@@ -1196,6 +1244,9 @@ namespace MyNamespace
                             {
                                 Console.WriteLine(skip);
                             }
+
+
+                            stepName.Pass("Click on FSW Exit button");
                             lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
 
                             /** Exit the FSW **/
@@ -1374,24 +1425,29 @@ namespace MyNamespace
                                 try
                                 {
                                     Thread.Sleep(2000);
-                                    lib.clickOnElementWithIdonly(session, "SkipButton");
+                                    lib.clickOnAutomationName(session, "Skip & Save");
                                 }
                                 catch (Exception)
                                 {
                                     lib.clickOnElementWithIdonly(session, "PART_Cancel");
                                 }
+
+                              
                                 stepName.Pass("Save is successfully done and Close the FSW");
                             }
                             catch (Exception skip)
                             {
                                 Console.WriteLine(skip);
                             }
+
+
+                            stepName.Pass("Click on FSW Exit button");
                             lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
 
                             /** Exit the FSW **/
-
-                            stepName.Pass("Click on FSW Exit button");
+                            
                             Thread.Sleep(8000);
+
                             lib.processKill("SmartFitSA");
                         }
                         break;
@@ -1458,8 +1514,10 @@ namespace MyNamespace
             Thread.Sleep(5000);
 
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-            stepName.Log(Status.Pass, "S&R Tool launched successfully");
+          
             session.FindElementByName("Device Info").Click();
+
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
             Thread.Sleep(2000);
 
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
@@ -1525,8 +1583,11 @@ namespace MyNamespace
                 stepName.Log(Status.Pass, "Clicked on Search");
 
                 session = lib.waitForElement(session, "Model Name");
+                Thread.Sleep(12000);
 
-                stepName.Log(Status.Pass, "Dook2 Dev");
+                screenshot = ModuleFunctions.CaptureScreenshot(session);
+                
+                stepName.Log(Status.Pass, "Device Info", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build()); 
             }
         }
 
@@ -1586,41 +1647,50 @@ namespace MyNamespace
                 {
 
                     case string _ when version.Text.Equals(Dooku2nonRechargeable) || version.Text.Equals(Dooku2Rechargeable) || version.Text.Equals(Dooku3PBTE) || version.Text.Equals(Dooku1nonRechargeble):
-                        stepName.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                        
                         break;
 
 
                     case string _ when device.Contains("RT962-DRW"):
 
-                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku2nonRechargeable + " But Current Firmware Version is: " + version.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku2nonRechargeable + " But Current Firmware Version is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                         break;
 
 
                     case string _ when device.Contains("RE962-DRW"):
 
-                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku1nonRechargeble + " But Current Firmware Version is: " + version.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku1nonRechargeble + " But Current Firmware Version is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                         break;
 
 
                     case string _ when device.Contains("RT961-DRWC"):
 
-                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku2Rechargeable + " But Current Firmware Version is: " + version.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku2Rechargeable + " But Current Firmware Version is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                         break;
 
 
                     case string _ when device.Contains("RU961-DRWC"):
 
-                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku3Rechargeable + " But Current Firmware Version is: " + version.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku3Rechargeable + " But Current Firmware Version is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                         break;
 
                     case string _ when device.Contains("RU988-DWC"):
 
-                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku3PBTE + " But Current Firmware Version is: " + version.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Info, "Expected Firmware Version is: " + Dooku3PBTE + " But Current Firmware Version is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                         break;
 
 
                     default:
-                        stepName.Log(Status.Info, "Unknown Firmware Version: " + version.Text);
+
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Info, "Unknown Firmware Version: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                         break;
                 }
 
@@ -1660,8 +1730,8 @@ namespace MyNamespace
 
                     case string _ when version.Text.Equals(Dooku3nonRechargeable) || version.Text.Equals(Dooku3Rechargeable) || version.Text.Equals(Dooku1nonRechargeble):
 
-                        stepName.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text);
-                        break;
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Pass, "Expected Firmware Version is: " + version.Text + " But Current Firmware is: " + version.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build()); break;
 
 
                     case string _ when device.Contains("RE962-DRW"):
@@ -1772,16 +1842,16 @@ namespace MyNamespace
             // Filter matching blobs
             var matchingBlob = blobList.OfType<CloudBlockBlob>().Where(blob =>
             {
-                if (containerName == "lucan-hiservicerecords")
+                //if (containerName == "lucan-hiservicerecords")
 
-                {
-                    // Parse the date from the blob name (assuming the date format is "yyyy-MM-dd")
-                    var currentDate = DateTime.UtcNow.Date;
-                    var formattedCurrentDate = currentDate.ToString("yyyy-MM-dd");
+                //{
+                //    // Parse the date from the blob name (assuming the date format is "yyyy-MM-dd")
+                //    var currentDate = DateTime.UtcNow.Date;
+                //    var formattedCurrentDate = currentDate.ToString("yyyy-MM-dd");
 
-                    return Path.GetDirectoryName(blob.Name) == formattedCurrentDate;
+                //    return Path.GetDirectoryName(blob.Name) == formattedCurrentDate;
 
-                }
+                //}
 
                 return blob.Name.Contains(DeviceNo);
 
@@ -1865,11 +1935,13 @@ namespace MyNamespace
 
             if (session.FindElementByAccessibilityId("labelHeader").Text == "Capture Succeeded")
             {
-                stepName.Log(Status.Pass, "Capture " + text.Text);
+                screenshot = ModuleFunctions.CaptureScreenshot(session);
+                stepName.Log(Status.Pass, "Capture " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
             else
             {
-                stepName.Log(Status.Fail, "Capture Failed" + ":" + "  " + text.Text);
+                screenshot = ModuleFunctions.CaptureScreenshot(session);
+                stepName.Log(Status.Fail, "Capture Failed" + ":" + "  " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
 
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
@@ -1929,6 +2001,9 @@ namespace MyNamespace
             {
                 if (session.FindElementByClassName("CheckBox").Selected)
                 {
+
+                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+                    stepName.Log(Status.Pass, "Listening test settings checkbox selected" , MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     session = lib.functionWaitForName(session, "CAPTURE");
                     var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
                     var text = session.FindElementByAccessibilityId("textBlockMessage");
@@ -1956,6 +2031,8 @@ namespace MyNamespace
                     action.MoveToElement(ext[0]).Click().Build().Perform();
                     Thread.Sleep(2000);
                     Thread.Sleep(2000);
+                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+                    stepName.Log(Status.Pass, "Listening test settings checkbox selected", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     session = lib.functionWaitForName(session, "CAPTURE");
 
                     var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
@@ -1963,11 +2040,13 @@ namespace MyNamespace
 
                     if (session.FindElementByAccessibilityId("labelHeader").Text == "Capture Succeeded")
                     {
-                        stepName.Log(Status.Pass, "Capture " + text.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Pass, "Capture " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     }
                     else
                     {
-                        stepName.Log(Status.Fail, "Capture Failed" + ":" + "  " + text.Text);
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Pass, "Capture Failed" + ":" + "  " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     }
 
                     ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
@@ -2079,6 +2158,8 @@ namespace MyNamespace
 
             Thread.Sleep(8000);
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
             Thread.Sleep(2000);
             session.FindElementByName("Device Info").Click();
@@ -2178,13 +2259,14 @@ namespace MyNamespace
 
             if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
             {
+                screenshot = ModuleFunctions.CaptureScreenshot(session);
 
-
-                stepName.Log(Status.Pass, "Restoration " + text.Text);
+                stepName.Log(Status.Pass, "Restoration " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
             else
             {
-                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
+                screenshot=ModuleFunctions.CaptureScreenshot(session);
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
 
             ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
@@ -2319,7 +2401,7 @@ namespace MyNamespace
                     session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     Thread.Sleep(10000);
                     lib.clickOnAutomationName(session, "Assign Instruments");
-                    session.FindElementByName("Back").Click();
+                    //session.FindElementByName("Back").Click();
                     Thread.Sleep(5000);
                     session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
                     Thread.Sleep(2000);
@@ -2327,7 +2409,7 @@ namespace MyNamespace
                     /** Select Noah link Wireless now, then click Connect.  **/
 
                     session.FindElementByName("Noahlink Wireless").Click();
-                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                    //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
 
 
                     Thread.Sleep(13000);
@@ -2449,7 +2531,7 @@ namespace MyNamespace
                                     /** Select Noah link Wireless now, then click Connect.  **/
 
                                     session.FindElementByName("Noahlink Wireless").Click();
-                                    lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
+                                    //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
 
                                     Thread.Sleep(13000);
                                     lib.clickOnAutomationName(session, "Assign Instruments");
@@ -3025,9 +3107,18 @@ namespace MyNamespace
                                 Thread.Sleep(4000);
                                 var data = session.FindElementByName("DataGridView");
                                 data.Click();
-                                var row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 0");
-                                row.Click();
 
+                                if (device.Contains("NX9ITC"))
+                                {
+                                    var row = session.FindElementByName("Value  -   from DeviceId: FittingDongle:0, Name: FittingDongle:0/Left, Side: Left Row 0");
+                                    row.Click();
+                                }
+                                else
+                                {
+                                    var row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 0");
+                                    row.Click();
+                                }
+                               
                                 /**In order to passing the Date and Time in the Product Testdata **/
 
                                 DateTimeOffset currentTime = DateTimeOffset.Now;
@@ -3038,26 +3129,60 @@ namespace MyNamespace
                                 Console.WriteLine(formattedtenDaysAgo);
                                 long unixTimestamp = tenDaysAgo.ToUnixTimeSeconds();
                                 Console.WriteLine(unixTimestamp);
-                                row.SendKeys(formattedtenDaysAgo);
-                                var miniidentification = session.FindElementByName("_Write to");
-                                miniidentification.Click();
-                                Thread.Sleep(3000);
-                                var min = session.FindElementByName("111000:00026 MiniIdentification");
-                                min.Click();
-                                Thread.Sleep(2000);
-                                data = session.FindElementByName("DataGridView");
-                                data.Click();
-                                row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 6");
-                                row.Click();
+                                if (device.Contains("NX9ITC"))
+                                {
+                                    var row = session.FindElementByName("Value  -   from DeviceId: FittingDongle:0, Name: FittingDongle:0/Left, Side: Left Row 0");
+                                    row.SendKeys(formattedtenDaysAgo);
+                                    var miniidentification = session.FindElementByName("_Write to");
+                                    miniidentification.Click();
+                                    Thread.Sleep(3000);
+                                    var min = session.FindElementByName("111000:00026 MiniIdentification");
+                                    min.Click();
+                                    Thread.Sleep(2000);
+                                    data = session.FindElementByName("DataGridView");
+                                    data.Click();
+                                    row = session.FindElementByName("Value  -   from DeviceId: FittingDongle:0, Name: FittingDongle:0/Left, Side: Left Row 6");
+                                    row.Click();
 
-                                /** In order to passing the Unix time Stamp ID in the Miniidentification **/
+                                    /** In order to passing the Unix time Stamp ID in the Miniidentification **/
 
-                                row.SendKeys(unixTimestamp.ToString());
-                                Thread.Sleep(2000);
-                                min = session.FindElementByName("_Write to");
-                                min.Click();
-                                Thread.Sleep(3000);
-                                stepName.Pass("Writing Presets is done successfully.");
+                                    row.SendKeys(unixTimestamp.ToString());
+                                    Thread.Sleep(2000);
+                                    min = session.FindElementByName("_Write to");
+                                    min.Click();
+                                    Thread.Sleep(3000);
+
+                                    screenshot=ModuleFunctions.CaptureScreenshot(session);
+
+                                    stepName.Pass("Writing Presets is done successfully.", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                }
+                                else
+                                {
+                                    var row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 0");
+                                    row.SendKeys(formattedtenDaysAgo);
+                                    var miniidentification = session.FindElementByName("_Write to");
+                                    miniidentification.Click();
+                                    Thread.Sleep(3000);
+                                    var min = session.FindElementByName("111000:00026 MiniIdentification");
+                                    min.Click();
+                                    Thread.Sleep(2000);
+                                    data = session.FindElementByName("DataGridView");
+                                    data.Click();
+                                    row = session.FindElementByName("Value  -   from FittingDongle:0/Left Row 6");
+                                    row.Click();
+
+                                    /** In order to passing the Unix time Stamp ID in the Miniidentification **/
+
+                                    row.SendKeys(unixTimestamp.ToString());
+                                    Thread.Sleep(2000);
+                                    min = session.FindElementByName("_Write to");
+                                    min.Click();
+                                    Thread.Sleep(3000);
+                                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+
+                                    stepName.Pass("Writing Presets is done successfully.", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                }
+                                
                             }
                             if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
                             {
@@ -3297,7 +3422,9 @@ namespace MyNamespace
 
                                             catch (Exception e)
                                             {
-                                                stepName.Pass("Writing Presets is done successfully.");
+                                                screenshot = ModuleFunctions.CaptureScreenshot(session);
+
+                                                stepName.Pass("Writing Presets is done successfully.", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                                             }
 
                                             /** De select the check boxes  **/
@@ -3371,7 +3498,9 @@ namespace MyNamespace
 
                                             catch (Exception e)
                                             {
-                                                stepName.Pass("Writing Presets is done successfully.");
+                                                screenshot = ModuleFunctions.CaptureScreenshot(session);
+
+                                                stepName.Pass("Writing Presets is done successfully.", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                                             }
                                         }
                                     }

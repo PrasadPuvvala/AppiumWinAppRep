@@ -54,6 +54,7 @@ namespace AppiumWinApp.StepDefinitions
         string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
         String user_name = Environment.UserName;
 
+        public static string screenshot = string.Empty;
         public StepDefinitionFDTS(ScenarioContext scenarioContext, FeatureContext featureContext)
         {
             _scenarioContext = scenarioContext;
@@ -545,12 +546,13 @@ namespace AppiumWinApp.StepDefinitions
 
             if (session.FindElementByAccessibilityId("labelHeader").Text == "Restoration Succeeded")
             {
-
-                stepName.Log(Status.Pass, "Restoration " + text.Text);
+                screenshot = ModuleFunctions.CaptureScreenshot(session);
+                stepName.Log(Status.Pass, "Restoration " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
             else
             {
-                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text);
+                screenshot = ModuleFunctions.CaptureScreenshot(session);
+                stepName.Log(Status.Fail, "Restoration Failed" + ":" + " " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
 
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
