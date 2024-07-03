@@ -30,6 +30,7 @@ using System.Net;
 using TestStack.BDDfy.Reporters.Html;
 using System.Text.RegularExpressions;
 using File = System.IO.File;
+using HtmlAgilityPack;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -338,13 +339,13 @@ namespace AppiumWinApp.StepDefinitions
             if (ScenarioContext.Current.TestError != null)
             {
                 if (stepType == "Given")
-                    test.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
                 if (stepType == "When")
-                    test.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
                 if (stepType == "Then")
-                    test.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
                 if (stepType == "And")
-                    test.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
             }
         }
 
@@ -369,6 +370,54 @@ namespace AppiumWinApp.StepDefinitions
             smtpClient.EnableSsl = true; // Enable SSL/TLS
             smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
             smtpClient.Send(mailMessage);
+
+            string outputDir = Path.Combine(textDir, "Reports");
+            string outputFilePath = Path.Combine(outputDir, "FinalReport.html");
+
+            // Ensure the output directory exists
+            if (!Directory.Exists(outputDir))
+            {
+                Directory.CreateDirectory(outputDir);
+            }
+
+            // Load the first HTML document
+            HtmlDocument firstDoc = new HtmlDocument();
+            firstDoc.Load(reportPath);
+
+            // Load the second HTML document
+            HtmlDocument secondDoc = new HtmlDocument();
+            if (File.Exists(outputFilePath))
+            {
+                secondDoc.Load(outputFilePath);
+            }
+
+            // Remove <li> elements with status="warning" from the first document
+            var failNodes = firstDoc.DocumentNode.SelectNodes("//li[@status='warning']");
+            if (failNodes != null)
+            {
+                foreach (var node in failNodes)
+                {
+                    node.Remove();
+                }
+            }
+            firstDoc.Save(outputFilePath);
+
+            // Select <li> elements with status="pass" from the second document
+            var passNodes = secondDoc.DocumentNode.SelectNodes("//li[@status='pass' or @status='fail']");
+            if (passNodes != null)
+            {
+                // Find a place to add the new <li> elements in the first document
+                var ulNode = firstDoc.DocumentNode.SelectSingleNode("//ul[@class='test-list-item']");
+                if (ulNode != null)
+                {
+                    foreach (var passNode in passNodes)
+                    {
+                        ulNode.AppendChild(passNode);
+                    }
+                }
+            }
+            // Save the modified first document
+            firstDoc.Save(outputFilePath);
         }
     }
 

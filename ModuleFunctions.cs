@@ -55,6 +55,7 @@ namespace AppiumWinApp
         public static appconfigsettings config;
         static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
         + Path.DirectorySeparatorChar + "appconfig.json";
+        public static string screenshot = string.Empty;
 
         /** Application launchhing **/
         public static WindowsDriver<WindowsElement> sessionInitialize(string name, string path)
@@ -100,7 +101,7 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", dir);
             appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), appCapabilities);
             Thread.Sleep(8000);
             return session;
         }
@@ -113,11 +114,28 @@ namespace AppiumWinApp
             appCapabilities.SetCapability("platformName", "Windows");
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), appCapabilities);
             Thread.Sleep(4000);
             return session;
         }
 
+        //public static string CaptureScreenshot(WindowsDriver<WindowsElement> windowsDriver)
+        //{
+        //    string screenshotDir = Path.Combine(Directory.GetCurrentDirectory(), "Screenshots");
+        //    if (!Directory.Exists(screenshotDir))
+        //        Directory.CreateDirectory(screenshotDir);
+
+        //    string screenshotPath = Path.Combine(screenshotDir, $"screenshot_{DateTime.Now:yyyyMMdd_HHmmss}.png");
+        //    Screenshot screenshot = ((ITakesScreenshot)windowsDriver).GetScreenshot();
+        //    screenshot.SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
+        //    return screenshotPath;
+        //}
+
+        public static string CaptureScreenshot(WindowsDriver<WindowsElement> windowsDriver)
+        {       
+            Screenshot screenshot = ((ITakesScreenshot)windowsDriver).GetScreenshot();
+            return screenshot.AsBase64EncodedString;
+        }
 
         /** Continue buttons click operation in fsw Connection flow **/
 
@@ -437,7 +455,7 @@ namespace AppiumWinApp
                                 lib.functionWaitForName(session, "Connect");
                                 try
                                 {
-                                    lib.functionWaitForName(session, "Dooku2.C6.TDI.9.78.0.0");
+                                    lib.functionWaitForName(session, "ReSound.Ratatosk.ToolApi.HearingInstrumentFactory.HearingInstrumentProxy");
 
                                     Thread.Sleep(2000);
 
@@ -456,7 +474,11 @@ namespace AppiumWinApp
                                 session.FindElementByAccessibilityId("textBox1_5").Clear();
                                 Thread.Sleep(2000);
                                 session.FindElementByAccessibilityId("textBox1_5").SendKeys("1");
-                                stepName.Log(Status.Pass, "Altered value is 1");
+
+                                screenshot = CaptureScreenshot(session);
+                                stepName.Log(Status.Pass, "Altered value is 1", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+
+
                                 /* Save changes in Fitting tab*/
                                 lib.clickOnAutomationName(session, "Fitting");
                                 Thread.Sleep(4000);
@@ -502,7 +524,7 @@ namespace AppiumWinApp
                                 session.CloseApp();
                             }
                             if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
-                            {                                
+                            {
                                 stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                                 Thread.Sleep(2000);
                                 session.FindElementByName("ADL").Click();
@@ -774,21 +796,27 @@ namespace AppiumWinApp
             FunctionLibrary lib = new FunctionLibrary();
             Thread.Sleep(10000);
 
+
+
+
             try
             {
-                session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSocket.bat", Directory.GetCurrentDirectory());
-                Thread.Sleep(2000);
+                session = launchApp(Directory.GetCurrentDirectory() + "\\LaunchSocket.bat", Directory.GetCurrentDirectory());
             }
 
             catch (System.InvalidOperationException e)
 
             { }
 
+
+
+
             DesiredCapabilities desktopCapabilities = new DesiredCapabilities();
             desktopCapabilities.SetCapability("platformName", "Windows");
             desktopCapabilities.SetCapability("app", "Root");
             desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
+
             WindowsElement applicationWindow = null;
 
             var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
@@ -811,7 +839,7 @@ namespace AppiumWinApp
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.SetCapability("deviceName", "WindowsPC");
             capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
             Thread.Sleep(2000);
 
             try
@@ -856,7 +884,7 @@ namespace AppiumWinApp
                     desktopCapabilities.SetCapability("platformName", "Windows");
                     desktopCapabilities.SetCapability("app", "Root");
                     desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
                     applicationWindow = null;
                     openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
@@ -877,7 +905,7 @@ namespace AppiumWinApp
                     capabilities = new DesiredCapabilities();
                     capabilities.SetCapability("deviceName", "WindowsPC");
                     capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities); Thread.Sleep(2000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities); Thread.Sleep(2000);
 
                     try
                     {
@@ -919,7 +947,7 @@ namespace AppiumWinApp
             desktopCapabilities.SetCapability("platformName", "Windows");
             desktopCapabilities.SetCapability("app", "Root");
             desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
             WindowsElement applicationWindow = null;
 
             var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
@@ -942,7 +970,7 @@ namespace AppiumWinApp
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.SetCapability("deviceName", "WindowsPC");
             capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
             Thread.Sleep(2000);
 
             try
@@ -966,7 +994,7 @@ namespace AppiumWinApp
 
                 else if (DeviceType.Equals("Rechargeable"))
                 {
-                    
+
                     session.Keyboard.SendKeys("A");
                     Thread.Sleep(8000);
                     session.Keyboard.SendKeys(Keys.Enter);
@@ -993,7 +1021,7 @@ namespace AppiumWinApp
                     desktopCapabilities.SetCapability("platformName", "Windows");
                     desktopCapabilities.SetCapability("app", "Root");
                     desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
                     applicationWindow = null;
                     openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
@@ -1015,7 +1043,7 @@ namespace AppiumWinApp
                     capabilities = new DesiredCapabilities();
                     capabilities.SetCapability("deviceName", "WindowsPC");
                     capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities); Thread.Sleep(2000);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities); Thread.Sleep(2000);
 
 
                     try
@@ -1039,7 +1067,7 @@ namespace AppiumWinApp
 
                         if (DeviceType.Equals("Rechargeable"))
                         {
-                            
+
                             session.Keyboard.SendKeys("A");
                             Thread.Sleep(8000);
                             session.Keyboard.SendKeys(Keys.Enter);
@@ -1076,7 +1104,7 @@ namespace AppiumWinApp
             desktopCapabilities.SetCapability("platformName", "Windows");
             desktopCapabilities.SetCapability("app", "Root");
             desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
             WindowsElement applicationWindow = null;
 
             var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
@@ -1099,13 +1127,13 @@ namespace AppiumWinApp
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.SetCapability("deviceName", "WindowsPC");
             capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
 
             Thread.Sleep(2000);
 
             try
             {
-                
+
                 if (DeviceType.Equals("Non-Rechargeable"))
                 {
                     session.Keyboard.SendKeys("A");
@@ -1128,7 +1156,7 @@ namespace AppiumWinApp
 
                 else if (DeviceType.Equals("Rechargeable"))
                 {
-                  
+
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(2000);
                     session.Keyboard.SendKeys("B");
@@ -1154,7 +1182,7 @@ namespace AppiumWinApp
                     desktopCapabilities.SetCapability("platformName", "Windows");
                     desktopCapabilities.SetCapability("app", "Root");
                     desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
                     applicationWindow = null;
                     openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
@@ -1176,7 +1204,7 @@ namespace AppiumWinApp
                     capabilities = new DesiredCapabilities();
                     capabilities.SetCapability("deviceName", "WindowsPC");
                     capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
                     Thread.Sleep(2000);
 
                     try
@@ -1238,7 +1266,7 @@ namespace AppiumWinApp
             desktopCapabilities.SetCapability("platformName", "Windows");
             desktopCapabilities.SetCapability("app", "Root");
             desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
             WindowsElement applicationWindow = null;
 
             var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
@@ -1261,7 +1289,7 @@ namespace AppiumWinApp
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.SetCapability("deviceName", "WindowsPC");
             capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
 
             Thread.Sleep(2000);
 
@@ -1289,7 +1317,7 @@ namespace AppiumWinApp
                     session.Keyboard.SendKeys("A");
                     Thread.Sleep(2000);
                     session.Keyboard.SendKeys(Keys.Enter);
-                    Thread.Sleep(2000);                   
+                    Thread.Sleep(2000);
                     session.Keyboard.SendKeys(Keys.Enter);
                     Thread.Sleep(2000);
                     session.Keyboard.SendKeys("B");
@@ -1316,7 +1344,7 @@ namespace AppiumWinApp
                     desktopCapabilities.SetCapability("platformName", "Windows");
                     desktopCapabilities.SetCapability("app", "Root");
                     desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
                     applicationWindow = null;
                     openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
@@ -1338,7 +1366,7 @@ namespace AppiumWinApp
                     capabilities = new DesiredCapabilities();
                     capabilities.SetCapability("deviceName", "WindowsPC");
                     capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
                     Thread.Sleep(2000);
 
                     try
@@ -1406,7 +1434,7 @@ namespace AppiumWinApp
             desktopCapabilities.SetCapability("platformName", "Windows");
             desktopCapabilities.SetCapability("app", "Root");
             desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
             WindowsElement applicationWindow = null;
             var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
@@ -1428,7 +1456,7 @@ namespace AppiumWinApp
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.SetCapability("deviceName", "WindowsPC");
             capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
             Thread.Sleep(2000);
 
             try
@@ -1454,7 +1482,7 @@ namespace AppiumWinApp
                     desktopCapabilities.SetCapability("platformName", "Windows");
                     desktopCapabilities.SetCapability("app", "Root");
                     desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
                     applicationWindow = null;
                     openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
@@ -1476,7 +1504,7 @@ namespace AppiumWinApp
                     capabilities = new DesiredCapabilities();
                     capabilities.SetCapability("deviceName", "WindowsPC");
                     capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-                    session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities); Thread.Sleep(2000); try
+                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities); Thread.Sleep(2000); try
 
                     {
                         session.Keyboard.SendKeys("3");
@@ -1499,7 +1527,7 @@ namespace AppiumWinApp
             desktopCapabilities.SetCapability("platformName", "Windows");
             desktopCapabilities.SetCapability("app", "Root");
             desktopCapabilities.SetCapability("deviceName", "WindowsPC");
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities); WindowsElement applicationWindow = null;
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities); WindowsElement applicationWindow = null;
             var openWindows = session.FindElementsByClassName("ConsoleWindowClass");
 
             foreach (var window in openWindows)
@@ -1521,7 +1549,7 @@ namespace AppiumWinApp
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.SetCapability("deviceName", "WindowsPC");
             capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
-            session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), capabilities);
             Thread.Sleep(2000);
             session.CloseApp();
         }
@@ -1545,12 +1573,13 @@ namespace AppiumWinApp
                         if (device == workingDirectory.Key)
                         {
                             Console.WriteLine($"{workingDirectory.Value}");
-                            session = ModuleFunctions.sessionInitialize(algoPath.Value, workingDirectory.Value);
+
+                            Thread.Sleep(2000);
+                            session = sessionInitialize(algoPath.Value, workingDirectory.Value);
 
                             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                             {
-                                ModuleFunctions.socketA(session, test, DeviceType);
-                                Thread.Sleep(2000);
+                                socketA(session, test, DeviceType);
                                 string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                                 Actions actions = new Actions(session);
                                 stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
@@ -1580,7 +1609,7 @@ namespace AppiumWinApp
 
                                 try
                                 {
-                                    lib.functionWaitForName(session, "Dooku2.C6.TDI.9.78.0.0");
+                                    lib.functionWaitForName(session, "ReSound.Ratatosk.ToolApi.HearingInstrumentFactory.HearingInstrumentProxy");
                                     Thread.Sleep(2000);
                                     lib.functionWaitForName(session, "Use when connecting next time");
                                     Thread.Sleep(2000);
@@ -1595,7 +1624,7 @@ namespace AppiumWinApp
                     }
                 }
             }
-            
+
             stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
             Thread.Sleep(2000);
             session.FindElementByName("ADL").Click();
@@ -1682,14 +1711,17 @@ namespace AppiumWinApp
             {
                 if ((session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000")
                 {
+                    screenshot = CaptureScreenshot(session);
                     Console.WriteLine("Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-                    stepName.Log(Status.Fail, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                    stepName.Log(Status.Fail, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString(), MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     Assert.Pass();
                     session.CloseApp();
                 }
                 else
                 {
-                    stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                    screenshot = CaptureScreenshot(session); 
+                    stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString(), MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+
                     session.CloseApp();
                 }
             }
@@ -1720,7 +1752,7 @@ namespace AppiumWinApp
         {
 
             Console.WriteLine("test");
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
             string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
 
             FunctionLibrary lib = new FunctionLibrary();
@@ -1772,7 +1804,7 @@ namespace AppiumWinApp
                                     ReadOnlyCollection<AppiumWebElement> dataGridCells = dataGrid.FindElementsByClassName("DataGridCell");
 
 
-                                 
+
                                     // Iterate through DataGridCell elements
                                     foreach (var element in dataGridCells)
                                     {
@@ -1860,7 +1892,7 @@ namespace AppiumWinApp
 
                                                             var GridCell = session.FindElementByClassName("DataGrid");
                                                             ReadOnlyCollection<AppiumWebElement> GridCells = GridCell.FindElementsByClassName("DataGridCell");
-                                                           // Thread.Sleep(7000);
+                                                            // Thread.Sleep(7000);
                                                             // Iterate through DataGridCell elements
                                                             foreach (var element in GridCells)
                                                             {
@@ -1883,19 +1915,19 @@ namespace AppiumWinApp
                                 } while (!session.FindElementByName("Connect").Enabled);
 
                                 session.SwitchTo().Window(session.WindowHandles[0]);
-                                Thread.Sleep(7000);
+                                Thread.Sleep(5000);
 
-                                lib.functionWaitForName(session, "Connect");             
+                                lib.functionWaitForName(session, "Connect");
 
                                 lib.waitUntilElementExists(session, "File", 0);
-                                Thread.Sleep(4000);
+                                Thread.Sleep(5000);
                                 var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
                                 ext[0].Click();
-                                Thread.Sleep(2000);
+                                Thread.Sleep(5000);
                                 ext = session.FindElements(WorkFlowPageFactory.readHI);
                                 actions = new Actions(session);
                                 actions.MoveToElement(ext[0]).Build().Perform();
-                                Thread.Sleep(2000);
+                                Thread.Sleep(5000);
                                 session.Keyboard.PressKey(Keys.Enter);
                                 Thread.Sleep(5000);
 
@@ -1936,6 +1968,8 @@ namespace AppiumWinApp
                                 session.SwitchTo().ActiveElement();
                                 WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(80));
                                 Thread.Sleep(8000);
+
+
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 Thread.Sleep(30000);
 
@@ -1952,34 +1986,50 @@ namespace AppiumWinApp
                                 }
                                 catch (Exception e)
                                 {
-                                    if (e.GetType().ToString() == "System.InvalidOperationException")
+                                    try
                                     {
-                                        var simu = new InputSimulator();
-                                        simu.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_T);
-                                        Thread.Sleep(2000);
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000);
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000);
-                                        Thread.Sleep(2000);
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.UP);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                                        Thread.Sleep(2000); session.SwitchTo().Window(session.WindowHandles.First());
-                                        session.SwitchTo().ActiveElement(); Thread.Sleep(2000);
-                                        session.FindElementByAccessibilityId("checkBoxIgnoreAll").Click();
-                                        Thread.Sleep(2000);
-                                        session.FindElementByAccessibilityId("buttonOk").Click();
+                                        if (e.GetType().ToString() == "System.InvalidOperationException")
+                                        {
+                                            var simu = new InputSimulator();
+                                            simu.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_T);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            //simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            //Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.UP);
+                                            Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000); simu.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                                            Thread.Sleep(2000); session.SwitchTo().Window(session.WindowHandles.First());
+                                            session.SwitchTo().ActiveElement(); Thread.Sleep(2000);
+                                            session.FindElementByAccessibilityId("checkBoxIgnoreAll").Click();
+                                            Thread.Sleep(2000);
+                                            session.FindElementByAccessibilityId("buttonOk").Click();
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+
                                     }
                                 }
-                                Thread.Sleep(200000);
+
+                               
 
                                 session.SwitchTo().Window(session.WindowHandles.First());
                                 session.SwitchTo().ActiveElement();
+
+                                screenshot = CaptureScreenshot(session);
+                                stepName.Log(Status.Info, "Device dump image is in process", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                Thread.Sleep(200000);
 
                                 try
                                 {
@@ -1989,47 +2039,58 @@ namespace AppiumWinApp
                                         session.SwitchTo().Window(session.WindowHandles.First());
                                         session.SwitchTo().ActiveElement();
                                         session.FindElementByAccessibilityId("buttonOk").Click();
+
+                                        session.SwitchTo().Window(session.WindowHandles.First());
+                                        Thread.Sleep(2000);
+                                        session.FindElementByName("OK").Click();
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    if (e.GetType().ToString() == "System.InvalidOperationException")
+                                    try
                                     {
-                                        var simu = new InputSimulator();
-                                        simu.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_T);
-                                        Thread.Sleep(2000);
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000);
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); 
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); 
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); 
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000);
-                                        Thread.Sleep(2000);
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.UP);
-                                        Thread.Sleep(2000); 
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); 
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-                                        Thread.Sleep(2000); 
-                                        simu.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                                        Thread.Sleep(2000);
-                                        session.SwitchTo().Window(session.WindowHandles.First());
-                                        session.SwitchTo().ActiveElement();
-                                        Thread.Sleep(2000);
-                                        session.FindElementByAccessibilityId("buttonOk").Click();
-                                    }
-                                }
-                                session.SwitchTo().Window(session.WindowHandles.First());
-                                Thread.Sleep(2000);
-                                session.FindElementByName("OK").Click();
+                                        if (e.GetType().ToString() == "System.InvalidOperationException")
+                                        {
+                                            var simu = new InputSimulator();
+                                            simu.Keyboard.ModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.VK_T);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.UP);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                                            Thread.Sleep(2000);
+                                            simu.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                                            Thread.Sleep(2000);
+                                            session.SwitchTo().Window(session.WindowHandles.First());
+                                            session.SwitchTo().ActiveElement();
+                                            Thread.Sleep(2000);
+                                            session.FindElementByAccessibilityId("buttonOk").Click();
 
-                                stepName.Log(Status.Info, "Device dump image process done successfully..");
+                                            session.SwitchTo().Window(session.WindowHandles.First());
+                                            Thread.Sleep(2000);
+                                            session.FindElementByName("OK").Click();
+                                        }
+                                    }
+                                    catch
+                                    {
+
+                                    }
+                                }                            
                                 session.SwitchTo().Window(session.WindowHandles.First());
-                                Thread.Sleep(2000);
+                                stepName.Log(Status.Info, "Device dump image is taken successfully..");
+                                Thread.Sleep(4000);
                                 session.CloseApp();
                                 Thread.Sleep(4000);
                             }
@@ -2286,6 +2347,9 @@ namespace AppiumWinApp
                                     session.SwitchTo().ActiveElement();
 
                                     /** To click the Ok button in the flow of Dump saving **/
+                                    screenshot = CaptureScreenshot(session);
+
+                                    stepName.Log(Status.Info, "Device dump image is in process", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
 
                                     try
                                     {
@@ -2311,6 +2375,11 @@ namespace AppiumWinApp
                                     }
 
                                 }
+
+                                screenshot = ModuleFunctions.CaptureScreenshot(session);
+
+                                stepName.Log(Status.Info, "Device dump image process done successfully..", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+
                                 try
                                 {
                                     session.SwitchTo().Window(session.WindowHandles.First());
