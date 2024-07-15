@@ -131,8 +131,9 @@ namespace AppiumWinApp.StepDefinitions
             /*Update XML files with TestPlan,TestSuite,TestConfig*/
 
             FunctionLibrary lib = new FunctionLibrary();
+            string scenarioName = ScenarioContext.Current.ScenarioInfo.Title;
 
-            //lib.PassingXML(test);
+            lib.PassingXML(test, scenarioName);
 
         }
 
@@ -349,76 +350,76 @@ namespace AppiumWinApp.StepDefinitions
             }
         }
 
-        [AfterTestRun]
-        public static void AfterTestRun()
-        {
-            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
-            extent.Flush();
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
-            mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
-            mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
-            mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
-            mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
-            mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
-            mailMessage.Subject = "S&R Automation Report";
-            mailMessage.Body = "Please find the attached S&R Automation Report.";
-            Attachment attachment = new Attachment(reportPath);
-            mailMessage.Attachments.Add(attachment);
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
-            smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
-            smtpClient.EnableSsl = true; // Enable SSL/TLS
-            smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
-            smtpClient.Send(mailMessage);
+        //[AfterTestRun]
+        //public static void AfterTestRun()
+        //{
+        //    string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
+        //    extent.Flush();
+        //    MailMessage mailMessage = new MailMessage();
+        //    mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+        //    mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+        //    mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+        //    mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
+        //    mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+        //    mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
+        //    mailMessage.Subject = "S&R Automation Report";
+        //    mailMessage.Body = "Please find the attached S&R Automation Report.";
+        //    Attachment attachment = new Attachment(reportPath);
+        //    mailMessage.Attachments.Add(attachment);
+        //    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+        //    smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+        //    smtpClient.EnableSsl = true; // Enable SSL/TLS
+        //    smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+        //    smtpClient.Send(mailMessage);
 
-            string outputDir = Path.Combine(textDir, "Reports");
-            string outputFilePath = Path.Combine(outputDir, "FinalReport.html");
+        //    string outputDir = Path.Combine(textDir, "Reports");
+        //    string outputFilePath = Path.Combine(outputDir, "FinalReport.html");
 
-            // Ensure the output directory exists
-            if (!Directory.Exists(outputDir))
-            {
-                Directory.CreateDirectory(outputDir);
-            }
+        //    // Ensure the output directory exists
+        //    if (!Directory.Exists(outputDir))
+        //    {
+        //        Directory.CreateDirectory(outputDir);
+        //    }
 
-            // Load the first HTML document
-            HtmlDocument firstDoc = new HtmlDocument();
-            firstDoc.Load(reportPath);
+        //    // Load the first HTML document
+        //    HtmlDocument firstDoc = new HtmlDocument();
+        //    firstDoc.Load(reportPath);
 
-            // Load the second HTML document
-            HtmlDocument secondDoc = new HtmlDocument();
-            if (File.Exists(outputFilePath))
-            {
-                secondDoc.Load(outputFilePath);
-            }
+        //    // Load the second HTML document
+        //    HtmlDocument secondDoc = new HtmlDocument();
+        //    if (File.Exists(outputFilePath))
+        //    {
+        //        secondDoc.Load(outputFilePath);
+        //    }
 
-            // Remove <li> elements with status="warning" from the first document
-            var failNodes = firstDoc.DocumentNode.SelectNodes("//li[@status='warning']");
-            if (failNodes != null)
-            {
-                foreach (var node in failNodes)
-                {
-                    node.Remove();
-                }
-            }
-            firstDoc.Save(outputFilePath);
+        //    // Remove <li> elements with status="warning" from the first document
+        //    var failNodes = firstDoc.DocumentNode.SelectNodes("//li[@status='warning']");
+        //    if (failNodes != null)
+        //    {
+        //        foreach (var node in failNodes)
+        //        {
+        //            node.Remove();
+        //        }
+        //    }
+        //    firstDoc.Save(outputFilePath);
 
-            // Select <li> elements with status="pass" from the second document
-            var passNodes = secondDoc.DocumentNode.SelectNodes("//li[@status='pass' or @status='fail']");
-            if (passNodes != null)
-            {
-                // Find a place to add the new <li> elements in the first document
-                var ulNode = firstDoc.DocumentNode.SelectSingleNode("//ul[@class='test-list-item']");
-                if (ulNode != null)
-                {
-                    foreach (var passNode in passNodes)
-                    {
-                        ulNode.AppendChild(passNode);
-                    }
-                }
-            }
-            // Save the modified first document
-            firstDoc.Save(outputFilePath);
-        }
+        //    // Select <li> elements with status="pass" from the second document
+        //    var passNodes = secondDoc.DocumentNode.SelectNodes("//li[@status='pass' or @status='fail']");
+        //    if (passNodes != null)
+        //    {
+        //        // Find a place to add the new <li> elements in the first document
+        //        var ulNode = firstDoc.DocumentNode.SelectSingleNode("//ul[@class='test-list-item']");
+        //        if (ulNode != null)
+        //        {
+        //            foreach (var passNode in passNodes)
+        //            {
+        //                ulNode.AppendChild(passNode);
+        //            }
+        //        }
+        //    }
+        //    // Save the modified first document
+        //    firstDoc.Save(outputFilePath);
+        //}
     }
 
 }

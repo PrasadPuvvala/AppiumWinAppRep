@@ -11,6 +11,9 @@ namespace AppiumWinApp
         public WorkingDirectory workingdirectory { get; set; }
         public ApplicationPath ApplicationPath { get; set; }
         public TestEnvironment TestEnvironment { get; set; }
+        public ConnectionStringPath connectionStringPath { get; set; }
+        public SandRToolUninstallation sandRToolUninstallation { get; set; }
+        public SandRToolInstallation sandRToolInstallation { get; set; }
     }
 
     public class Algo
@@ -55,5 +58,18 @@ namespace AppiumWinApp
     {
         public string WinappDriverUrl { get; set; } = string.Empty;
         public string WinAppDriverPath { get; set; } = string.Empty;
+    }
+    public class ConnectionStringPath
+    {
+        public string PathtoValue { get; set; } = string.Empty;
+    }
+    public class SandRToolUninstallation
+    {
+        public string DisplayName { get; set; } = string.Empty;
+        public string UninstallKeyWow64 { get; set; } = string.Empty;
+    }
+    public class SandRToolInstallation
+    {
+        public string InstallationPath { get; set; } = string.Empty;
     }
 }

@@ -94,7 +94,7 @@ Scenario Outline: 02Test Case ID 1537268: Verify that battery ADL data is restor
 	When [Launch algo lab and check the ADL value "<DeviceId>" and "<DeviceLeftSlNo>"and "<Devicetype>"]
 	When [Go to log file for verifying Restore time]
 	#And [Open Capture and Restore report and log info in report]
-	Then [done]
+	#Then [done]
 	
 Examples:
 
@@ -115,7 +115,7 @@ Examples:
 @tag3
 Scenario Outline: 03Test Case ID 1103972: Verify device information is shown correctly
 
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"and "<DeviceLeft>"]
 	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]

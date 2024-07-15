@@ -40,6 +40,9 @@ using javax.swing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.SqlServer.Management.Smo;
 using Newtonsoft.Json;
+using System.Xml.Linq;
+using System.Xml;
+using Microsoft.Win32;
 
 namespace AppiumWinApp
 {
@@ -80,11 +83,12 @@ namespace AppiumWinApp
         {
             string ApplicationPath = name;
             DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
+            appCapabilities.SetCapability("app", ApplicationPath);          
             appCapabilities.SetCapability("platformName", "Windows");
             appCapabilities.SetCapability("deviceName", "WindowsPC");
             appCapabilities.SetCapability("appWorkingDir", path);
             appCapabilities.SetCapability("appArguments", "--run-as-administrator");
+            appCapabilities.SetCapability("ms:waitForAppLaunch", "25");
             Thread.Sleep(8000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
@@ -2744,6 +2748,160 @@ namespace AppiumWinApp
 
             }
 
+        }
+
+        private static void UpdateAppSettings(string filePath, string key, string value)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(filePath);
+            XmlNode node = xmlDoc.SelectSingleNode($"//appSettings/add[@key='{key}']");
+            if (node != null)
+            {
+                node.Attributes["value"].Value = value;
+            }
+            xmlDoc.Save(filePath);
+        }
+
+        private static void UpdateNLogMinLevel(string filePath, string minLevel)
+        {
+            XDocument xmlDoc = XDocument.Load(filePath);
+            XNamespace nlogNamespace = "http://www.nlog-project.org/schemas/NLog.xsd";
+            XElement rulesElement = xmlDoc.Descendants(nlogNamespace + "rules").FirstOrDefault();
+            if (rulesElement != null)
+            {
+                var loggerElements = rulesElement.Elements(nlogNamespace + "logger");
+                foreach (var loggerElement in loggerElements)
+                {
+                    XAttribute minlevelAttribute = loggerElement.Attribute("minlevel");
+                    if (minlevelAttribute != null)
+                    {
+                        minlevelAttribute.Value = minLevel;
+                    }
+                }
+            }
+            xmlDoc.Save(filePath);
+        }
+
+        public static void SandRenvironmentchange()
+        {
+            var appConfigFiles = new[]
+            {
+      @"C:\Program Files (x86)\GN Hearing\Lucan\App\Lucan.App.UI.exe.config",
+      @"C:\Program Files (x86)\GN Hearing\Lucan\Settings\Lucan.SettingsRestoration.Runtime.exe.config",
+      @"C:\Program Files (x86)\GN Hearing\Lucan.SettingsRestoration\SettingsRestoration\Lucan.SettingsRestoration.Runtime.exe.config",
+      @"C:\Program Files (x86)\GN Hearing\Avalon\Device.DeviceInfos\Avalon.DeviceInfos.Runtime.exe.config",
+      @"C:\Program Files (x86)\GN Hearing\Avalon.Lucan\DeviceInfos\Avalon.DeviceInfos.Runtime.exe.config"
+  };
+
+            var nlogConfigFiles = new[]
+            {
+      @"C:\Program Files (x86)\GN Hearing\Lucan\App\Nlog.config",
+      @"C:\Program Files (x86)\GN Hearing\Lucan\Settings\Nlog.config",
+      @"C:\Program Files (x86)\GN Hearing\Lucan.SettingsRestoration\SettingsRestoration\Nlog.config",
+      @"C:\Program Files (x86)\GN Hearing\Avalon\Device.DeviceInfos\Nlog.config",
+      @"C:\Program Files (x86)\GN Hearing\Avalon.Lucan\DeviceInfos\Nlog.config"
+  };
+
+            foreach (var filePath in appConfigFiles)
+            {
+                if (filePath == @"C:\Program Files (x86)\GN Hearing\Lucan\App\Lucan.App.UI.exe.config")
+                {
+                    UpdateAppSettings(filePath, "LocalSite", "TEST");
+                }
+                else
+                {
+                    UpdateAppSettings(filePath, "CloudEnvironment", "Verification");
+                    UpdateAppSettings(filePath, "CloudLocation", "DevWestEurope");
+                }
+            }
+
+            foreach (var filePath in nlogConfigFiles)
+            {
+                UpdateNLogMinLevel(filePath, "Trace");
+            }
+
+            Console.WriteLine("XML files updated successfully.");
+        }
+
+        public static void UninstallSandRTool()
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64))
+            {
+                if (key == null)
+                {
+                    Console.WriteLine("Uninstall registry key not found.");
+                    return;
+                }
+
+                var targetSubKey = key.GetSubKeyNames()
+                    .Select(subkeyName => key.OpenSubKey(subkeyName))
+                    .FirstOrDefault(subkey => subkey != null &&
+                                              subkey.GetValue("DisplayName") != null &&
+                                              ((string)subkey.GetValue("DisplayName")).Contains(config.sandRToolUninstallation.DisplayName));
+
+                if (targetSubKey != null)
+                {
+                    string uninstallString = (string)targetSubKey.GetValue("UninstallString");
+                    string trimmedUninstallString = uninstallString?.TrimEnd(" /uninstall".ToCharArray());
+
+                    if (!string.IsNullOrEmpty(trimmedUninstallString))
+                    {
+                        try
+                        {
+                            // Create a process object
+                            using (Process uninstallProcess = new Process())
+                            {
+                                // Configure the process using StartInfo properties
+                                uninstallProcess.StartInfo.FileName = trimmedUninstallString;
+                                uninstallProcess.StartInfo.Verb = "runas";
+                                uninstallProcess.StartInfo.Arguments = "/uninstall /quiet"; // Adjust arguments as needed
+                                uninstallProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Optional: hide the uninstall window
+                                uninstallProcess.StartInfo.UseShellExecute = false; // Ensure no shell is used for better control
+
+                                // Start the process
+                                uninstallProcess.Start();
+                                uninstallProcess.WaitForExit(); // Wait for the uninstallation to complete
+
+                                // Check the exit code if needed
+                                int exitCode = uninstallProcess.ExitCode;
+                                Console.WriteLine($"Uninstallation exit code: {exitCode}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error occurred: {ex.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void InstallSandRTool()
+        {
+            // Path to your .exe file
+            string filePath = config.sandRToolInstallation.InstallationPath;
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = filePath,
+                    Arguments = "/quiet",
+                    Verb = "runas", // This prompts for administrative access
+                    UseShellExecute = true
+                };
+
+                Process process = new Process
+                {
+                    StartInfo = startInfo
+                };
+
+                process.Start();
+                process.WaitForExit(); // Optional: Wait for the process to exit if needed
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
     } /**End of ModuleFunctions*/
