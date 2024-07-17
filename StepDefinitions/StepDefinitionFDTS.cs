@@ -303,7 +303,7 @@ namespace AppiumWinApp.StepDefinitions
 
         /** Opens FDTS system configuration tool
          *  Navigates to System settings - Communication device
-         *  Changes the Interface Channel side **/
+         *  Changes the Interface Channel side  **/
 
         [Given(@"Lauch socket Driver ""([^""]*)""and""([^""]*)""")]
         public void GivenLauchSocketDriverAnd(string device, string DeviceType)
