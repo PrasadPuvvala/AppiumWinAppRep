@@ -1202,7 +1202,7 @@ namespace AppiumWinApp.StepDefinitions
                         //#var elementTestStatus = testResultSetElement.Element("TestStatus");
                         //#if (elementTestStatus != null)
                        // #{
-                            #elementTestStatus.Value = testStatus;
+                           // #elementTestStatus.Value = testStatus;
                        // #}
                    // #}
               //  #}
