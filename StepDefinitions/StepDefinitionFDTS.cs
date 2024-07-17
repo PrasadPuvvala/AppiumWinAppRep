@@ -30,6 +30,8 @@ using System.Configuration;
 using System.Xml.Linq;
 using OpenQA.Selenium.Appium;
 using System.Collections.ObjectModel;
+using jdk;
+using System.Xml;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -64,7 +66,7 @@ namespace AppiumWinApp.StepDefinitions
         }
 
         /** This is to clear exisisting dump image files in the c drive **/
-        
+
         [Given(@"\[Cleaning up dumps before execution starts]")]
         public void GivenCleaningUpDumpsBeforeExecutionStarts()
         {
@@ -210,7 +212,7 @@ namespace AppiumWinApp.StepDefinitions
 
             session.FindElementByName("Services").Click();
             session.CloseApp();
-           // stepName.Log(Status.Pass, "Communication channel chanted to " +side);
+            // stepName.Log(Status.Pass, "Communication channel chanted to " +side);
 
         }
 
@@ -284,7 +286,7 @@ namespace AppiumWinApp.StepDefinitions
             }
             else
             {
-                
+
                 if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
 
@@ -346,7 +348,7 @@ namespace AppiumWinApp.StepDefinitions
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            config = (appconfigsettings)_featureContext["config"];           
+            config = (appconfigsettings)_featureContext["config"];
 
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
@@ -417,7 +419,7 @@ namespace AppiumWinApp.StepDefinitions
                         session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(deviceSlNo);
                     }
 
-                   
+
                     do
                     {
                         try
@@ -455,7 +457,7 @@ namespace AppiumWinApp.StepDefinitions
                         }
 
                     } while (!session.FindElementByName("Disconnect").Displayed);
-                   
+
 
                     session = lib.waitForElement(session, "Model Name");
 
@@ -704,7 +706,7 @@ namespace AppiumWinApp.StepDefinitions
                         lib.clickOnAutomationName(session, "Assign Instruments");
 
                         // Initial wait before searching
-                        Thread.Sleep(5000); 
+                        Thread.Sleep(5000);
 
                         var SN = session.FindElementsByClassName("ListBoxItem");
 
@@ -734,7 +736,7 @@ namespace AppiumWinApp.StepDefinitions
 
                     if (!deviceFound)
 
-                    {                      
+                    {
 
                         DateTime startTime = DateTime.Now;
 
@@ -792,7 +794,7 @@ namespace AppiumWinApp.StepDefinitions
 
                                     Thread.Sleep(5000);
 
-                                   List = session.FindElementsByClassName("ListBoxItem");
+                                    List = session.FindElementsByClassName("ListBoxItem");
                                 }
 
                             }
@@ -815,7 +817,7 @@ namespace AppiumWinApp.StepDefinitions
                     }
 
                 }
-            
+
                 /** Select the Connection Flow's "Continue" button to continue. **/
 
                 lib.clickOnAutomationName(session, "Continue");
@@ -1008,212 +1010,319 @@ namespace AppiumWinApp.StepDefinitions
             lib.AzureFileCompare(session, test);
         }
 
-
-        [Given(@"\[Launch FDTS]")]
-        public void GivenLaunchFDTS()
-        {
-            Console.WriteLine("Given FDTS method");
-            Thread.Sleep(5000);
-        }
-
-        [When(@"\[Select Device]")]
-        public void WhenSelectDevice()
-        {
-            Console.WriteLine("When FDTS method");
-        }
-
-        [Then(@"\[Do Flashing]")]
-        public void ThenDoFlashing()
-        {
-            Console.WriteLine("Do FDTS method");
-        }
-
-        /* S&R */
-
         [Given(@"\[Launch SandRTool]")]
         public void GivenLaunchSandRTool()
         {
-            Console.WriteLine("Given FDTS method");
-            Thread.Sleep(5000);
+            ModuleFunctions.SandRenvironmentchange();
+            config = (appconfigsettings)_featureContext["config"];
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);         
         }
 
-        [When(@"\[Moving to Settings]")]
-        public void WhenMovingtoSettings()
+        [When(@"\[Navigate to settings tab and set the system role to ""([^""]*)""]")]
+        public void WhenNavigateToSettingsTabAndSetTheSystemRoleTo(string SystemRole)
         {
-            Console.WriteLine("When FDTS method");
+            session.SwitchTo().Window(session.WindowHandles.First());
+            session.FindElementByAccessibilityId("Button_4").FindElementByName("Settings").Click();
+            Thread.Sleep(2000);
+            session.FindElementByAccessibilityId("GroupBox_1").FindElementByAccessibilityId("ComboBox_2").Click();
+            Thread.Sleep(2000);
+            session.FindElementByClassName("Popup").FindElementByName(SystemRole).Click();
+            Thread.Sleep(2000);
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            stepName.Log(Status.Pass, "Verify the visibility of set sales order connection string option", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
         }
 
-        [Then(@"\[Finish Capture]")]
-        public void ThenFinishCapture()
+        [Then(@"\[Click on set sales order connection string and input the invalid base string ""([^""]*)""]")]
+        public void ThenClickOnSetSalesOrderConnectionStringAndInputTheInvalidBaseString(string value)
         {
-            Console.WriteLine("Do FDTS method");
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;          
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            session.FindElementByName("Set sales order connection string").Click();
+            Thread.Sleep(2000);
+            session.FindElementByAccessibilityId("controls:MetroWindow_2").FindElementByAccessibilityId("ConnectionStringTextBox").SendKeys(value);
+            Thread.Sleep(2000);
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            stepName.Log(Status.Pass, "Textbox to Enter the connection string value", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            session.FindElementByAccessibilityId("SaveButton").Click();
+            Thread.Sleep(2000);
         }
 
-        [Given(@"\[HCP Launches WorkFlow And Flash Device]")]
-        public void GivenHCPLaunchesWorkFlowAndFlashDevice()
+        [Then(@"\[Verify the error message on the connection string pop-up window ""([^""]*)""]")]
+        public void ThenVerifyTheErrorMessageOnTheConnectionStringPop_UpWindow(string expectedmessage)
         {
-            Console.WriteLine("Second Scenario");
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            var actualmessage = session.FindElementByAccessibilityId("TextBlock_1").Text;
+            Thread.Sleep(2000);
+            stepName.Log(Status.Pass, $"Verify the error message {actualmessage}", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            Assert.That(actualmessage, Is.EqualTo(expectedmessage));
         }
 
+        [Then(@"\[Verify that a ""([^""]*)"" string in the user config file in the local machine]")]
+        public void ThenVerifyThatAStringInTheUserConfigFileInTheLocalMachine(string value)
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            config = (appconfigsettings)_featureContext["config"];
+            try
+            {              
+                XmlDocument doc = new XmlDocument();
+                doc.Load(config.connectionStringPath.PathtoValue);
+                string settingName = "SalesOrderConnection";
+                XmlNode node = doc.SelectSingleNode($"//setting[@name='{settingName}']/value");
+                Assert.That(value, Is.EqualTo(node.InnerText));
+                stepName.Log(Status.Pass, $"valid base64 connection string value is updated in the user.config file : {node.InnerText}");
+            }
+            catch
+            {
+                stepName.Log(Status.Pass, $"Invalid base64 connection string is not updated in the user.config file : {value}");
+            }       
+        }
 
-        //[AfterScenario]
+        [Then(@"\[Click on set sales order connection string and input the valid base string ""([^""]*)""]")]
+        public void ThenClickOnSetSalesOrderConnectionStringAndInputTheValidBaseString(string ValidBase64Value)
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            session.FindElementByName("Set sales order connection string").Click();
+            Thread.Sleep(2000);
+            session.FindElementByAccessibilityId("controls:MetroWindow_2").FindElementByAccessibilityId("ConnectionStringTextBox").SendKeys(ValidBase64Value);
+            Thread.Sleep(2000);
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            stepName.Log(Status.Pass, "Textbox to Enter the connection string value", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            session.FindElementByAccessibilityId("SaveButton").Click();
+            Thread.Sleep(2000);
+            var btncls = session.FindElementByAccessibilityId("PART_Close");
+            btncls.Click();
+        }
+
+        [Then(@"\[Verify the visibility of connection string]")]
+        public void ThenVerifyTheVisibilityOfConnectionString()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            stepName.Log(Status.Pass, "Set sales order connection string is displayed", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+        }
+
+        [Then(@"\[Verify the visibility of connection string other than VA system role]")]
+        public void ThenVerifyTheVisibilityOfConnectionStringOtherThanVASystemRole()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            stepName.Log(Status.Pass, "Set sales order connection string is not displayed for other than VA system role", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+        }
+
+        [When(@"\[Uninstall the current S&R Tool]")]
+        public void WhenUninstallTheCurrentSRTool()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ModuleFunctions.UninstallSandRTool();
+            stepName.Log(Status.Pass, "S&R Tool Uninstalled sucessfully");
+        }
+
+        [When(@"\[Install the latest S&R Tool]")]
+        public void WhenInstallTheLatestSRTool()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ModuleFunctions.InstallSandRTool();
+            stepName.Log(Status.Pass, "S&R Tool Installed sucessfully");
+            ModuleFunctions.SandRenvironmentchange();
+        }
+
+        [Then(@"\[Validate the previous SystemRole ""([^""]*)"" and valid base connection string ""([^""]*)"" and ""([^""]*)"" is preserved to latest S&R]")]
+        public void ThenValidateThePreviousSystemRoleAndValidBaseConnectionStringAndIsPreservedToLatestSR(string systemrole, string validbasevalue, string connectionStringButton)
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            session.SwitchTo().Window(session.WindowHandles.First());
+            session.FindElementByAccessibilityId("Button_4").FindElementByName("Settings").Click();
+            Thread.Sleep(2000);
+            screenshot = ModuleFunctions.CaptureScreenshot(session);
+            try
+            {
+                var actualsystemrole = session.FindElementByAccessibilityId("GroupBox_1").FindElementByAccessibilityId("ComboBox_2").Text;
+                Assert.That(systemrole, Is.EqualTo(actualsystemrole));
+                stepName.Log(Status.Pass, "Previously selected VA system role is preserved to latest S&R Tool", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            }
+            catch (Exception ex)
+            {
+                stepName.Log(Status.Fail, "Previously selected VA system role is not preserved to latest S&R Tool", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            }
+            try
+            {
+                var actualConnectionStringButton = session.FindElementByAccessibilityId("GroupBox_1").FindElementByAccessibilityId("Button_3").FindElementByClassName("TextBlock").Text;
+                Assert.That(connectionStringButton, Is.EqualTo(actualConnectionStringButton));
+                stepName.Log(Status.Pass, "Sales order connection string button with value is preserved to latest S&R Tool", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            }
+            catch(Exception ex)
+            {
+                stepName.Log(Status.Fail, "Sales order connection string button with value is not preserved to latest S&R Tool", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+            }                
+        }
+
+        [AfterScenario]
 
         //[Then(@"\[done]")]
-        //public void ThenDone()
-        //{
+        public void ThenDone()
+        {
 
-        //Process winApp = new Process();
-        //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
-        //winApp.Kill();
+            //Process winApp = new Process();
+            //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+            //winApp.Kill();
 
-        //Console.WriteLine("This is Done method");
-        //var scenarioContext = ScenarioContext.Current;
-        //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
-        //var testcaseId = scenarioContext.Get<string>("TestCaseID");
+            Console.WriteLine("This is Done method");
+            var scenarioContext = ScenarioContext.Current;
+            var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+            var testcaseId = scenarioContext.Get<string>("TestCaseID");
 
-        //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
-
-
-        //foreach (var xmlFile in xmlFiles)
-        //{
-        //    XDocument xmlDoc = XDocument.Load(xmlFile);
+            var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
 
 
-        //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
-        //    {
-        //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
-
-        //        if (elementTestCaseID == testcaseId)
-        //        {
-
-        //            var elementTestStatus = testResultSetElement.Element("TestStatus");
-        //            if (elementTestStatus != null)
-        //            {
-        //                elementTestStatus.Value = testStatus;
-        //            }
-        //        }
-        //    }
-
-        //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
-        //}
+            foreach (var xmlFile in xmlFiles)
+            {
+                XDocument xmlDoc = XDocument.Load(xmlFile);
 
 
+                foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
+                {
+                    var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
 
-        //{
+                    if (elementTestCaseID == testcaseId)
+                    {
 
-        //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+                        var elementTestStatus = testResultSetElement.Element("TestStatus");
+                        if (elementTestStatus != null)
+                        {
+                            elementTestStatus.Value = testStatus;
+                        }
+                    }
+                }
 
-        //    string xmlFolderPath = Path.Combine(projectPath, "XML");
-
-        //    string keyToUpdate = "WorkFlowsXMLsPath";
-        //    string valueToUpdate = xmlFolderPath;
-
-        //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
-
-        //    foreach (var configFile in configFiles)
-        //    {
-        //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
-        //    }
-        //}
-
-        //static void UpdateAppSettingValue(string configFilePath, string key, string value)
-        //{
-        //    try
-        //    {
-        //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
-        //        {
-        //            ExeConfigFilename = configFilePath
-        //        };
-        //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
-
-        //        if (config.AppSettings.Settings[key] != null)
-        //        {
-        //            config.AppSettings.Settings[key].Value = value;
-        //            config.Save(ConfigurationSaveMode.Modified);
-        //            ConfigurationManager.RefreshSection("appSettings");
-
-        //            string updatedValue = ConfigurationManager.AppSettings[key];
-        //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
-        //    }
-        //}
-
-        //try
-
-        //{
-        //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
-
-        //    if (System.IO.File.Exists(agentPath))
-        //    {
-        //        ProcessStartInfo startInfo = new ProcessStartInfo
-        //        {
-        //            FileName = agentPath,
-        //            UseShellExecute = false,
-        //            RedirectStandardOutput = true,
-        //            RedirectStandardError = true,
-        //            CreateNoWindow = true
-        //        };
-
-        //        Process process = new Process
-        //        {
-        //            StartInfo = startInfo
-        //        };
-
-        //        process.Start();
-        //        process.WaitForExit(); // Optionally wait for the process to complete
-
-        //        string standardOutput = process.StandardOutput.ReadToEnd();
-        //        string standardError = process.StandardError.ReadToEnd();
-
-        //        Console.WriteLine("Standard Output:");
-        //        Console.WriteLine(standardOutput);
-
-        //        Console.WriteLine("Standard Error:");
-        //        Console.WriteLine(standardError);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("TFS agent executable not found at the specified path.");
-        //    }
-        //}
-
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine("An error occurred: " + ex.Message);
-        //}
-
-        //}
-        //    processKill("SmartFit");
-        //    processKill("SmartFitSA");
-        //    processKill("Camelot.WorkflowRuntime");
-        //    processKill("Camelot.SystemInfobar");
-        //    processKill("Lucan.App.UI");
-        //    processKill("StorageLayoutViewer");
+                xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
+            }
 
 
-        //}
+
+            {
+
+                string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                string xmlFolderPath = Path.Combine(projectPath, "XML");
+
+                string keyToUpdate = "WorkFlowsXMLsPath";
+                string valueToUpdate = xmlFolderPath;
+
+                string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
+
+                foreach (var configFile in configFiles)
+                {
+                    UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
+                }
+            }
+
+            static void UpdateAppSettingValue(string configFilePath, string key, string value)
+            {
+                try
+                {
+                    ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+                    {
+                        ExeConfigFilename = configFilePath
+                    };
+                    Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+
+                    if (config.AppSettings.Settings[key] != null)
+                    {
+                        config.AppSettings.Settings[key].Value = value;
+                        config.Save(ConfigurationSaveMode.Modified);
+                        ConfigurationManager.RefreshSection("appSettings");
+
+                        string updatedValue = ConfigurationManager.AppSettings[key];
+                        Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Key {key} not found in {configFilePath}.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+                }
+            }
+
+            try
+
+            {
+                string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
+
+                if (System.IO.File.Exists(agentPath))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = agentPath,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
+                    };
+
+                    Process process = new Process
+                    {
+                        StartInfo = startInfo
+                    };
+
+                    process.Start();
+                   // process.WaitForExit(); // Optionally wait for the process to complete
+
+                    //string standardOutput = process.StandardOutput.ReadToEnd();
+                    //string standardError = process.StandardError.ReadToEnd();
+
+                }
+                else
+                {
+                    Console.WriteLine("TFS agent executable not found at the specified path.");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+
+            //}
+            //    processKill("SmartFit");
+            //    processKill("SmartFitSA");
+            //    processKill("Camelot.WorkflowRuntime");
+            //    processKill("Camelot.SystemInfobar");
+            //    processKill("Lucan.App.UI");
+            //    processKill("StorageLayoutViewer");
 
 
-        //public void processKill(string name)
-        //{
-        //    Process[] processCollection = Process.GetProcesses();
-        //    foreach (Process proc in processCollection)
-        //    {
-        //        Console.WriteLine(proc);
-        //        if (proc.ProcessName == name)
-        //        {
-        //            proc.Kill();
-        //        }
-        //    }
-        //}
+            //}
+
+
+            //public void processKill(string name)
+            //{
+            //    Process[] processCollection = Process.GetProcesses();
+            //    foreach (Process proc in processCollection)
+            //    {
+            //        Console.WriteLine(proc);
+            //        if (proc.ProcessName == name)
+            //        {
+            //            proc.Kill();
+            //        }
+            //    }
+            //}
+        }
     }
 }
 

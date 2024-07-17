@@ -40,9 +40,9 @@ namespace AppiumWinApp
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
 
-        string testPlanId = "1633245";
-        string testSuiteId = "1633281";
-        string testConfig = "GOP:Dooku2_BTE_RHI(C70)";
+        string testPlanId;
+        string testSuiteId;
+        string testConfig;
 
         private List<string> xmlFilePaths = new List<string>
         {
@@ -1758,54 +1758,166 @@ namespace AppiumWinApp
 
 
 
-
-
-        public void PassingXML(ExtentTest test)
-
+        public void PassingXML(ExtentTest test, string scenarioName)
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            foreach (string filePath in xmlFilePaths)
+            string excelFileName = "TFSTestPlanUpdation.xlsx";
+            string excelFilePath = Path.Combine(Directory.GetCurrentDirectory(), excelFileName);
 
+            string testPlanId = "";
+            string testSuiteId = "";
+            string testConfig = "";
+            string testCaseId = "";
+
+            // Load the Excel file using EPPlus
+            FileInfo fileInfo = new FileInfo(excelFilePath);
+            using (ExcelPackage package = new ExcelPackage(fileInfo))
             {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Assuming the data is in the first worksheet
 
-                // Load the XML document
-
-                XmlDocument doc = new XmlDocument();
-                doc.Load(filePath);                                                                                                                                                                                                       // Replace with the path to your XML file
-
-                // Select the nodes you want to update
-
-                XmlNodeList nodes = doc.SelectNodes("//TFSTestResultsSet");
-                foreach (XmlNode node in nodes)
-
+                // Find the row for the specified scenario name
+                int rowNumber = FindRowNumberForScenario(worksheet, scenarioName);
+                if (rowNumber <= 0)
                 {
-                    // Update TestPlanID, TestSuiteID, and TestConfiguration
-
-                    XmlNode testPlanIdNode = node.SelectSingleNode("TestPlanID");
-                    XmlNode testSuiteIdNode = node.SelectSingleNode("TestSuitID");
-                    XmlNode testConfigNode = node.SelectSingleNode("TestConfiguration");
-
-                    if (testPlanIdNode != null)
-                    {
-                        testPlanIdNode.InnerText = testPlanId; // Replace with the new TestPlanID value
-                    }
-
-                    if (testSuiteIdNode != null)
-                    {
-                        testSuiteIdNode.InnerText = testSuiteId; // Replace with the new TestSuiteID value
-                    }
-
-                    if (testConfigNode != null)
-
-                    {
-                        testConfigNode.InnerText = testConfig; // Replace with the new TestConfiguration value
-                    }
+                    test.Fail($"Scenario '{scenarioName}' not found in the Excel sheet.");
+                    return;
                 }
 
-                doc.Save(filePath);
+                // Read the values from the Excel file
+                testPlanId = worksheet.Cells[$"A{rowNumber}"].Text; // Assuming testPlanId is in column A
+                testSuiteId = worksheet.Cells[$"B{rowNumber}"].Text; // Assuming testSuiteId is in column B
+                testConfig = worksheet.Cells[$"C{rowNumber}"].Text; // Assuming testConfig is in column C
+                string testScenario = worksheet.Cells[$"D{rowNumber}"].Text; // Assuming testScenario is in column D
 
-            }// Save the updated XML document
+                // Extract the test case ID from the test scenario
+                testCaseId = ExtractTestCaseId(testScenario);
+            }
+
+            bool fileUpdated = false;
+
+            foreach (string filePath in xmlFilePaths)
+            {
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+
+                if (fileNameWithoutExtension.Equals(testCaseId, StringComparison.OrdinalIgnoreCase))
+                {
+                    // Load the XML document
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(filePath);
+
+                    // Select the nodes you want to update
+                    XmlNodeList nodes = doc.SelectNodes("//TFSTestResultsSet");
+
+                    foreach (XmlNode node in nodes)
+                    {
+                        // Update TestPlanID, TestSuiteID, and TestConfiguration
+                        XmlNode testPlanIdNode = node.SelectSingleNode("TestPlanID");
+                        XmlNode testSuiteIdNode = node.SelectSingleNode("TestSuitID");
+                        XmlNode testConfigNode = node.SelectSingleNode("TestConfiguration");
+
+                        if (testPlanIdNode != null)
+                        {
+                            testPlanIdNode.InnerText = testPlanId;
+                        }
+
+                        if (testSuiteIdNode != null)
+                        {
+                            testSuiteIdNode.InnerText = testSuiteId;
+                        }
+
+                        if (testConfigNode != null)
+                        {
+                            testConfigNode.InnerText = testConfig;
+                        }
+                    }
+
+                    // Save the updated XML document
+                    doc.Save(filePath);
+                    fileUpdated = true;
+                    break; // Exit the loop as we have found and updated the corresponding XML file
+                }
+            }
+
+            if (!fileUpdated)
+            {
+                test.Fail($"No XML file found matching the test case ID '{testCaseId}' from the Excel file.");
+            }
         }
+
+        // Extracts the test case ID from the test scenario string
+        private string ExtractTestCaseId(string testScenario)
+        {
+            // Assuming the format is always like "XXTest Case ID NNNNNNN: Description"
+            int startIndex = testScenario.IndexOf("Test Case ID") + "Test Case ID".Length;
+            int endIndex = testScenario.IndexOf(":", startIndex);
+            if (startIndex > 0 && endIndex > startIndex)
+            {
+                return testScenario.Substring(startIndex, endIndex - startIndex).Trim();
+            }
+            return "";
+        }
+
+        // Example of FindRowNumberForScenario method
+        private int FindRowNumberForScenario(ExcelWorksheet worksheet, string scenarioName)
+        {
+            int rowCount = worksheet.Dimension.End.Row;
+            for (int row = 2; row <= rowCount; row++) // Start from row 2
+            {
+                if (worksheet.Cells[$"D{row}"].Text.Contains(scenarioName, StringComparison.OrdinalIgnoreCase)) // Assuming scenario names are in column D
+                {
+                    return row;
+                }
+            }
+            return -1; // Return -1 if scenarioName is not found
+        }
+
+        //public void PassingXML(ExtentTest test)
+
+        //{
+
+        //    foreach (string filePath in xmlFilePaths)
+
+        //    {
+
+        //        // Load the XML document
+
+        //        XmlDocument doc = new XmlDocument();
+        //        doc.Load(filePath);                                                                                                                                                                                                       // Replace with the path to your XML file
+
+        //        // Select the nodes you want to update
+
+        //        XmlNodeList nodes = doc.SelectNodes("//TFSTestResultsSet");
+        //        foreach (XmlNode node in nodes)
+
+        //        {
+        //            // Update TestPlanID, TestSuiteID, and TestConfiguration
+
+        //            XmlNode testPlanIdNode = node.SelectSingleNode("TestPlanID");
+        //            XmlNode testSuiteIdNode = node.SelectSingleNode("TestSuitID");
+        //            XmlNode testConfigNode = node.SelectSingleNode("TestConfiguration");
+
+        //            if (testPlanIdNode != null)
+        //            {
+        //                testPlanIdNode.InnerText = testPlanId; // Replace with the new TestPlanID value
+        //            }
+
+        //            if (testSuiteIdNode != null)
+        //            {
+        //                testSuiteIdNode.InnerText = testSuiteId; // Replace with the new TestSuiteID value
+        //            }
+
+        //            if (testConfigNode != null)
+
+        //            {
+        //                testConfigNode.InnerText = testConfig; // Replace with the new TestConfiguration value
+        //            }
+        //        }
+
+        //        doc.Save(filePath);
+
+        //    }// Save the updated XML document
+        //}
 
         public void Azurefile(WindowsDriver<WindowsElement> session)
         {
