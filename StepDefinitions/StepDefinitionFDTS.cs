@@ -1169,134 +1169,134 @@ namespace AppiumWinApp.StepDefinitions
             }                
         }
 
-        [AfterScenario]
+        #[AfterScenario]
 
         //[Then(@"\[done]")]
-        public void ThenDone()
-        {
+        #public void ThenDone()
+        #{
 
             //Process winApp = new Process();
             //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
             //winApp.Kill();
 
-            Console.WriteLine("This is Done method");
-            var scenarioContext = ScenarioContext.Current;
-            var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
-            var testcaseId = scenarioContext.Get<string>("TestCaseID");
+            #Console.WriteLine("This is Done method");
+            #var scenarioContext = ScenarioContext.Current;
+            #var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+            #var testcaseId = scenarioContext.Get<string>("TestCaseID");
 
-            var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
-
-
-            foreach (var xmlFile in xmlFiles)
-            {
-                XDocument xmlDoc = XDocument.Load(xmlFile);
+            #var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
 
 
-                foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
-                {
-                    var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
-
-                    if (elementTestCaseID == testcaseId)
-                    {
-
-                        var elementTestStatus = testResultSetElement.Element("TestStatus");
-                        if (elementTestStatus != null)
-                        {
-                            elementTestStatus.Value = testStatus;
-                        }
-                    }
-                }
-
-                xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
-            }
+            #foreach (var xmlFile in xmlFiles)
+            #{
+                #XDocument xmlDoc = XDocument.Load(xmlFile);
 
 
+                #foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
+                #{
+                    #var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
 
-            {
+                    #if (elementTestCaseID == testcaseId)
+                    #{
 
-                string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+                        #var elementTestStatus = testResultSetElement.Element("TestStatus");
+                        #if (elementTestStatus != null)
+                        #{
+                            #elementTestStatus.Value = testStatus;
+                        #}
+                    #}
+                #}
 
-                string xmlFolderPath = Path.Combine(projectPath, "XML");
+                #xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
+            #}
 
-                string keyToUpdate = "WorkFlowsXMLsPath";
-                string valueToUpdate = xmlFolderPath;
 
-                string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
 
-                foreach (var configFile in configFiles)
-                {
-                    UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
-                }
-            }
+            #{
 
-            static void UpdateAppSettingValue(string configFilePath, string key, string value)
-            {
-                try
-                {
-                    ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
-                    {
-                        ExeConfigFilename = configFilePath
-                    };
-                    Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+                #string projectPath = AppDomain.CurrentDomain.BaseDirectory;
 
-                    if (config.AppSettings.Settings[key] != null)
-                    {
-                        config.AppSettings.Settings[key].Value = value;
-                        config.Save(ConfigurationSaveMode.Modified);
-                        ConfigurationManager.RefreshSection("appSettings");
+                #string xmlFolderPath = Path.Combine(projectPath, "XML");
 
-                        string updatedValue = ConfigurationManager.AppSettings[key];
-                        Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Key {key} not found in {configFilePath}.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
-                }
-            }
+                #string keyToUpdate = "WorkFlowsXMLsPath";
+                #string valueToUpdate = xmlFolderPath;
 
-            try
+                #string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
 
-            {
-                string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
+                #foreach (var configFile in configFiles)
+                #{
+                    #UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
+                #}
+            #}
 
-                if (System.IO.File.Exists(agentPath))
-                {
-                    ProcessStartInfo startInfo = new ProcessStartInfo
-                    {
-                        FileName = agentPath,
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        CreateNoWindow = true
-                    };
+            #static void UpdateAppSettingValue(string configFilePath, string key, string value)
+            #{
+                #try
+                #{
+                    #ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+                    #{
+                        #ExeConfigFilename = configFilePath
+                    #};
+                    #Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
 
-                    Process process = new Process
-                    {
-                        StartInfo = startInfo
-                    };
+                    #if (config.AppSettings.Settings[key] != null)
+                    #{
+                        #config.AppSettings.Settings[key].Value = value;
+                        #config.Save(ConfigurationSaveMode.Modified);
+                        #ConfigurationManager.RefreshSection("appSettings");
 
-                    process.Start();
+                        #string updatedValue = ConfigurationManager.AppSettings[key];
+                        #Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+                    #}
+                    #else
+                    #{
+                        #Console.WriteLine($"Key {key} not found in {configFilePath}.");
+                    #}
+                #}
+                #catch (Exception ex)
+                #{
+                    #Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+                #}
+            #}
+
+            #try
+
+            #{
+                #string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
+
+                #if (System.IO.File.Exists(agentPath))
+                #{
+                    #ProcessStartInfo startInfo = new ProcessStartInfo
+                    #{
+                        #FileName = agentPath,
+                        #UseShellExecute = false,
+                        #RedirectStandardOutput = true,
+                        #RedirectStandardError = true,
+                        #CreateNoWindow = true
+                    #};
+
+                    #Process process = new Process
+                    #{
+                        #StartInfo = startInfo
+                    #};
+
+                    #process.Start();
                    // process.WaitForExit(); // Optionally wait for the process to complete
 
                     //string standardOutput = process.StandardOutput.ReadToEnd();
                     //string standardError = process.StandardError.ReadToEnd();
 
-                }
-                else
-                {
-                    Console.WriteLine("TFS agent executable not found at the specified path.");
-                }
-            }
+                #}
+                #else
+                #{
+                    #Console.WriteLine("TFS agent executable not found at the specified path.");
+                #}
+            #}
 
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred: " + ex.Message);
-            }
+            #catch (Exception ex)
+            #{
+                #Console.WriteLine("An error occurred: " + ex.Message);
+            #}
 
             //}
             //    processKill("SmartFit");
@@ -1322,7 +1322,7 @@ namespace AppiumWinApp.StepDefinitions
             //        }
             //    }
             //}
-        }
+        #}
     }
 }
 
