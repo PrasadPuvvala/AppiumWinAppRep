@@ -22,12 +22,16 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
     <PackageReference Include="Azure.Storage.Common" Version="12.18.0" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="3.0.5" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.3" />
     <PackageReference Include="Microsoft.Azure.Storage.Common" Version="11.2.3" />
     <PackageReference Include="Microsoft.Azure.Storage.File" Version="11.2.3" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.5.0" />
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="19.225.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="19.225.1" />
+    <PackageReference Include="ReportGenerator" Version="5.3.8" />
     <PackageReference Include="SimpleMessageBoxes" Version="1.0.0" />
     <PackageReference Include="chilkat-x64" Version="9.5.0.91" />
     <PackageReference Include="DotNetSeleniumExtras.PageObjects" Version="3.11.0" />

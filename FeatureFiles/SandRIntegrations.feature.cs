@@ -74,18 +74,18 @@ namespace AppiumWinApp.FeatureFiles
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("01TestCaseID 1703234 Verify that a connection string with a format other than Bas" +
-            "e64 is not acceptable.")]
+        [NUnit.Framework.DescriptionAttribute("01Test Case ID 1703234: S&R [VA] -  Verify that a connection string with a format" +
+            " other than Base64 is not acceptable.")]
         [NUnit.Framework.TestCaseAttribute("VA", "rtikertgey", "Connection string must be Base64 encoded", null)]
-        public void _01TestCaseID1703234VerifyThatAConnectionStringWithAFormatOtherThanBase64IsNotAcceptable_(string systemRole, string invalidBase64Value, string message, string[] exampleTags)
+        public void _01TestCaseID1703234SRVA_VerifyThatAConnectionStringWithAFormatOtherThanBase64IsNotAcceptable_(string systemRole, string invalidBase64Value, string message, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("SystemRole", systemRole);
             argumentsOfScenario.Add("InvalidBase64Value", invalidBase64Value);
             argumentsOfScenario.Add("Message", message);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01TestCaseID 1703234 Verify that a connection string with a format other than Bas" +
-                    "e64 is not acceptable.", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01Test Case ID 1703234: S&R [VA] -  Verify that a connection string with a format" +
+                    " other than Base64 is not acceptable.", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -117,17 +117,17 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("02TestCaseID 1703237 Verify that a valid string in the user config file in the lo" +
-            "cal machine")]
+        [NUnit.Framework.DescriptionAttribute("02Test Case ID 1703237: S&R [VA] -  Verify that a valid connection string is save" +
+            "d in the user config file in the local machine")]
         [NUnit.Framework.TestCaseAttribute("VA", "lkjhgfdunukg", null)]
-        public void _02TestCaseID1703237VerifyThatAValidStringInTheUserConfigFileInTheLocalMachine(string systemRole, string validBase64Value, string[] exampleTags)
+        public void _02TestCaseID1703237SRVA_VerifyThatAValidConnectionStringIsSavedInTheUserConfigFileInTheLocalMachine(string systemRole, string validBase64Value, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("SystemRole", systemRole);
             argumentsOfScenario.Add("ValidBase64Value", validBase64Value);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02TestCaseID 1703237 Verify that a valid string in the user config file in the lo" +
-                    "cal machine", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02Test Case ID 1703237: S&R [VA] -  Verify that a valid connection string is save" +
+                    "d in the user config file in the local machine", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 20
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -156,18 +156,18 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("03TestCaseID 1703238 Verify that a connection string is overridden when a valid c" +
-            "onnection string in input")]
+        [NUnit.Framework.DescriptionAttribute("03Test Case ID 1703238: S&R [VA] -  Verify that a connection string is overridden" +
+            " when a new valid connection string is input.")]
         [NUnit.Framework.TestCaseAttribute("VA", "lokjhtrevbiarfjh", "mfsvywnf", null)]
-        public void _03TestCaseID1703238VerifyThatAConnectionStringIsOverriddenWhenAValidConnectionStringInInput(string systemRole, string validBase64Value1, string validBase64Value2, string[] exampleTags)
+        public void _03TestCaseID1703238SRVA_VerifyThatAConnectionStringIsOverriddenWhenANewValidConnectionStringIsInput_(string systemRole, string validBase64Value1, string validBase64Value2, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("SystemRole", systemRole);
             argumentsOfScenario.Add("ValidBase64Value1", validBase64Value1);
             argumentsOfScenario.Add("ValidBase64Value2", validBase64Value2);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03TestCaseID 1703238 Verify that a connection string is overridden when a valid c" +
-                    "onnection string in input", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03Test Case ID 1703238: S&R [VA] -  Verify that a connection string is overridden" +
+                    " when a new valid connection string is input.", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 33
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -203,17 +203,17 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("04TestCaseID 1703240 Verify that Set Sales Order Connection String feature is ava" +
-            "ilable only for VA role")]
+        [NUnit.Framework.DescriptionAttribute("04Test Case ID 1703240: S&R [VA] -  Verify that Set Sales Order Connection String" +
+            " feature is available only for VA role")]
         [NUnit.Framework.TestCaseAttribute("VA", "Repairs", null)]
-        public void _04TestCaseID1703240VerifyThatSetSalesOrderConnectionStringFeatureIsAvailableOnlyForVARole(string systemRole1, string systemRole2, string[] exampleTags)
+        public void _04TestCaseID1703240SRVA_VerifyThatSetSalesOrderConnectionStringFeatureIsAvailableOnlyForVARole(string systemRole1, string systemRole2, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("SystemRole1", systemRole1);
             argumentsOfScenario.Add("SystemRole2", systemRole2);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04TestCaseID 1703240 Verify that Set Sales Order Connection String feature is ava" +
-                    "ilable only for VA role", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04Test Case ID 1703240: S&R [VA] -  Verify that Set Sales Order Connection String" +
+                    " feature is available only for VA role", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 47
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -244,16 +244,18 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("05TestCaseID 1696030 Inputting, Validating, and Retaining Connection String")]
+        [NUnit.Framework.DescriptionAttribute("05Test Case ID 1696030: S&R [VA] - Inputting, Validating, and Retaining Connectio" +
+            "n String.")]
         [NUnit.Framework.TestCaseAttribute("VA", "malounbeopwnksymclau", "Set sales order connection string", null)]
-        public void _05TestCaseID1696030InputtingValidatingAndRetainingConnectionString(string systemRole, string validBase64Value, string connectionStringButton, string[] exampleTags)
+        public void _05TestCaseID1696030SRVA_InputtingValidatingAndRetainingConnectionString_(string systemRole, string validBase64Value, string connectionStringButton, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("SystemRole", systemRole);
             argumentsOfScenario.Add("ValidBase64Value", validBase64Value);
             argumentsOfScenario.Add("ConnectionStringButton", connectionStringButton);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05TestCaseID 1696030 Inputting, Validating, and Retaining Connection String", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05Test Case ID 1696030: S&R [VA] - Inputting, Validating, and Retaining Connectio" +
+                    "n String.", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 60
 this.ScenarioInitialize(scenarioInfo);
 #line hidden

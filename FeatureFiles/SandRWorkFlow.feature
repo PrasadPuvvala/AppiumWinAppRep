@@ -1,13 +1,16 @@
 ﻿Feature: SandRWorkFlow
 
-A short summary of the feature
+A short Summary of the feature
+
+Background: 
+    Given Importing Test Cases to Excel from TFS TestPlanID "1703202" equivalent to Testcase Configuration "GOP: Dooku3_RIE_RHI(Rhodium)" to Create XML.  
 
 @tag1
 
 Scenario Outline: 01Test Case ID 1105696: Verify that fitting data is properly restored during restoration on new device (RTS)
 
 	Given [Cleaning up dumps before execution starts]
-	Given Lauch socket Driver "<DeviceId>"and"<Devicetype>"
+	Given Launch socket Driver "<DeviceId>"and"<Devicetype>"
 	#Given [Change channel side in FDTS<DeviceLeft>] 
 	#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>" 
 	##Given [Change channel side in FDTS<DeviceRight>]   #Added for D2 Family
@@ -15,7 +18,7 @@ Scenario Outline: 01Test Case ID 1105696: Verify that fitting data is properly r
 	When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Get the dump of connected device by storage layout "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
 	When [Cleaning up Capture and Restore Reports Before Launch SandR]
-	When [Change communication channel in S and R<DeviceLeft>]
+	#When [Change communication channel in S and R<DeviceLeft>]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"and "<DeviceLeft>"]
 	#When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
@@ -58,16 +61,18 @@ Examples:
 
 	 #| RE962-DRW   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1900812195 | NoDev    | 1900812197       | Yes    | Cdevice  | Cdevice   |  Wired |
 #	 | RE962-DRWT   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2000803066 | NoDev    | 2000803069       | Yes   | Cdevice  | Cdevice   |  Wired |
-#	 | LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1700800900 | NoDev    | 2000800436       | Yes   | Cdevice  | Cdevice   |  Wired |
+	 #| LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1600805063 | NoDev    | 1700803025       | Yes   | Cdevice  | Cdevice   |  Wired |
 	  #| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1600805063 | NoDev    | 1600807163       | Yes     | Cdevice  |  Cdevice  |  Wired |
 	 #| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2066070058 | NoDev    | 2026793947       | Yes     | Cdevice  | Cdevice   | D1rechargeableWired|
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Cdevice  | Cdevice   |Non-Rechargeable |
 	 #| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     | 2000816933  | Cdevice   |Rechargeable |
-	 #| NX977-DWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2300806615 | NoDev    | 2300806645     | Yes     | 2000816933  | Cdevice |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2300803315 | NoDev    | 2300803297     | Yes     | 2000816933  | Cdevice | Rechargeable |
+	 #| NX977-DWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2300809945 | NoDev    | 2300809944     | Yes     | 2000816933  | Cdevice |Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | 2000816933  | Cdevice | Rechargeable |
 	 #| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     | 2000816933  | Cdevice   |Rechargeable |
 	 #| RE977-DWT   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2149002375 | NoDev    | 2026723065       | Yes    | Cdevice  | Cdevice   |  Wired |
-	| NX9ITC-DW-HP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
+	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
+	#| NX961-DRW | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400800489 | NoDev    | 2400800488     | Yes     | 2000816933  | Cdevice |Non-Rechargeable |
+	#| CX160S-DRWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400801281 | NoDev    | 2400801280     | Yes     | 2000816933  | Cdevice |Rechargeable |
 
 
 @tag2
@@ -76,7 +81,7 @@ Scenario Outline: 02Test Case ID 1537268: Verify that battery ADL data is restor
 	#Given Lauch socket Driver "<DeviceId>"and"<Devicetype>"
 	#Given [Change channel side in FDTS<DeviceLeft>]
 	#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>"
-	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon "<DeviceId>" and "<DeviceLeft>" and "<DeviceLeftSlNo>"and"<Devicetype>"]
 	When [Cleaning up Capture and Restore Reports Before Launch SandR]
 	When [Change communication channel in S and R<DeviceLeft>]
@@ -106,16 +111,16 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left        |    Wired         |
 	 #| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
 	#| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
 
 @tag3
 Scenario Outline: 03Test Case ID 1103972: Verify device information is shown correctly
 
-	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"and "<DeviceLeft>"]
 	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
@@ -131,13 +136,16 @@ Examples:
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	#| NX977-DWC | 2300806645    | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | Rechargeable |
+	#| NX977-DWC | 2300809944    | Yes     | Right       | Left       | Rechargeable     |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
 	# |XF9ITC-DWC-MP | 2476020406     | Yes     | Right       | Left       | Rechargeable     |
 	#| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
+	#| NX9ITC-DW-MP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
+	#| NX961-DRW | 2400800488    | Yes     | Right       | Left       | Non-Rechargeable     |
+	#| CX160S-DRWC | 2400801280    | Yes     | Right       | Left       | Rechargeable     |
+	#| RT977-DWC | 2100817051    | Yes     | Right       | Left       | Rechargeable     |
 
 
 
@@ -161,11 +169,11 @@ Examples:
 	 #| LT988-DW | 1600807163     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
 	#| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
 
 @tag5
 
@@ -192,11 +200,11 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
     #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	 #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
 	 #| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
 
 
 @tag6
@@ -216,11 +224,11 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
     #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable     |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	 #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
 	 #| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable |
 
 @tag7
 
@@ -228,8 +236,8 @@ Scenario Outline: 07Test Case ID 1104002: Verify HI capture/restoration report
 
 	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"] #Added for D2 Family
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"and "<DeviceLeft>"]
-	#When [Cleaning up Capture and Restore Reports Before Launch SandR]
-	#When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
+	When [Cleaning up Capture and Restore Reports Before Launch SandR]
+	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	When [Perform Capture"<DeviceId>"and"<Devicetype>"]
 	And [Open Capture and Restore report and log info in report]
@@ -259,11 +267,11 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left        |    Wired         |      capture          |      restore   |
 	 #| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	 capture          |      restore   |
     #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable |           capture           |      restore  |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | Rechargeable | capture              | restore              |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable | capture              | restore              |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |      capture           |      restore  |
 	 #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|      capture           |     restore   |
 	 #| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |      capture         |     restore    |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable | capture              | restore              |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | Non-Rechargeable | capture              | restore              |
 
 
 
@@ -299,11 +307,13 @@ Scenario Outline: 08Test Case ID 1105498: Verify that S&R Tool properly sets lis
 				#Given [Change channel side in FDTS<DeviceRight>]       #Added for D2 Family
 		        #Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceSlNo>" and "<FlashHI>" and "<DeviceRight>"and"<Devicetype>"  #Added for D2 Family
 	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	When [Change communication channel in S and R<DeviceLeft>]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"and "<DeviceLeft>"]
 				#When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	When [Perform Capture with listening test settings]
 	And [Open Capture and Restore report and log info in report]
+	Then [Close SandR tool]
 	Then [Launch FSW and check the added programs "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 
 
@@ -312,21 +322,24 @@ Examples:
 				 #| LT961-DRW-UP | 2000800436   | Yes     | Right       | Left       |1700800900|  Wired    |
 				 #| RE962-DRWT | 2000803069     | Yes     | Right       | Left       | 2000803066 |Wired    |
 				 #| RE962-DRW |    1900812197  | Yes     | Right       | Left       | 1900812195 |  Wired    |
+				 #| RE967-DWT |    2026637923  | Yes     | Right       | Left       | 1900812195 |  Wired    |
 				 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269 | Non-Rechargeable    |
 				  #| LT988-DW | 1600807163     | Yes     | Right       | Left       | 1600805063 |Wired    |
 				 #| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | Rechargeable |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | 2300803315 | Rechargeable |
-				  #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 |Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | Rechargeable |
+				  #| NX977-DWC | 2300809944     | Yes     | Right       | Left       | 2300809945 |Rechargeable |
 				  #| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144 | Rechargeable |
 				  #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |2066070058 |D1rechargeableWired|
 				  #| RE977-DWT |    2026723065  | Yes     | Right       | Left       | 2149002375 |  Wired    |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454 | Non-Rechargeable |
+	#| NX9ITC-DW-MP | 2476130453     | Yes     | Right       | Left       | 2476130454 | Non-Rechargeable |
+	 #| NX961-DRW | 2400800488     | Yes     | Right       | Left       | 2400800489 |Non-Rechargeable |
+	 #| CX160S-DRWC | 2400801280     | Yes     | Right       | Left       | 2400801281 |Rechargeable |
 
 
 
 @tag9
 
-Scenario Outline: 09Test case ID 1629628: Verify that firmware is upgraded if conditions apply
+Scenario Outline: 09Test Case ID 1629628: Verify that firmware is upgraded if conditions apply
 
 			#Given [Change channel side in FDTS<DeviceLeft>]
 			#Given Launch FDTS WorkFlow And Flash Device "<DeviceId>" and "<DeviceLeftSlNo>" and "<FlashHI>" and "<DeviceLeft>"and"<Devicetype>"
@@ -359,10 +372,10 @@ Examples:
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     |Rechargeable |
     #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645     | Yes     |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300803297     | Yes     | Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | Rechargeable |
 	#| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     |Rechargeable |
 	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2149002375 | NoDev    | 2026723065     | Yes     | Wired      |
-	| NX9ITC-DW-HP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     | Non-Rechargeable |
+	#| NX9ITC-DW-HP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     | Non-Rechargeable |
 
 @tag10
 
@@ -397,10 +410,10 @@ Examples:
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     |Rechargeable |
    #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645     | Yes     |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300803297     | Yes     | Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | Rechargeable |
 	#| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     |Rechargeable |
 	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2149002375 | NoDev    | 2026723065     | Yes     | Wired      |
-	| NX9ITC-DW-HP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     | Non-Rechargeable |
+	#| NX9ITC-DW-HP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     | Non-Rechargeable |
 
 
 @tag11
@@ -430,12 +443,12 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left       | 1600805063   | capture      |   Wired    |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934  | capture    |  Rechargeable |
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806646 | capture       |Rechargeable |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | 2300803315 | capture       | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | capture       | Rechargeable |
 	 #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | capture       |Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144  | capture | Rechargeable |
 	#| RE961-DRWC  | 2026793947     | Yes     | Right       | Left       | 2066070058  | capture | D1rechargeableWired |
 	#| RE977-DWT | 2026723065     | Yes     | Right       | Left       | 2149002375 | capture       | Wired      |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454 |  capture    |Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454 |  capture    |Non-Rechargeable |
 
 
 @tag12
@@ -467,11 +480,11 @@ Examples:
 	 #| LT988-DW | 1600807163     | Yes     | Right       | Left       | 1600805063   | service records |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934  | service records | Rechargeable |
      #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | service records  | Rechargeable  |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | 2300803315 | service records | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | service records | Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144  | service records | Rechargeable |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left     | 2066070058    |service records | D1rechargeableWired|
 	#| RE977-DWT | 2026723065     | Yes     | Right       | Left       | 2149002375 | service records | Wired      |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454  | service records |Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454  | service records |Non-Rechargeable |
 
 	
 	
@@ -504,12 +517,12 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left       | 1600805063   | restore     |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | restore   | Rechargeable |
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806646 | restore     |Rechargeable |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | 2300803315 | restore       | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | restore       | Rechargeable |
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | restore      |Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144 | restore    | Rechargeable |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left     | 2066070058    |restore    | D1rechargeableWired|
 	#| RE977-DWT | 2026723065     | Yes     | Right       | Left       | 2149002375 | restore       | Wired      |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454  | restore   |Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454  | restore   |Non-Rechargeable |
 		
 @tag14
 
@@ -535,17 +548,17 @@ Examples:
 	#| LT988-DW | 1600807163     | Yes     | Right       | Left       | 1600805063   | service records     |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | service records   | Rechargeable |
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806646 | service records     |Rechargeable |
-	#| NX960S-DRWC | 2300803297     | Yes     | Right       | Left       | 2300803315 | service records | Rechargeable |
+	| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | service records | Rechargeable |
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | service records      |Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144 | service records    | Rechargeable |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left     | 2066070058    |service records    | D1rechargeableWired|
 	#| RE962-DRW | 2026723065     | Yes     | Right       | Left       | 2149002375 | service records | Wired      |
-	| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454  | service records   |Non-Rechargeable |
+	#| NX9ITC-DW-HP | 2476130453     | Yes     | Right       | Left       | 2476130454  | service records   |Non-Rechargeable |
 
 
 @tag15
 
-Scenario Outline: 15Test Case ID 1105669: Verify that fitting data is properly restored during restoration on original device or Clone (SWAP)
+Scenario Outline: 15Test Case ID 1105669: Verify that fitting data is properly restored during restoration on original device or Clone  (SWAP)
 
 	Given [Cleaning up dumps before execution starts]
 #		#When [Create a Patient and Fitting HI In FSW "<AlterFSW>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"] #Added for D2 Family
@@ -608,11 +621,15 @@ Examples:
 	#| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2066070058 | NoDev    | 2026793947       | Yes     |D1rechargeableWired|
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936    | Yes     |Rechargeable |
-    #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300806615 | NoDev    | 2300806645     | Yes     |Rechargeable |
-	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300803315 | NoDev    | 2300803297     | Yes     | Rechargeable |
+    #| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809945 | NoDev    | 2300809944     | Yes     |Rechargeable |
+    #| RT977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2100817052 | NoDev    | 2100817051     | Yes     |Rechargeable |
+	| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | Rechargeable |
      #| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     |Rechargeable |
 	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2149002375 | NoDev    | 2026723065     | Yes     | Wired      |
-	| NX9ITC-DW-HP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     |Non-Rechargeable |
+	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     |Non-Rechargeable |
+	#| NX961-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400800489 | NoDev    | 2400800488     | Yes     |Non-Rechargeable |
+	#| CX160S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400801281 | NoDev    | 2400801280     | Yes     |Rechargeable |
+	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     |Non-Rechargeable |
 
 
 @tag16

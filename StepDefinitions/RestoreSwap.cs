@@ -105,6 +105,9 @@ namespace AppiumWinApp.StepDefinitions
             FunctionLibrary lib = new FunctionLibrary();
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
 
+            var scenarioContext = ScenarioContext.Current;
+            var testcaseId = scenarioContext.Get<string>("TestCaseID");
+
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 if (side.Equals("Left"))
@@ -140,7 +143,14 @@ namespace AppiumWinApp.StepDefinitions
 
                 try
                 {
-                    session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceLeftSlNo);
+                    if (testcaseId == "1105675" || testcaseId == "1413300")
+                    {
+                        session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(deviceSlNo);
+                    }
+                    else
+                    {
+                        session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceLeftSlNo);
+                    }
                     lib.functionWaitForName(session, "Search");
                 }
 
@@ -243,6 +253,9 @@ namespace AppiumWinApp.StepDefinitions
             session.FindElementByName("Login").Click();
             Thread.Sleep(4000);
             lib.waitUntilElementExists(session, "textBoxSerialNumber", 1);
+
+
+
             session.FindElementByAccessibilityId("textBoxSerialNumber").SendKeys(DeviceLeftSlNo);
             session = lib.functionWaitForId(session, "buttonFind");
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));

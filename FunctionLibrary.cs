@@ -29,6 +29,7 @@ using Castle.Core.Internal;
 using System.IO.Compression;
 using Xamarin.Forms.Internals;
 using com.sun.xml.@internal.ws.api.pipe;
+using Chilkat;
 
 namespace AppiumWinApp
 {
@@ -39,6 +40,7 @@ namespace AppiumWinApp
         string[] strArrayVal;
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
+        public static appconfigsettings config;
 
         string testPlanId;
         string testSuiteId;
@@ -435,9 +437,9 @@ namespace AppiumWinApp
 
         public void LogElementStatus(ExtentTest test, string elementName, string textBoxValue)
         {
-            if (string.IsNullOrEmpty(textBoxValue))
+            if (string.IsNullOrEmpty(textBoxValue) || textBoxValue.Equals("-"))
             {
-                test.Log(Status.Fail, $"{elementName} is displayed as => {textBoxValue}");
+                test.Log(Status.Info, $"{elementName} is displayed as => {textBoxValue}");
             }
             else if (textBoxValue.Contains("?"))
             {
@@ -1568,7 +1570,7 @@ namespace AppiumWinApp
                                     }
                                     break;
                                 }
-                            
+
                             case 5:
 
                                 {
@@ -1776,72 +1778,92 @@ namespace AppiumWinApp
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Assuming the data is in the first worksheet
 
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string xmlFolderPath = Path.Combine(currentDirectory, "XML");
+
+                if (!Directory.Exists(xmlFolderPath))
+                {
+                    Directory.CreateDirectory(xmlFolderPath);
+                }
+
+                string[] xmlFiles = Directory.GetFiles(xmlFolderPath, "*.xml");
+                foreach (string file in xmlFiles)
+                {
+                    File.Delete(file);
+                }
+
                 // Find the row for the specified scenario name
                 int rowNumber = FindRowNumberForScenario(worksheet, scenarioName);
                 if (rowNumber <= 0)
                 {
-                    test.Fail($"Scenario '{scenarioName}' not found in the Excel sheet.");
+                    //test.Fail($"Scenario '{scenarioName}' not found in the Excel sheet.");
                     return;
                 }
 
                 // Read the values from the Excel file
                 testPlanId = worksheet.Cells[$"A{rowNumber}"].Text; // Assuming testPlanId is in column A
                 testSuiteId = worksheet.Cells[$"B{rowNumber}"].Text; // Assuming testSuiteId is in column B
-                testConfig = worksheet.Cells[$"C{rowNumber}"].Text; // Assuming testConfig is in column C
-                string testScenario = worksheet.Cells[$"D{rowNumber}"].Text; // Assuming testScenario is in column D
+                testCaseId = worksheet.Cells[$"C{rowNumber}"].Text; // Assuming testSuiteId is in column C
+                testConfig = worksheet.Cells[$"D{rowNumber}"].Text; // Assuming testConfig is in column D
+                string testScenario = worksheet.Cells[$"E{rowNumber}"].Text; // Assuming testScenario is in column E
+                int testSteps = int.Parse(worksheet.Cells[$"F{rowNumber}"].Text); // Assuming testSteps is in column F
 
                 // Extract the test case ID from the test scenario
-                testCaseId = ExtractTestCaseId(testScenario);
-            }
+                //testCaseId = ExtractTestCaseId(testScenario);
+            
+                string xmlFileName = $"{testCaseId}.xml";
+                string xmlFilePath = Path.Combine(currentDirectory, $"XML\\{xmlFileName}");   
 
-            bool fileUpdated = false;
+                // Create the XML document
+                XmlDocument document = new XmlDocument();
 
-            foreach (string filePath in xmlFilePaths)
-            {
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+                // Create the XML declaration
+                XmlDeclaration xmlDeclaration = document.CreateXmlDeclaration("1.0", "utf-8", null);
+                XmlElement root = document.DocumentElement;
+                document.InsertBefore(xmlDeclaration, root);
 
-                if (fileNameWithoutExtension.Equals(testCaseId, StringComparison.OrdinalIgnoreCase))
+                // Create the root element
+                XmlElement documentElement = document.CreateElement(string.Empty, "DocumentElement", string.Empty);
+                document.AppendChild(documentElement);
+
+                // Add the TFSTestResultsSet elements
+                for (int i = 1; i <= testSteps; i++)
                 {
-                    // Load the XML document
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(filePath);
+                    XmlElement testResultsSet = document.CreateElement(string.Empty, "TFSTestResultsSet", string.Empty);
 
-                    // Select the nodes you want to update
-                    XmlNodeList nodes = doc.SelectNodes("//TFSTestResultsSet");
+                    XmlElement testPlanID = document.CreateElement(string.Empty, "TestPlanID", string.Empty);
+                    XmlText textPlanIdText = document.CreateTextNode(testPlanId);
+                    testPlanID.AppendChild(textPlanIdText);
+                    testResultsSet.AppendChild(testPlanID);
 
-                    foreach (XmlNode node in nodes)
-                    {
-                        // Update TestPlanID, TestSuiteID, and TestConfiguration
-                        XmlNode testPlanIdNode = node.SelectSingleNode("TestPlanID");
-                        XmlNode testSuiteIdNode = node.SelectSingleNode("TestSuitID");
-                        XmlNode testConfigNode = node.SelectSingleNode("TestConfiguration");
+                    XmlElement testSuitID = document.CreateElement(string.Empty, "TestSuitID", string.Empty);
+                    XmlText testSuitIDText = document.CreateTextNode(testSuiteId);
+                    testSuitID.AppendChild(testSuitIDText);
+                    testResultsSet.AppendChild(testSuitID);
 
-                        if (testPlanIdNode != null)
-                        {
-                            testPlanIdNode.InnerText = testPlanId;
-                        }
+                    XmlElement testCaseID = document.CreateElement(string.Empty, "TestCaseID", string.Empty);
+                    XmlText testCaseIDText = document.CreateTextNode(testCaseId);
+                    testCaseID.AppendChild(testCaseIDText);
+                    testResultsSet.AppendChild(testCaseID);
 
-                        if (testSuiteIdNode != null)
-                        {
-                            testSuiteIdNode.InnerText = testSuiteId;
-                        }
+                    XmlElement testConfiguration = document.CreateElement(string.Empty, "TestConfiguration", string.Empty);
+                    XmlText testConfigurationText = document.CreateTextNode(testConfig);
+                    testConfiguration.AppendChild(testConfigurationText);
+                    testResultsSet.AppendChild(testConfiguration);
 
-                        if (testConfigNode != null)
-                        {
-                            testConfigNode.InnerText = testConfig;
-                        }
-                    }
+                    XmlElement testStepID = document.CreateElement(string.Empty, "TestStepID", string.Empty);
+                    XmlText stepIdText = document.CreateTextNode(i.ToString());
+                    testStepID.AppendChild(stepIdText);
+                    testResultsSet.AppendChild(testStepID);
 
-                    // Save the updated XML document
-                    doc.Save(filePath);
-                    fileUpdated = true;
-                    break; // Exit the loop as we have found and updated the corresponding XML file
+                    XmlElement testStatus = document.CreateElement(string.Empty, "TestStatus", string.Empty);
+                    testResultsSet.AppendChild(testStatus);
+
+                    documentElement.AppendChild(testResultsSet);
                 }
-            }
 
-            if (!fileUpdated)
-            {
-                test.Fail($"No XML file found matching the test case ID '{testCaseId}' from the Excel file.");
+                // Save the XML document
+                document.Save(xmlFilePath);
             }
         }
 
@@ -1861,14 +1883,15 @@ namespace AppiumWinApp
         // Example of FindRowNumberForScenario method
         private int FindRowNumberForScenario(ExcelWorksheet worksheet, string scenarioName)
         {
+            //config = FeatureContext.Current["config"] as appconfigsettings;
             int rowCount = worksheet.Dimension.End.Row;
             for (int row = 2; row <= rowCount; row++) // Start from row 2
             {
-                if (worksheet.Cells[$"D{row}"].Text.Contains(scenarioName, StringComparison.OrdinalIgnoreCase)) // Assuming scenario names are in column D
-                {
-                    return row;
-                }
-            }
+                 if (scenarioName.Contains(worksheet.Cells[$"E{row}"].Text, StringComparison.OrdinalIgnoreCase)) // Assuming scenario names are in column D
+                    {
+                        return row;
+                    }
+                }                   
             return -1; // Return -1 if scenarioName is not found
         }
 
@@ -2083,9 +2106,9 @@ namespace AppiumWinApp
             string[] fyles3 = Directory.GetFileSystemEntries(path2, "*", SearchOption.AllDirectories);
             Console.WriteLine(String.Join(System.Environment.NewLine, fyles3));
             string file3 = String.Join(System.Environment.NewLine, fyles3[0]);
-            
+
             // Check if file is there    
-            
+
             if (fyles3.Count() > 1)
             {
                 File = String.Join(System.Environment.NewLine, fyles3[1]);

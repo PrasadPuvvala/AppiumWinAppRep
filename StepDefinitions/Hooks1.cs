@@ -31,6 +31,16 @@ using TestStack.BDDfy.Reporters.Html;
 using System.Text.RegularExpressions;
 using File = System.IO.File;
 using HtmlAgilityPack;
+using System.Xml;
+using System.Xml.Linq;
+using Microsoft.VisualStudio.Services.WebApi;
+using Microsoft.VisualStudio.Services.Common;
+using Microsoft.TeamFoundation.Core.WebApi;
+using Microsoft.TeamFoundation.TestManagement.WebApi;
+using ClosedXML.Excel;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using Process = System.Diagnostics.Process;
+using MailMessage = System.Net.Mail.MailMessage;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -45,6 +55,7 @@ namespace AppiumWinApp.StepDefinitions
         private static ExtentHtmlReporter htmlReporter;
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
+        private static VssConnection vssConnection = null;
 
         [BeforeFeature]
         [Obsolete]
@@ -71,22 +82,17 @@ namespace AppiumWinApp.StepDefinitions
             /* Reading CSV file to get device names */
 
             String[] csvVal = FunctionLibrary.readCSVFile();
-
-            /*Launch Socket Driver*/
-
-
         }
-
-
+    
         [BeforeScenario]
         [Obsolete]
         public static void BeforeScenario()
 
         {
-            ProcessStartInfo psi = new ProcessStartInfo(config.TestEnvironment.WinAppDriverPath);
-            psi.UseShellExecute = true;
-            psi.Verb = "runas"; // run as administrator
-            Process.Start(psi);
+            //ProcessStartInfo psi = new ProcessStartInfo(config.TestEnvironment.WinAppDriverPath);
+            //psi.UseShellExecute = true;
+            //psi.Verb = "runas"; // run as administrator
+            //Process.Start(psi);
             string test1 = ScenarioContext.Current.ScenarioInfo.Title;
             test = extent.CreateTest(test1.ToString());
             ScenarioContext.Current["extentTest"] = test;
@@ -128,12 +134,39 @@ namespace AppiumWinApp.StepDefinitions
 
             Console.WriteLine("Test Case ID: " + testcaseID);
 
+            //string path = AppDomain.CurrentDomain.BaseDirectory;
+            //string xmlPath = Path.Combine(path, "XML");
+            //string[] xmlNodeFiles = Directory.GetFiles(xmlPath, "*.xml");
+
+            //foreach (string xmlNodeFile in xmlNodeFiles)
+            //{
+            //    XmlDocument xmlDoc = new XmlDocument();
+            //    xmlDoc.Load(xmlNodeFile);
+            //    XmlNodeList testResultSets = xmlDoc.SelectNodes("//TFSTestResultsSet");
+            //    foreach (XmlNode testResultSet in testResultSets)
+            //    {
+            //        if (testResultSet != null)
+            //        {
+            //            foreach (XmlNode childNode in testResultSet.ChildNodes)
+            //            {
+            //                if (childNode.Name == "TestStepID")
+            //                {
+            //                    continue;
+            //                }
+            //                childNode.InnerText = string.Empty;
+            //            }
+            //        }
+            //    }
+            //    xmlDoc.Save(xmlNodeFile);
+            //}
+
+
             /*Update XML files with TestPlan,TestSuite,TestConfig*/
 
-            FunctionLibrary lib = new FunctionLibrary();
-            string scenarioName = ScenarioContext.Current.ScenarioInfo.Title;
+            //FunctionLibrary lib = new FunctionLibrary();
+            //string scenarioName = ScenarioContext.Current.ScenarioInfo.Title;
 
-            lib.PassingXML(test, scenarioName);
+            //lib.PassingXML(test, scenarioName);
 
         }
 
@@ -340,86 +373,86 @@ namespace AppiumWinApp.StepDefinitions
             if (ScenarioContext.Current.TestError != null)
             {
                 if (stepType == "Given")
-                    test.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<Given>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
                 if (stepType == "When")
-                    test.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<When>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
                 if (stepType == "Then")
-                    test.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<Then>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
                 if (stepType == "And")
-                    test.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Warning(ScenarioContext.Current.TestError.Message);
+                    test.CreateNode<And>(ScenarioStepContext.Current.StepInfo.Text).Fail(ScenarioContext.Current.TestError.Message);
             }
         }
 
-        //[AfterTestRun]
-        //public static void AfterTestRun()
-        //{
-        //    string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
-        //    extent.Flush();
-        //    MailMessage mailMessage = new MailMessage();
-        //    mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
-        //    mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
-        //    mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
-        //    mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
-        //    mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
-        //    mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
-        //    mailMessage.Subject = "S&R Automation Report";
-        //    mailMessage.Body = "Please find the attached S&R Automation Report.";
-        //    Attachment attachment = new Attachment(reportPath);
-        //    mailMessage.Attachments.Add(attachment);
-        //    SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
-        //    smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
-        //    smtpClient.EnableSsl = true; // Enable SSL/TLS
-        //    smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
-        //    smtpClient.Send(mailMessage);
+        [AfterTestRun]
+        public static void AfterTestRun()
+        {
+            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
+            extent.Flush();
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+            mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
+            mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
+            mailMessage.Subject = "S&R Automation Report";
+            mailMessage.Body = "Please find the attached S&R Automation Report.";
+            Attachment attachment = new Attachment(reportPath);
+            mailMessage.Attachments.Add(attachment);
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+            smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+            smtpClient.EnableSsl = true; // Enable SSL/TLS
+            smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+            smtpClient.Send(mailMessage);
 
-        //    string outputDir = Path.Combine(textDir, "Reports");
-        //    string outputFilePath = Path.Combine(outputDir, "FinalReport.html");
+            //string outputDir = Path.Combine(textDir, "Reports");
+            //string outputFilePath = Path.Combine(outputDir, "FinalReport.html");
 
-        //    // Ensure the output directory exists
-        //    if (!Directory.Exists(outputDir))
-        //    {
-        //        Directory.CreateDirectory(outputDir);
-        //    }
+            //// Ensure the output directory exists
+            //if (!Directory.Exists(outputDir))
+            //{
+            //    Directory.CreateDirectory(outputDir);
+            //}
 
-        //    // Load the first HTML document
-        //    HtmlDocument firstDoc = new HtmlDocument();
-        //    firstDoc.Load(reportPath);
+            //// Load the first HTML document
+            //HtmlDocument firstDoc = new HtmlDocument();
+            //firstDoc.Load(reportPath);
 
-        //    // Load the second HTML document
-        //    HtmlDocument secondDoc = new HtmlDocument();
-        //    if (File.Exists(outputFilePath))
-        //    {
-        //        secondDoc.Load(outputFilePath);
-        //    }
+            //// Load the second HTML document
+            //HtmlDocument secondDoc = new HtmlDocument();
+            //if (File.Exists(outputFilePath))
+            //{
+            //    secondDoc.Load(outputFilePath);
+            //}
 
-        //    // Remove <li> elements with status="warning" from the first document
-        //    var failNodes = firstDoc.DocumentNode.SelectNodes("//li[@status='warning']");
-        //    if (failNodes != null)
-        //    {
-        //        foreach (var node in failNodes)
-        //        {
-        //            node.Remove();
-        //        }
-        //    }
-        //    firstDoc.Save(outputFilePath);
+            //// Remove <li> elements with status="warning" from the first document
+            //var failNodes = firstDoc.DocumentNode.SelectNodes("//li[@status='warning']");
+            //if (failNodes != null)
+            //{
+            //    foreach (var node in failNodes)
+            //    {
+            //        node.Remove();
+            //    }
+            //}
+            //firstDoc.Save(outputFilePath);
 
-        //    // Select <li> elements with status="pass" from the second document
-        //    var passNodes = secondDoc.DocumentNode.SelectNodes("//li[@status='pass' or @status='fail']");
-        //    if (passNodes != null)
-        //    {
-        //        // Find a place to add the new <li> elements in the first document
-        //        var ulNode = firstDoc.DocumentNode.SelectSingleNode("//ul[@class='test-list-item']");
-        //        if (ulNode != null)
-        //        {
-        //            foreach (var passNode in passNodes)
-        //            {
-        //                ulNode.AppendChild(passNode);
-        //            }
-        //        }
-        //    }
-        //    // Save the modified first document
-        //    firstDoc.Save(outputFilePath);
-        //}
+            //// Select <li> elements with status="pass" from the second document
+            //var passNodes = secondDoc.DocumentNode.SelectNodes("//li[@status='pass' or @status='fail']");
+            //if (passNodes != null)
+            //{
+            //    // Find a place to add the new <li> elements in the first document
+            //    var ulNode = firstDoc.DocumentNode.SelectSingleNode("//ul[@class='test-list-item']");
+            //    if (ulNode != null)
+            //    {
+            //        foreach (var passNode in passNodes)
+            //        {
+            //            ulNode.AppendChild(passNode);
+            //        }
+            //    }
+            //}
+            //// Save the modified first document
+            //firstDoc.Save(outputFilePath);
+        }
     }
 
 }
