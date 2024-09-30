@@ -45,6 +45,8 @@ namespace AppiumWinApp
         public string FDTS { get; set; } = String.Empty;
         public string SandR { get; set; } = String.Empty;
         public string TestRuntime { get; set; } = String.Empty;
+        public string HiRegistration { get; set; } = String.Empty;
+        public string FSWWorkingPath { get; set; } = String.Empty;
     }
     public class ApplicationPath
     {
@@ -53,6 +55,7 @@ namespace AppiumWinApp
         public string FSWAppPath { get; set; } = string.Empty;
         public string TestRuntimePC { get; set; } = string.Empty;
         public string SmartFitAppPath { get; set; } = string.Empty;
+        public string HiRegistrationPath { get; set; } = string.Empty;
     }
     public class TestEnvironment
     {

@@ -32,7 +32,7 @@ namespace AppiumWinApp.PageFactory
 
         public static void launchSystemSettings(String sideSelection, ExtentReports extent1, ExtentTest stepName)
         {
-            extent = extent1;           
+            extent = extent1;
             String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
             Thread.Sleep(2000);
             DesiredCapabilities appCapabilities = new DesiredCapabilities();
@@ -47,6 +47,41 @@ namespace AppiumWinApp.PageFactory
 
         }
 
+        public static void launchSystemSettingsServiceGROC(ExtentReports extent1, ExtentTest stepName)
+        {
+            extent = extent1;
+            String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
+            Thread.Sleep(2000);
+            DesiredCapabilities appCapabilities = new DesiredCapabilities();
+            appCapabilities.SetCapability("app", ApplicationPath);
+            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            Thread.Sleep(2000);
+            standardElements.test(session);
+            SystemConfigurationSettings.systemConfig(session);
+            systemSettingsPage.ServiceGROC(session);
+            //systemSettingsPage.changeChannel(session, sideSelection);
+
+            stepName.Log(Status.Pass, "Basic settings are set Service GROC");
+        }
+
+        public static void launchSystemSettingsDevelopmentAndVerification(ExtentReports extent1, ExtentTest stepName)
+        {
+            extent = extent1;
+            String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
+            Thread.Sleep(2000);
+            DesiredCapabilities appCapabilities = new DesiredCapabilities();
+            appCapabilities.SetCapability("app", ApplicationPath);
+            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            Thread.Sleep(2000);
+            standardElements.test(session);
+            SystemConfigurationSettings.systemConfig(session);
+            systemSettingsPage.DevelopmentAndVerification(session);
+            //systemSettingsPage.changeChannel(session, sideSelection);
+
+            stepName.Log(Status.Pass, "Basic settings are set Development and Verification");
+        }
 
         public partial class testElements : SystemPageFactory
         {
@@ -146,6 +181,75 @@ namespace AppiumWinApp.PageFactory
                 /*Close the System Settings Window*/
                 items[0].Click();
 
+            }
+
+            public static void ServiceGROC(WindowsDriver<WindowsElement> session)
+            {
+                session.FindElementByName("Basic Settings").FindElementByAccessibilityId("Expander").Click();
+                var combo = session.FindElementsByClassName("ComboBox");
+                foreach (var item in combo)
+                {
+                    if (item.Text == "Service GROC")
+                    {
+                        var items = session.FindElementsByClassName("Button");
+                        items[1].Click();
+                        Thread.Sleep(2000);
+
+                        /*Close the System Settings Window*/
+                        items[0].Click();
+                        break;
+                    }
+                    else
+                    {
+                        combo[0].Click();
+                        string developmentandVerification_Xpath = "//*[@Name='Service GROC']";
+                        WindowsElement comboBoxItem = session.FindElement(By.XPath(developmentandVerification_Xpath));
+                        Actions actionscomboBoxItem = new Actions(session);
+                        actionscomboBoxItem.MoveToElement(comboBoxItem).Click().Perform();
+                        var items = session.FindElementsByClassName("Button");
+                        items[1].Click();
+                        Thread.Sleep(2000);
+
+                        /*Close the System Settings Window*/
+                        items[0].Click();
+                        break;
+                    }
+                }
+            }
+
+            public static void DevelopmentAndVerification(WindowsDriver<WindowsElement> session)
+            {
+                session.FindElementByName("Basic Settings").FindElementByAccessibilityId("Expander").Click();
+                var combo = session.FindElementsByClassName("ComboBox");
+
+                foreach( var item in combo )
+                {
+                    if(item.Text=="Development and Verification")
+                    {
+                        var items = session.FindElementsByClassName("Button");
+                        items[1].Click();
+                        Thread.Sleep(2000);
+
+                        /*Close the System Settings Window*/
+                        items[0].Click();
+                        break;
+                    }
+                    else
+                    {
+                        combo[0].Click();
+                        string developmentandVerification_Xpath = "//*[@Name='Development and Verification']";
+                        WindowsElement comboBoxItem = session.FindElement(By.XPath(developmentandVerification_Xpath));
+                        Actions actionscomboBoxItem = new Actions(session);
+                        actionscomboBoxItem.MoveToElement(comboBoxItem).Click().Perform();
+                        var items = session.FindElementsByClassName("Button");
+                        items[1].Click();
+                        Thread.Sleep(2000);
+
+                        /*Close the System Settings Window*/
+                        items[0].Click();
+                        break;
+                    }
+                }    
             }
         }
 

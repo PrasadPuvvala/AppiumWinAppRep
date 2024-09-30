@@ -856,7 +856,7 @@ namespace AppiumWinApp
             Thread.Sleep(1000);
 
             /** Verify AlgoTet Lab**/
-            ModuleFunctions.checkADLValue(session, test, "", "","");
+            ModuleFunctions.checkADLValue(session, test, "", "", "");
 
             Thread.Sleep(1000);
             path = (@"C:\Users\Public\Documents\Camelot\Logs\DKCPHHPF2PNBPF-prapuv-" + DateTime.Now.ToString("yyyy-MM-dd") + ".log");

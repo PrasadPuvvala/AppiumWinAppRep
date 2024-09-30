@@ -3,7 +3,7 @@
 A short summary of the feature
 
 
-Scenario: 01TestCaseID 1703234 Verify that a connection string with a format other than Base64 is not acceptable.
+Scenario: 01Test Case ID 1703234: S&R [VA] -  Verify that a connection string with a format other than Base64 is not acceptable.
 
     Given [Launch SandRTool]
 	When [Navigate to settings tab and set the system role to "<SystemRole>"]
@@ -17,7 +17,7 @@ Scenario: 01TestCaseID 1703234 Verify that a connection string with a format oth
 	|     VA     | rtikertgey         | Connection string must be Base64 encoded |
 
 
-Scenario: 02TestCaseID 1703237 Verify that a valid string in the user config file in the local machine
+Scenario: 02Test Case ID 1703237: S&R [VA] -  Verify that a valid connection string is saved in the user config file in the local machine
 
      Given [Launch SandRTool]
      When [Navigate to settings tab and set the system role to "<SystemRole>"]
@@ -30,7 +30,7 @@ Scenario: 02TestCaseID 1703237 Verify that a valid string in the user config fil
 	 |     VA     | lkjhgfdunukg     |
 
 
-Scenario: 03TestCaseID 1703238 Verify that a connection string is overridden when a valid connection string in input
+Scenario: 03Test Case ID 1703238: S&R [VA] -  Verify that a connection string is overridden when a new valid connection string is input.
 
      Given [Launch SandRTool]
      When [Navigate to settings tab and set the system role to "<SystemRole>"]
@@ -44,7 +44,7 @@ Scenario: 03TestCaseID 1703238 Verify that a connection string is overridden whe
 	 |     VA     | lokjhtrevbiarfjh  | mfsvywnf          |
 
 
-Scenario: 04TestCaseID 1703240 Verify that Set Sales Order Connection String feature is available only for VA role
+Scenario: 04Test Case ID 1703240: S&R [VA] -  Verify that Set Sales Order Connection String feature is available only for VA role
 
      Given [Launch SandRTool]
 	 When [Navigate to settings tab and set the system role to "<SystemRole1>"]
@@ -57,7 +57,7 @@ Scenario: 04TestCaseID 1703240 Verify that Set Sales Order Connection String fea
 	 |      VA     |   Repairs   |
 
 
-Scenario: 05TestCaseID 1696030 Inputting, Validating, and Retaining Connection String
+Scenario: 05Test Case ID 1696030: S&R [VA] - Inputting, Validating, and Retaining Connection String.
 
       Given [Launch SandRTool]
 	  When [Navigate to settings tab and set the system role to "<SystemRole>"]
