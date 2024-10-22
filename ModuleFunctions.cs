@@ -43,6 +43,7 @@ using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.Xml;
 using Microsoft.Win32;
+using javax.tools;
 
 namespace AppiumWinApp
 {
@@ -421,6 +422,7 @@ namespace AppiumWinApp
                         {
                             if (device == workingDirectory.Key)
                             {
+
                                 Console.WriteLine($"{workingDirectory.Value}");
 
                                 if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
@@ -433,18 +435,17 @@ namespace AppiumWinApp
                                     }
                                     catch { }
                                     Thread.Sleep(2000);
-
-                                    string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                                     session = sessionInitialize(algoPath.Value, workingDirectory.Value);
+                                    string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
                                     Actions actions = new Actions(session);
                                     stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                                     Thread.Sleep(5000);
-                                  
+
 
                                     session.FindElementByName("ADL").Click();
                                     stepName.Log(Status.Pass, "Moved to ADL page successfully.");
                                     Thread.Sleep(2000);
-                                   
+
                                     session.FindElementByAccessibilityId("FINDICON").Click();
                                     Thread.Sleep(2000);
                                     session.FindElementByAccessibilityId("FINDICON").Click();
@@ -531,142 +532,399 @@ namespace AppiumWinApp
                                         Assert.AreEqual("Gatt database detected - save of presets will be disabled until presets are read", statusMessage);
                                         isDeviceConnected = true;
                                     }
+
+
+
+
+
+                                    //session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+                                    //lib.waitForElement(session, "Persist ADL to device when writing presets");
+
+                                    var scenarioContext = ScenarioContext.Current;
+                                    var testcaseId = scenarioContext.Get<string>("TestCaseID");
+
+                                    if (testcaseId == "1105675")
+                                    {
+                                        session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Click();
+                                        Thread.Sleep(2000);
+                                        session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Clear();
+                                        Thread.Sleep(2000);
+                                        session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").SendKeys("1");
+                                        Thread.Sleep(2000);
+                                        session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Click();
+                                        Thread.Sleep(2000);
+                                        session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Clear();
+                                        Thread.Sleep(2000);
+                                        session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").SendKeys("100");
+
+                                        screenshot = CaptureScreenshot(session);
+
+                                        stepName.Log(Status.Pass, "Histogram on Use Time from Full Charge to Low Bat set the feild 16-18h value is 1 and Number of Preset Switches value is 100", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                    }
+                                    else if (testcaseId == "1413300")
+                                    {
+                                        var fullChargeToLowBatElement = session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5");
+
+                                        var scollViewr = session.FindElementByClassName("ScrollViewer");
+                                        var scrollBar = scollViewr.FindElementByClassName("ScrollBar");
+                                        var thumb = scrollBar.FindElementByClassName("Thumb");
+                                        int scrollHeight = thumb.Size.Height;
+                                        //Actions action = new Actions(session);
+
+                                        fullChargeToLowBatElement.Click();
+                                        Thread.Sleep(2000);
+                                        fullChargeToLowBatElement.Clear();
+                                        Thread.Sleep(2000);
+                                        fullChargeToLowBatElement.SendKeys("1");
+                                        Thread.Sleep(2000);
+                                        action.ClickAndHold(thumb).MoveByOffset(0, scrollHeight).Release().Perform();
+                                        var batteryLevelEnteringChargerElement = session.FindElementByName("Histogram on Battery Level when Entering Charger").FindElementByAccessibilityId("textBox1_6");
+
+                                        batteryLevelEnteringChargerElement.Click();
+                                        Thread.Sleep(2000);
+                                        batteryLevelEnteringChargerElement.Clear();
+                                        Thread.Sleep(2000);
+                                        batteryLevelEnteringChargerElement.SendKeys("1");
+                                        Thread.Sleep(2000);
+                                        var batteryLevelExistingChargerElement = session.FindElementByName("Histogram on Battery Level when Exiting Charger").FindElementByAccessibilityId("textBox1_7");
+                                        batteryLevelExistingChargerElement.Click();
+                                        Thread.Sleep(2000);
+                                        batteryLevelExistingChargerElement.Clear();
+                                        Thread.Sleep(2000);
+                                        batteryLevelExistingChargerElement.SendKeys("1");
+                                        Thread.Sleep(2000);
+                                        var chagingTimeElement = session.FindElementByName("Histogram on Charging Time").FindElementByAccessibilityId("textBox1_7");
+                                        chagingTimeElement.Click();
+                                        Thread.Sleep(2000);
+                                        chagingTimeElement.Clear();
+                                        Thread.Sleep(2000);
+                                        chagingTimeElement.SendKeys("1");
+                                        Thread.Sleep(2000);
+                                        var idelTimeChargerElement = session.FindElementByName("Histogram on Idle Time in Charger").FindElementByAccessibilityId("textBox1_6");
+                                        idelTimeChargerElement.Click();
+                                        Thread.Sleep(2000);
+                                        idelTimeChargerElement.Clear();
+                                        Thread.Sleep(2000);
+                                        idelTimeChargerElement.SendKeys("1");
+                                        Thread.Sleep(2000);
+                                        screenshot = CaptureScreenshot(session);
+
+                                        stepName.Log(Status.Pass, "The Battery values are altered to 1", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                    }
+                                    else
+                                    {
+                                        lib.clickOnElementWithIdonly(session, "textBox1_5");
+                                        Thread.Sleep(2000);
+                                        session.FindElementByAccessibilityId("textBox1_5").Clear();
+                                        Thread.Sleep(2000);
+                                        session.FindElementByAccessibilityId("textBox1_5").SendKeys("1");
+
+                                        screenshot = CaptureScreenshot(session);
+
+                                        stepName.Log(Status.Pass, "Altered value is 1", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                    }
+
+                                    /* Save changes in Fitting tab*/
+                                    lib.clickOnAutomationName(session, "Fitting");
+                                    Thread.Sleep(4000);
+                                    var RW = session.FindElementsByClassName("Button");
+                                    Thread.Sleep(5000);
+                                    RW[23].Click();
+                                    Thread.Sleep(1000);
+                                    session.FindElementByName("OK").Click();
+                                    session = lib.waitUntilElementExists(session, "Preset Programs read on left side.", 0);
+                                    RW[24].Click();
+                                    session.FindElementByName("OK").Click();
+                                    session = lib.waitUntilElementExists(session, "Preset Programs stored on left side.", 0);
+                                    lib.clickOnAutomationName(session, "ADL");
+                                    lib.clickOnElementWithIdonly(session, "ClearNodeButton");
+                                    Thread.Sleep(4000);
+                                    lib.functionWaitForName(session, "Connect");
+                                    session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+
+                                    if (testcaseId == "1105675")
+                                    {
+                                        try
+                                        {
+                                            if (((session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000" || (session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1") && ((session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Text.ToString()) == "100"))
+                                            {
+                                                stepName.Log(Status.Pass, $"Saved Histogram on Use Time from Full Charge to Low Bat Value is :{session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()} and Saved Number of Preset Switches value is : {session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Text.ToString()}");
+                                                Assert.Pass();
+                                                session.CloseApp();
+                                            }
+                                            else
+                                            {
+                                                stepName.Log(Status.Fail, $"Saved Histogram on Use Time from Full Charge to Low Bat Value is :{session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()} and Saved Number of Preset Switches value is : {session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Text.ToString()}");
+                                                Assert.Fail();
+                                                session.CloseApp();
+                                            }
+                                        }
+                                        catch (Exception)
+                                        { }
+                                    }
+                                    else if (testcaseId == "1413300")
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            screenshot = CaptureScreenshot(session);
+
+                                            if ((session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000" || (session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1")
+                                            {
+                                                Console.WriteLine("Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
+                                                stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString(), MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                                                Assert.Pass();
+                                                session.CloseApp();
+                                            }
+                                            else
+                                            {
+                                                stepName.Log(Status.Fail, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString(), MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+
+                                                Assert.Fail();
+
+                                                session.CloseApp();
+                                            }
+                                            lib.clickOnAutomationName(session, "OK");
+                                            session.CloseApp();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            stepName.Log(Status.Fail, $"Error message : {ex}");
+                                        }
+                                    }
+                                    session.CloseApp();
+                                    lib.clickOnAutomationName(session, "OK");
                                 }
 
 
-
-
-                                session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
-                                lib.waitForElement(session, "Persist ADL to device when writing presets");
-
-                                var scenarioContext = ScenarioContext.Current;
-                                var testcaseId = scenarioContext.Get<string>("TestCaseID");
-
-                                if (testcaseId == "1105675")
+                                if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
                                 {
-                                    session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Click();
-                                    Thread.Sleep(2000);
-                                    session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Clear();
-                                    Thread.Sleep(2000);
-                                    session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").SendKeys("1");
-                                    Thread.Sleep(2000);
-                                    session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Click();
-                                    Thread.Sleep(2000);
-                                    session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Clear();
-                                    Thread.Sleep(2000);
-                                    session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").SendKeys("100");
 
-                                    screenshot = CaptureScreenshot(session);
+                                    //string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+                                    session = sessionInitialize(algoPath.Value, workingDirectory.Value);
+                                    stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
+                                    Thread.Sleep(2000);
+                                    session.FindElementByName("ADL").Click();
+                                    stepName.Log(Status.Pass, "Moved to ADL page successfully.");
 
-                                    stepName.Log(Status.Pass, "Histogram on Use Time from Full Charge to Low Bat set the feild 16-18h value is 1 and Number of Preset Switches value is 100", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
-                                }
-                                else if (testcaseId == "1413300")
-                                {
-                                    var fullChargeToLowBatElement = session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5");
+                                    /*Select Speedlink from the interface selection pop up*/
 
-                                    var scollViewr = session.FindElementByClassName("ScrollViewer");
-                                    var scrollBar = scollViewr.FindElementByClassName("ScrollBar");
-                                    var thumb = scrollBar.FindElementByClassName("Thumb");
-                                    int scrollHeight = thumb.Size.Height;
-                                    Actions action = new Actions(session);
+                                    try
+                                    {
+                                        if (session.FindElementByName("Activated device Hipro").Enabled)
+                                        {
+                                            lib.clickOnElementWithIdonly(session, "BUTTON");
+                                            var interfaceButton = session.FindElementsByClassName("Image");
 
-                                    fullChargeToLowBatElement.Click();
-                                    Thread.Sleep(2000);
-                                    fullChargeToLowBatElement.Clear();
-                                    Thread.Sleep(2000);
-                                    fullChargeToLowBatElement.SendKeys("1");
-                                    Thread.Sleep(2000);
-                                    action.ClickAndHold(thumb).MoveByOffset(0, scrollHeight).Release().Perform();
-                                    var batteryLevelEnteringChargerElement = session.FindElementByName("Histogram on Battery Level when Entering Charger").FindElementByAccessibilityId("textBox1_6");
+                                            Console.WriteLine(interfaceButton.ToString());
+                                            int counter = 0;
+                                            foreach (var item in interfaceButton)
+                                            {
+                                                Console.WriteLine("Indexvalue is" + counter + ":" + item.GetAttribute("HelpText"));
+                                                counter = counter + 1;
+                                                stepName.Log(Status.Info, "Interfaces Available for selection: " + item.GetAttribute("HelpText"));
+                                            }
+                                            Console.WriteLine(interfaceButton.ToString());
+                                            Thread.Sleep(2000);
+                                            interfaceButton[12].Click();
+                                            stepName.Log(Status.Info, "Speedlink is selected");
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine(e.ToString());
+                                        stepName.Log(Status.Pass, "Selected Interface is Speedlink");
+                                    }
 
-                                    batteryLevelEnteringChargerElement.Click();
-                                    Thread.Sleep(2000);
-                                    batteryLevelEnteringChargerElement.Clear();
-                                    Thread.Sleep(2000);
-                                    batteryLevelEnteringChargerElement.SendKeys("1");
-                                    Thread.Sleep(2000);
-                                    var batteryLevelExistingChargerElement = session.FindElementByName("Histogram on Battery Level when Exiting Charger").FindElementByAccessibilityId("textBox1_7");
-                                    batteryLevelExistingChargerElement.Click();
-                                    Thread.Sleep(2000);
-                                    batteryLevelExistingChargerElement.Clear();
-                                    Thread.Sleep(2000);
-                                    batteryLevelExistingChargerElement.SendKeys("1");
-                                    Thread.Sleep(2000);
-                                    var chagingTimeElement = session.FindElementByName("Histogram on Charging Time").FindElementByAccessibilityId("textBox1_7");
-                                    chagingTimeElement.Click();
-                                    Thread.Sleep(2000);
-                                    chagingTimeElement.Clear();
-                                    Thread.Sleep(2000);
-                                    chagingTimeElement.SendKeys("1");
-                                    Thread.Sleep(2000);
-                                    var idelTimeChargerElement = session.FindElementByName("Histogram on Idle Time in Charger").FindElementByAccessibilityId("textBox1_6");
-                                    idelTimeChargerElement.Click();
-                                    Thread.Sleep(2000);
-                                    idelTimeChargerElement.Clear();
-                                    Thread.Sleep(2000);
-                                    idelTimeChargerElement.SendKeys("1");
-                                    Thread.Sleep(2000);
-                                    screenshot = CaptureScreenshot(session);
+                                    /*Getting all button from ADL screen*/
 
-                                    stepName.Log(Status.Pass, "The Battery values are altered to 1", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
-                                }
-                                else
-                                {
+                                    var button = session.FindElementsByClassName("Button");
+                                    int Counter = 0;
+                                    foreach (var item in button)
+                                    {
+                                        string btnName = item.GetAttribute("Value");
+                                        Counter = Counter + 1;
+                                        Console.WriteLine(Counter.ToString());
+                                    }
+                                    if (device.Contains("LT"))
+                                    {
+                                        button[29].Click();
+                                    }
+                                    else
+                                    {
+                                        lib.clickOnElementWithIdonly(session, "ConnectLeftRightBothUserControlLeftButton");
+
+                                        try
+                                        {
+                                            session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+
+                                            if (computer_name.Equals("FSWIRAY80"))
+                                            {
+                                                session.Keyboard.PressKey(Keys.Enter);
+                                            }
+
+                                        }
+                                        catch (Exception e)
+                                        {
+
+                                        }
+                                    }
+                                    session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+
+                                    try
+                                    {
+                                        session.FindElementByName("OK").Click();
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+
+                                    lib.waitForElement(session, "Persist ADL to device when writing presets");
                                     lib.clickOnElementWithIdonly(session, "textBox1_5");
                                     Thread.Sleep(2000);
                                     session.FindElementByAccessibilityId("textBox1_5").Clear();
                                     Thread.Sleep(2000);
                                     session.FindElementByAccessibilityId("textBox1_5").SendKeys("1");
+                                    stepName.Log(Status.Pass, "Altered value is 1");
 
-                                    screenshot = CaptureScreenshot(session);
+                                    /* Save changes in Fitting tab*/
 
-                                    stepName.Log(Status.Pass, "Altered value is 1", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
-                                }
+                                    lib.clickOnAutomationName(session, "Fitting");
+                                    Thread.Sleep(2000);
+                                    button = session.FindElementsByClassName("Button");
+                                    Counter = 0;
+                                    foreach (var item in button)
+                                    {
+                                        string btnName = item.GetAttribute("Value");
+                                        Console.WriteLine("Index" + Counter + "Is" + item.GetAttribute("HelpText"));
+                                        Counter = Counter + 1;
+                                        Console.WriteLine(Counter.ToString());
+                                        Console.WriteLine(item.GetAttribute("HelpText"));
+                                    }
 
-                                /* Save changes in Fitting tab*/
-                                lib.clickOnAutomationName(session, "Fitting");
-                                Thread.Sleep(4000);
-                                var RW = session.FindElementsByClassName("Button");
-                                Thread.Sleep(5000);
-                                RW[23].Click();
-                                Thread.Sleep(1000);
-                                session.FindElementByName("OK").Click();
-                                session = lib.waitUntilElementExists(session, "Preset Programs read on left side.", 0);
-                                RW[24].Click();
-                                session.FindElementByName("OK").Click();
-                                session = lib.waitUntilElementExists(session, "Preset Programs stored on left side.", 0);
-                                lib.clickOnAutomationName(session, "ADL");
-                                lib.clickOnElementWithIdonly(session, "ClearNodeButton");
-                                Thread.Sleep(4000);
-                                lib.functionWaitForName(session, "Connect");
-                                session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+                                    if (device.Contains("LT"))
+                                    {
+                                        button[22].Click();
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            Thread.Sleep(4000);
+                                            button[25].Click();
+                                            session.Keyboard.PressKey(Keys.Enter);
+                                            session = lib.waitUntilElementExists(session, "Preset Programs read on left side.", 0);
+                                        }
+                                        catch (Exception e)
+                                        {
 
-                                if (testcaseId == "1105675")
-                                {
+                                        }
+                                    }
+
                                     try
                                     {
-                                        if (((session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000" || (session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1") && ((session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Text.ToString()) == "100"))
-                                        {
-                                            stepName.Log(Status.Pass, $"Saved Histogram on Use Time from Full Charge to Low Bat Value is :{session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()} and Saved Number of Preset Switches value is : {session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Text.ToString()}");
-                                            Assert.Pass();
-                                            session.CloseApp();
-                                        }
-                                        else
-                                        {
-                                            stepName.Log(Status.Fail, $"Saved Histogram on Use Time from Full Charge to Low Bat Value is :{session.FindElementByName("Histogram on Use Time from Full Charge to Low Bat").FindElementByAccessibilityId("textBox1_5").Text.ToString()} and Saved Number of Preset Switches value is : {session.FindElementByAccessibilityId("NumberOfPresetSwitchesTextBox").Text.ToString()}");
-                                            Assert.Fail();
-                                            session.CloseApp();
-                                        }
+                                        session.FindElementByName("OK").Click();
                                     }
                                     catch (Exception)
                                     { }
-                                }
-                                else if (testcaseId == "1413300")
-                                {
+                                    button = session.FindElementsByClassName("Button");
+                                    Counter = 0;
+                                    foreach (var item in button)
+                                    {
+                                        string btnName = item.GetAttribute("Value");
+                                        Console.WriteLine("Index of write" + Counter + "Is" + item.GetAttribute("HelpText"));
+                                        Counter = Counter + 1;
+                                        Console.WriteLine(Counter.ToString());
+                                        Console.WriteLine(item.GetAttribute("HelpText"));
+                                    }
+                                    session = lib.waitUntilElementExists(session, "Preset Programs read on left side.", 0);
+                                    if (device.Contains("LT"))
+                                    {
+                                        button[23].Click();
+                                    }
+                                    else
+                                    {
+                                        try
+                                        {
+                                            button[26].Click();
+                                            session.Keyboard.PressKey(Keys.Enter);
+                                        }
+                                        catch (Exception e)
+                                        {
 
-                                }
-                                else
-                                {
+                                        }
+                                    }
+
+                                    try
+                                    {
+                                        session.FindElementByName("OK").Click();
+                                    }
+                                    catch (Exception)
+                                    { }
+                                    session = lib.waitUntilElementExists(session, "Preset Programs stored on left side.", 0);
+                                    lib.clickOnAutomationName(session, "ADL");
+                                    session = lib.waitUntilElementExists(session, "buttonReloadData", 1);
+
+                                    /*Disconnecting left HI*/
+
+                                    if (device.Contains("LT"))
+                                    {
+                                        button[29].Click();
+                                    }
+                                    else
+                                    {
+                                        lib.clickOnElementWithIdonly(session, "ConnectLeftRightBothUserControlLeftButton");
+                                        try
+                                        {
+                                            session = lib.waitUntilElementExists(session, "Left side disconnected", 0);
+                                        }
+                                        catch (Exception e)
+                                        {
+
+                                        }
+                                    }
+                                    session = lib.waitUntilElementExists(session, "Left side disconnected", 0);
+
+                                    /*Reconnecting left HI*/
+
+                                    if (device.Contains("LT"))
+                                    {
+                                        button[29].Click();
+                                    }
+                                    else
+                                    {
+                                        lib.clickOnElementWithIdonly(session, "ConnectLeftRightBothUserControlLeftButton");
+                                        try
+                                        {
+                                            session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+
+                                            if (computer_name.Equals("FSWIRAY80"))
+                                            {
+                                                session.Keyboard.PressKey(Keys.Enter);
+
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+
+                                        }
+                                    }
+                                    session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
+
+                                    try
+                                    {
+                                        session.FindElementByName("OK").Click();
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+
+
                                     try
                                     {
                                         if ((session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000" || (session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1")
@@ -689,272 +947,17 @@ namespace AppiumWinApp
                                     }
                                     catch (Exception)
                                     { }
-                                }
-                                session.CloseApp();
-                                lib.clickOnAutomationName(session, "OK");
-                            }
 
-
-                            if (DeviceType.Equals("Wired") || DeviceType.Equals("D1rechargeableWired"))
-                            {
-                                stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
-                                Thread.Sleep(2000);
-                                session.FindElementByName("ADL").Click();
-                                stepName.Log(Status.Pass, "Moved to ADL page successfully.");
-
-                                /*Select Speedlink from the interface selection pop up*/
-
-                                try
-                                {
-                                    if (session.FindElementByName("Activated device Hipro").Enabled)
-                                    {
-                                        lib.clickOnElementWithIdonly(session, "BUTTON");
-                                        var interfaceButton = session.FindElementsByClassName("Image");
-
-                                        Console.WriteLine(interfaceButton.ToString());
-                                        int counter = 0;
-                                        foreach (var item in interfaceButton)
-                                        {
-                                            Console.WriteLine("Indexvalue is" + counter + ":" + item.GetAttribute("HelpText"));
-                                            counter = counter + 1;
-                                            stepName.Log(Status.Info, "Interfaces Available for selection: " + item.GetAttribute("HelpText"));
-                                        }
-                                        Console.WriteLine(interfaceButton.ToString());
-                                        Thread.Sleep(2000);
-                                        interfaceButton[12].Click();
-                                        stepName.Log(Status.Info, "Speedlink is selected");
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e.ToString());
-                                    stepName.Log(Status.Pass, "Selected Interface is Speedlink");
-                                }
-
-                                /*Getting all button from ADL screen*/
-
-                                var button = session.FindElementsByClassName("Button");
-                                int Counter = 0;
-                                foreach (var item in button)
-                                {
-                                    string btnName = item.GetAttribute("Value");
-                                    Counter = Counter + 1;
-                                    Console.WriteLine(Counter.ToString());
-                                }
-                                if (device.Contains("LT"))
-                                {
-                                    button[29].Click();
-                                }
-                                else
-                                {
-                                    lib.clickOnElementWithIdonly(session, "ConnectLeftRightBothUserControlLeftButton");
-
-                                    try
-                                    {
-                                        session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
-
-                                        if (computer_name.Equals("FSWIRAY80"))
-                                        {
-                                            session.Keyboard.PressKey(Keys.Enter);
-                                        }
-
-                                    }
-                                    catch (Exception e)
-                                    {
-
-                                    }
-                                }
-                                session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
-
-                                try
-                                {
-                                    session.FindElementByName("OK").Click();
-                                }
-                                catch (Exception)
-                                {
-
-                                }
-
-                                lib.waitForElement(session, "Persist ADL to device when writing presets");
-                                lib.clickOnElementWithIdonly(session, "textBox1_5");
-                                Thread.Sleep(2000);
-                                session.FindElementByAccessibilityId("textBox1_5").Clear();
-                                Thread.Sleep(2000);
-                                session.FindElementByAccessibilityId("textBox1_5").SendKeys("1");
-                                stepName.Log(Status.Pass, "Altered value is 1");
-
-                                /* Save changes in Fitting tab*/
-
-                                lib.clickOnAutomationName(session, "Fitting");
-                                Thread.Sleep(2000);
-                                button = session.FindElementsByClassName("Button");
-                                Counter = 0;
-                                foreach (var item in button)
-                                {
-                                    string btnName = item.GetAttribute("Value");
-                                    Console.WriteLine("Index" + Counter + "Is" + item.GetAttribute("HelpText"));
-                                    Counter = Counter + 1;
-                                    Console.WriteLine(Counter.ToString());
-                                    Console.WriteLine(item.GetAttribute("HelpText"));
-                                }
-
-                                if (device.Contains("LT"))
-                                {
-                                    button[22].Click();
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        Thread.Sleep(4000);
-                                        button[25].Click();
-                                        session.Keyboard.PressKey(Keys.Enter);
-                                        session = lib.waitUntilElementExists(session, "Preset Programs read on left side.", 0);
-                                    }
-                                    catch (Exception e)
-                                    {
-
-                                    }
-                                }
-
-                                try
-                                {
-                                    session.FindElementByName("OK").Click();
-                                }
-                                catch (Exception)
-                                { }
-                                button = session.FindElementsByClassName("Button");
-                                Counter = 0;
-                                foreach (var item in button)
-                                {
-                                    string btnName = item.GetAttribute("Value");
-                                    Console.WriteLine("Index of write" + Counter + "Is" + item.GetAttribute("HelpText"));
-                                    Counter = Counter + 1;
-                                    Console.WriteLine(Counter.ToString());
-                                    Console.WriteLine(item.GetAttribute("HelpText"));
-                                }
-                                session = lib.waitUntilElementExists(session, "Preset Programs read on left side.", 0);
-                                if (device.Contains("LT"))
-                                {
-                                    button[23].Click();
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        button[26].Click();
-                                        session.Keyboard.PressKey(Keys.Enter);
-                                    }
-                                    catch (Exception e)
-                                    {
-
-                                    }
-                                }
-
-                                try
-                                {
-                                    session.FindElementByName("OK").Click();
-                                }
-                                catch (Exception)
-                                { }
-                                session = lib.waitUntilElementExists(session, "Preset Programs stored on left side.", 0);
-                                lib.clickOnAutomationName(session, "ADL");
-                                session = lib.waitUntilElementExists(session, "buttonReloadData", 1);
-
-                                /*Disconnecting left HI*/
-
-                                if (device.Contains("LT"))
-                                {
-                                    button[29].Click();
-                                }
-                                else
-                                {
-                                    lib.clickOnElementWithIdonly(session, "ConnectLeftRightBothUserControlLeftButton");
-                                    try
-                                    {
-                                        session = lib.waitUntilElementExists(session, "Left side disconnected", 0);
-                                    }
-                                    catch (Exception e)
-                                    {
-
-                                    }
-                                }
-                                session = lib.waitUntilElementExists(session, "Left side disconnected", 0);
-
-                                /*Reconnecting left HI*/
-
-                                if (device.Contains("LT"))
-                                {
-                                    button[29].Click();
-                                }
-                                else
-                                {
-                                    lib.clickOnElementWithIdonly(session, "ConnectLeftRightBothUserControlLeftButton");
-                                    try
-                                    {
-                                        session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
-
-                                        if (computer_name.Equals("FSWIRAY80"))
-                                        {
-                                            session.Keyboard.PressKey(Keys.Enter);
-
-                                        }
-                                    }
-                                    catch (Exception e)
-                                    {
-
-                                    }
-                                }
-                                session = lib.waitUntilElementExists(session, "Gatt database detected - save of presets will be disabled until presets are read", 0);
-
-                                try
-                                {
-                                    session.FindElementByName("OK").Click();
-                                }
-                                catch (Exception)
-                                {
-
-                                }
-
-                                try
-                                {
-                                    if ((session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1.000" || (session.FindElementByAccessibilityId("textBox1_5").Text.ToString()) == "1")
-                                    {
-
-                                        Console.WriteLine("Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-                                        stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-
-                                        Assert.Pass();
-                                        session.CloseApp();
-
-                                    }
-                                    else
-                                    {
-                                        stepName.Log(Status.Pass, "Saved Value is :" + session.FindElementByAccessibilityId("textBox1_5").Text.ToString());
-
-                                        Assert.Fail();
-
-                                        session.CloseApp();
-
-                                    }
-                                }
-
-                                catch (Exception e)
-                                {
                                     session.CloseApp();
+                                    Thread.Sleep(3000);
+                                    lib.clickOnAutomationName(session, "OK");
+                                    isDeviceConnected = true;
 
-                                    if (device.Contains("RE"))
-                                    {
-                                        session.Keyboard.PressKey(Keys.Enter);
-
-                                    }
-                                    else
-                                    {
-
-                                    }
-                                }
-                            }//End of AlgoTets Lab  
+                                }//End of AlgoTets Lab  
+                            }
                         }
+
+
                     }
                 }
             }
@@ -1000,7 +1003,7 @@ namespace AppiumWinApp
                                     stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                                     Thread.Sleep(2000);
 
-                                 
+
 
                                     session.FindElementByName("ADL").Click();
                                     stepName.Log(Status.Pass, "Moved to ADL page successfully.");
@@ -1231,7 +1234,7 @@ namespace AppiumWinApp
                                     stepName.Log(Status.Pass, "Algo test lab is launched successfully.");
                                     Thread.Sleep(2000);
 
-                                   
+
 
                                     session.FindElementByName("ADL").Click();
                                     stepName.Log(Status.Pass, "Moved to ADL page successfully.");
@@ -2158,7 +2161,7 @@ namespace AppiumWinApp
                                 {
                                     try
                                     {
-                                        ModuleFunctions.socketA(session, test, DeviceType);
+                                        socketA(session, test, DeviceType);
                                     }
                                     catch { }
                                     Thread.Sleep(2000);
@@ -2577,7 +2580,6 @@ namespace AppiumWinApp
 
         public static void takeDeviceDumpImage(WindowsDriver<WindowsElement> session, ExtentTest stepName, string device, String fileName, String side, string DeviceNo, string DeviceType)
         {
-
             Console.WriteLine("test");
             //Thread.Sleep(5000);
             string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
@@ -3161,12 +3163,14 @@ namespace AppiumWinApp
                                                 Thread.Sleep(2000);
                                                 session.FindElementByAccessibilityId("buttonOk").Click();
 
+
+
                                             }
                                         } while (session.FindElementByAccessibilityId("WorkerDialog").Enabled);
                                     }
                                     catch (Exception ex) { }
 
-                                    Thread.Sleep(10000);
+                                    Thread.Sleep(20000);
 
                                     /**This is to handle child windows whlie saving CDI**/
 
@@ -3190,6 +3194,10 @@ namespace AppiumWinApp
                                                 session.SwitchTo().Window(session.WindowHandles.First());
                                                 session.SwitchTo().ActiveElement();
                                                 session.FindElementByAccessibilityId("buttonOk").Click();
+
+                                                session.SwitchTo().Window(session.WindowHandles.First());
+                                                Thread.Sleep(2000);
+                                                session.FindElementByName("OK").Click();
                                             }
 
 
@@ -3501,7 +3509,7 @@ namespace AppiumWinApp
                     session.SwitchTo().Window(session.WindowHandles.First());
                     session.SwitchTo().ActiveElement();
 
-                  
+
 
                     /** Entering the Serial number **/
 
@@ -3662,63 +3670,119 @@ namespace AppiumWinApp
             Console.WriteLine("XML files updated successfully.");
         }
 
-        public static void UninstallSandRTool()
+        public static void UninstallSandRTool(ExtentTest stepName)
         {
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64))
             {
                 if (key == null)
                 {
-                    Console.WriteLine("Uninstall registry key not found.");
+                    stepName.Log(Status.Fail, "Uninstall Registry key not found");
                     return;
                 }
 
                 var targetSubKey = key.GetSubKeyNames()
-                    .Select(subkeyName => key.OpenSubKey(subkeyName))
-                    .FirstOrDefault(subkey => subkey != null &&
-                                              subkey.GetValue("DisplayName") != null &&
-                                              ((string)subkey.GetValue("DisplayName")).Contains(config.sandRToolUninstallation.DisplayName));
+                                 .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                 .Where(appKey => appKey != null)
+                                 .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                 .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool"))
+                                 .ToList();
 
-                if (targetSubKey != null)
+                if (!targetSubKey.Any())
                 {
-                    string uninstallString = (string)targetSubKey.GetValue("UninstallString");
-                    string trimmedUninstallString = uninstallString?.TrimEnd(" /uninstall".ToCharArray());
+                    stepName.Log(Status.Fail, "Service & Repair Tool not found");
+                    return;
+                }
 
-                    if (!string.IsNullOrEmpty(trimmedUninstallString))
+                foreach (var e in targetSubKey)
+                {
+                    if (e.displayName.Contains("Beta"))
                     {
-                        try
+                        string uninstallString = e.appKey.GetValue("UninstallString") as string;
+                        if (string.IsNullOrEmpty(uninstallString))
                         {
-                            // Create a process object
-                            using (Process uninstallProcess = new Process())
-                            {
-                                // Configure the process using StartInfo properties
-                                uninstallProcess.StartInfo.FileName = trimmedUninstallString;
-                                uninstallProcess.StartInfo.Verb = "runas";
-                                uninstallProcess.StartInfo.Arguments = "/uninstall /quiet"; // Adjust arguments as needed
-                                uninstallProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Optional: hide the uninstall window
-                                uninstallProcess.StartInfo.UseShellExecute = false; // Ensure no shell is used for better control
-
-                                // Start the process
-                                uninstallProcess.Start();
-                                uninstallProcess.WaitForExit(); // Wait for the uninstallation to complete
-
-                                // Check the exit code if needed
-                                int exitCode = uninstallProcess.ExitCode;
-                                Console.WriteLine($"Uninstallation exit code: {exitCode}");
-                            }
+                            stepName.Log(Status.Fail, $"UninstallString not found for {e.displayName}");
+                            continue;
                         }
-                        catch (Exception ex)
+                        string trimmedUninstallString = uninstallString?.TrimEnd(" /uninstall".ToCharArray());
+                        if (!string.IsNullOrEmpty(trimmedUninstallString))
                         {
-                            Console.WriteLine($"Error occurred: {ex.Message}");
+                            try
+                            {
+                                // Create a process object
+                                using (Process uninstallProcess = new Process())
+                                {
+                                    // Configure the process using StartInfo properties
+                                    uninstallProcess.StartInfo.FileName = trimmedUninstallString;
+                                    uninstallProcess.StartInfo.Verb = "runas";
+                                    uninstallProcess.StartInfo.Arguments = "/uninstall /quiet"; // Adjust arguments as needed
+                                    uninstallProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Optional: hide the uninstall window
+                                    uninstallProcess.StartInfo.UseShellExecute = false; // Ensure no shell is used for better control
+
+                                    // Start the process
+                                    uninstallProcess.Start();
+                                    uninstallProcess.WaitForExit(); // Wait for the uninstallation to complete
+
+                                    // Check the exit code if needed
+                                    int exitCode = uninstallProcess.ExitCode;
+                                    Console.WriteLine($"Uninstallation exit code: {exitCode}");
+                                }
+
+                                var displayNames = key.GetSubKeyNames()
+                                     .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                     .Where(appKey => appKey != null)
+                                     .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                     .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool"))
+                                     .ToList();
+
+                               if(displayNames.Any(app=>app.displayName.Contains("Beta")))
+                                {
+                                    stepName.Log(Status.Fail, "Serivce & Repair Tool Beta version was not uninstalled");
+                                }
+                                else
+                                {
+                                    stepName.Log(Status.Pass, "Service & Repair Tool Beta version sucessfully uninstalled");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                               stepName.Log(Status.Fail,$"Error during uninstallation : {ex.Message}");
+                            }
                         }
                     }
                 }
             }
         }
 
-        public static void InstallSandRTool()
+        public static void InstallSandRTool(ExtentTest stepName)
         {
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64);
+            if (key == null)
+            {
+                stepName.Log(Status.Fail, "Uninstall registry key not found.");
+                return;
+            }
+
+            var targetSubKey = key.GetSubKeyNames()
+                                 .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                 .Where(appKey => appKey != null)
+                                 .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                 .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool"))
+                                 .ToList();
+
+            if (targetSubKey.Any())
+            {
+                foreach (var item in targetSubKey)
+                {
+                    if (item.displayName.Contains("Beta"))
+                    {
+                        UninstallSandRTool(stepName);
+                        break;
+                    }
+                }
+            }
+
             // Path to your .exe file
-            string filePath = config.sandRToolInstallation.InstallationPath;
+            string filePath = $"C:\\Users\\iray3\\Downloads\\S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}).zip\\S&R Tool Setup.exe";
             try
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo
@@ -3736,10 +3800,39 @@ namespace AppiumWinApp
 
                 process.Start();
                 process.WaitForExit(); // Optional: Wait for the process to exit if needed
+
+                var displayNames = key.GetSubKeyNames()
+                                  .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                  .Where(appKey => appKey != null)
+                                  .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                  .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta})"))
+                                  .ToList();
+
+                if (displayNames.Any())
+                {
+                    foreach (var item in displayNames)
+                    {
+                        if (item.displayName == $"Service & Repair Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta})")
+                        {
+                            stepName.Log(Status.Pass, $"Service & Repair Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) Installed successfully");
+                            //item.appKey.Close();  // Close the appKey after processing
+                        }
+                        else
+                        {
+                            stepName.Log(Status.Info, $"Service & Repair Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) is not Installed");
+                            //item.appKey.Close();  // Close the appKey after processing
+                        }
+
+                    }
+                }
+                else
+                {
+                    stepName.Log(Status.Fail, $"Service & Repair Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) is not Installed");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                stepName.Log(Status.Fail, $"Error: {ex.Message}");
             }
         }
 

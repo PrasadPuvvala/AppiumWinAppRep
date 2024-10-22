@@ -1796,7 +1796,8 @@ namespace AppiumWinApp
                 int rowNumber = FindRowNumberForScenario(worksheet, scenarioName);
                 if (rowNumber <= 0)
                 {
-                    //test.Fail($"Scenario '{scenarioName}' not found in the Excel sheet.");
+                    test.Info($"Scenario '{scenarioName}' not found in the Excel sheet.");
+                    ScenarioContext.Current.Pending();
                     return;
                 }
 

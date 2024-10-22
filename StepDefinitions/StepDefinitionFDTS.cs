@@ -33,6 +33,9 @@ using System.Collections.ObjectModel;
 using jdk;
 using System.Xml;
 using org.xml.sax;
+using System.Net.Http;
+using System.Threading.Tasks;
+using File = System.IO.File;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -1120,13 +1123,51 @@ namespace AppiumWinApp.StepDefinitions
             stepName.Log(Status.Pass, "Set sales order connection string is not displayed for other than VA system role", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
         }
 
-        [When(@"\[Uninstall the current S&R Tool]")]
-        public void WhenUninstallTheCurrentSRTool()
+        [Given(@"Downloading latest S&R beta version from the app-gop-apt-devops site")]
+        public async Task GivenDownloadingLatestSRBetaVersionFromTheApp_Gop_Apt_DevopsSiteAsync()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-            ModuleFunctions.UninstallSandRTool();
-            stepName.Log(Status.Pass, "S&R Tool Uninstalled sucessfully");
+            config = (appconfigsettings)_featureContext["config"];
+
+            var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool/DEV/{config.sandRDownloadLinkUpdateParameters.Build}/Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}/S&R%20Tool%20{config.sandRDownloadLinkUpdateParameters.Build}%20(Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}).zip?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-11-01T17:11:32Z&st=2023-10-31T09:11:32Z&spr=https&sig=djt13wu5PaY7vBdyyrqI5RKFf4QRaIafPYu8f6xzuGA%3D";
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(baseUrl);
+
+                    response.EnsureSuccessStatusCode();
+
+                    byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+                    string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                    string filePath = Path.Combine(downloadsFolder, "Downloads", $"S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}).zip");
+
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+
+                    await File.WriteAllBytesAsync(filePath, fileBytes);
+
+                    stepName.Log(Status.Pass, $"Downloading of latest S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) is success!");
+                }
+            }
+            catch (Exception ex)
+            {
+                stepName.Log(Status.Fail, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        [When(@"\[Uninstall the current S&R Tool]")]
+        public static void WhenUninstallTheCurrentSRTool()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ModuleFunctions.UninstallSandRTool(stepName);
+            stepName.Log(Status.Pass, "S&R Tool Uninstalled successfully");
         }
 
         [When(@"\[Install the latest S&R Tool]")]
@@ -1134,8 +1175,7 @@ namespace AppiumWinApp.StepDefinitions
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-            ModuleFunctions.InstallSandRTool();
-            stepName.Log(Status.Pass, "S&R Tool Installed sucessfully");
+            ModuleFunctions.InstallSandRTool(stepName);
             ModuleFunctions.SandRenvironmentchange();
         }
 
