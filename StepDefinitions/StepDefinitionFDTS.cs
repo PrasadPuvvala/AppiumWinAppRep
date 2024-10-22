@@ -307,7 +307,7 @@ namespace AppiumWinApp.StepDefinitions
 
         /** Opens FDTS system configuration tool
          *  Navigates to System settings - Communication device
-         *  Changes the Interface Channel side **/
+         *  Changes the Interface Channel side  **/
 
         [Given(@"Launch socket Driver ""([^""]*)""and""([^""]*)""")]
         public void GivenLaunchSocketDriverAnd(string device, string DeviceType)
@@ -1210,11 +1210,11 @@ namespace AppiumWinApp.StepDefinitions
             }                
         }
 
-        [AfterScenario]
+        //[AfterScenario]
 
         //[Then(@"\[done]")]
-        public void ThenDone()
-        {
+        //public void ThenDone()
+        //{
 
             //Process winApp = new Process();
             //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
@@ -1223,7 +1223,9 @@ namespace AppiumWinApp.StepDefinitions
             //Console.WriteLine("This is Done method");
             //var scenarioContext = ScenarioContext.Current;
             //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+
             //var testcaseId = scenarioContext.Get<string>("TestCaseID");
+
 
             //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
 
@@ -1298,6 +1300,7 @@ namespace AppiumWinApp.StepDefinitions
 
             //try
 
+
             //{
             //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
 
@@ -1317,6 +1320,7 @@ namespace AppiumWinApp.StepDefinitions
             //            StartInfo = startInfo
             //        };
 
+
             //        process.Start();
             //        process.WaitForExit(); // Optionally wait for the process to complete
 
@@ -1334,7 +1338,7 @@ namespace AppiumWinApp.StepDefinitions
             //{
             //    Console.WriteLine("An error occurred: " + ex.Message);
             //}
-        }
+       // }
     }
 }
 
