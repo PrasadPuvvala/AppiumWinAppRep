@@ -13,7 +13,7 @@ namespace AppiumWinApp
         public TestEnvironment TestEnvironment { get; set; }
         public ConnectionStringPath connectionStringPath { get; set; }
         public SandRToolUninstallation sandRToolUninstallation { get; set; }
-        public SandRToolInstallation sandRToolInstallation { get; set; }
+        public SandRDownloadLinkUpdateParameters sandRDownloadLinkUpdateParameters { get; set; }
     }
 
     public class Algo
@@ -68,11 +68,11 @@ namespace AppiumWinApp
     }
     public class SandRToolUninstallation
     {
-        public string DisplayName { get; set; } = string.Empty;
         public string UninstallKeyWow64 { get; set; } = string.Empty;
     }
-    public class SandRToolInstallation
+    public class SandRDownloadLinkUpdateParameters
     {
-        public string InstallationPath { get; set; } = string.Empty;
+        public string Build { get; set; } = string.Empty;
+        public string Beta { get; set; } = string.Empty;
     }
 }
