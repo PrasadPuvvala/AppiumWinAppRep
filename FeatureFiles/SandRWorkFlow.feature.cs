@@ -106,7 +106,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("02Test Case ID 1105696: Verify that fitting data is properly restored during rest" +
             "oration on new device (RTS)")]
         [NUnit.Framework.CategoryAttribute("tag2")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Yes", "No", "2300809943", "NoDev", "2300809940", "Yes", "2000816933", "Cdevice", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Yes", "No", "1600806836", "NoDev", "1700600061", "Yes", "Cdevice", "Cdevice", "Wired", null)]
         public void _02TestCaseID1105696VerifyThatFittingDataIsProperlyRestoredDuringRestorationOnNewDeviceRTS(
                     string deviceId, 
                     string deviceLeft, 
@@ -256,7 +256,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("03Test Case ID 1537268: Verify that battery ADL data is restored on original devi" +
             "ce")]
         [NUnit.Framework.CategoryAttribute("tag3")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "Wired", null)]
         public void _03TestCaseID1537268VerifyThatBatteryADLDataIsRestoredOnOriginalDevice(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -336,7 +336,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("04Test Case ID 1103972: Verify device information is shown correctly")]
         [NUnit.Framework.CategoryAttribute("tag4")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "Wired", null)]
         public void _04TestCaseID1103972VerifyDeviceInformationIsShownCorrectly(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -389,7 +389,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("05Test Case ID 1105474: Verify capture operation is performed within desired time" +
             "")]
         [NUnit.Framework.CategoryAttribute("tag5")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "Wired", null)]
         public void _05TestCaseID1105474VerifyCaptureOperationIsPerformedWithinDesiredTime(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -440,7 +440,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("06Test Case ID 1103482: Verify supported PC configuration")]
         [NUnit.Framework.CategoryAttribute("tag6")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "Wired", null)]
         public void _06TestCaseID1103482VerifySupportedPCConfiguration(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -493,7 +493,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("07Test Case ID 1103833: Verify channel can be changed while S&R tool is running")]
         [NUnit.Framework.CategoryAttribute("tag7")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "Wired", null)]
         public void _07TestCaseID1103833VerifyChannelCanBeChangedWhileSRToolIsRunning(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -531,7 +531,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("08Test Case ID 1104002: Verify HI capture/restoration report")]
         [NUnit.Framework.CategoryAttribute("tag8")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "Rechargeable", "capture", "restore", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "Wired", "capture", "restore", null)]
         public void _08TestCaseID1104002VerifyHICaptureRestorationReport(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string devicetype, string captureScenarioTitle, string restoreScenarioTitle, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -618,7 +618,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("09Test Case ID 1105498: Verify that S&R Tool properly sets listening test setting" +
             "s")]
         [NUnit.Framework.CategoryAttribute("tag9")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "2300809943", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "1600806836", "Wired", null)]
         public void _09TestCaseID1105498VerifyThatSRToolProperlySetsListeningTestSettings(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -680,7 +680,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("10Test Case ID 1629628: Verify that firmware is upgraded if conditions apply")]
         [NUnit.Framework.CategoryAttribute("tag10")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300809943", "NoDev", "2300809940", "Yes", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "1600806836", "NoDev", "1700600061", "Yes", "Wired", null)]
         public void _10TestCaseID1629628VerifyThatFirmwareIsUpgradedIfConditionsApply(
                     string deviceId, 
                     string deviceLeft, 
@@ -772,7 +772,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("11Test Case ID 1629629: Verify that firmware is downgraded if conditions apply")]
         [NUnit.Framework.CategoryAttribute("tag11")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300809943", "NoDev", "2300809940", "Yes", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "1600806836", "NoDev", "1700600061", "Yes", "Wired", null)]
         public void _11TestCaseID1629629VerifyThatFirmwareIsDowngradedIfConditionsApply(
                     string deviceId, 
                     string deviceLeft, 
@@ -869,7 +869,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("12Test Case ID 1105470: Verify the data saved during capture and cleaning in Came" +
             "lot Cloud")]
         [NUnit.Framework.CategoryAttribute("tag12")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "2300809943", "capture", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "1600806836", "capture", "Wired", null)]
         public void _12TestCaseID1105470VerifyTheDataSavedDuringCaptureAndCleaningInCamelotCloud(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -936,7 +936,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("13Test Case ID 1101758: Verify device information is uploaded to Camelot cloud co" +
             "rrectly")]
         [NUnit.Framework.CategoryAttribute("tag13")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "2300809943", "service records", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "1600806836", "service records", "Wired", null)]
         public void _13TestCaseID1101758VerifyDeviceInformationIsUploadedToCamelotCloudCorrectly(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -1003,7 +1003,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("14Test Case ID 1105521: Verify the data saved during restore in Camelot Cloud")]
         [NUnit.Framework.CategoryAttribute("tag14")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "2300809943", "restore", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "1600806836", "restore", "Wired", null)]
         public void _14TestCaseID1105521VerifyTheDataSavedDuringRestoreInCamelotCloud(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -1068,7 +1068,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("15Test Case ID 1103983: Verify cloud icon is shown when device information in sav" +
             "ed in cloud")]
         [NUnit.Framework.CategoryAttribute("tag15")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "2300809940", "Yes", "Right", "Left", "2300809943", "service records", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "1700600061", "Yes", "Right", "Left", "1600806836", "service records", "Wired", null)]
         public void _15TestCaseID1103983VerifyCloudIconIsShownWhenDeviceInformationInSavedInCloud(string deviceId, string deviceLeftSlNo, string flashHI, string deviceRight, string deviceLeft, string deviceSlNo, string scenarioTitle, string devicetype, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -1123,7 +1123,7 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("16Test Case ID 1105669: Verify that fitting data is properly restored during rest" +
             "oration on original device or Clone  (SWAP)")]
         [NUnit.Framework.CategoryAttribute("tag16")]
-        [NUnit.Framework.TestCaseAttribute("NX977-DWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "2300809943", "NoDev", "2300809940", "Yes", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("LT988-DW", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Temp", "Yes", "No", "1600806836", "NoDev", "1700600061", "Yes", "Wired", null)]
         public void _16TestCaseID1105669VerifyThatFittingDataIsProperlyRestoredDuringRestorationOnOriginalDeviceOrCloneSWAP(
                     string deviceId, 
                     string deviceLeft, 

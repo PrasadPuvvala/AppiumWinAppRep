@@ -36,6 +36,8 @@ using org.xml.sax;
 using System.Net.Http;
 using System.Threading.Tasks;
 using File = System.IO.File;
+using System.Net;
+using Polly;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -1126,33 +1128,55 @@ namespace AppiumWinApp.StepDefinitions
         [Given(@"Downloading latest S&R beta version from the app-gop-apt-devops site")]
         public async Task GivenDownloadingLatestSRBetaVersionFromTheApp_Gop_Apt_DevopsSiteAsync()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             config = (appconfigsettings)_featureContext["config"];
 
             var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool/DEV/{config.sandRDownloadLinkUpdateParameters.Build}/Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}/S&R%20Tool%20{config.sandRDownloadLinkUpdateParameters.Build}%20(Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}).zip?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-11-01T17:11:32Z&st=2023-10-31T09:11:32Z&spr=https&sig=djt13wu5PaY7vBdyyrqI5RKFf4QRaIafPYu8f6xzuGA%3D";
+
             try
             {
-                using (HttpClient client = new HttpClient())
+                var cts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+
+                stepName.Log(Status.Info, "Download Started");
+
+                var retryPolicy = Policy
+                    .Handle<HttpRequestException>()
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                await retryPolicy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage response = await client.GetAsync(baseUrl);
 
-                    response.EnsureSuccessStatusCode();
-
-                    byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
-
-                    string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                    string filePath = Path.Combine(downloadsFolder, "Downloads", $"S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}).zip");
-
-                    if (File.Exists(filePath))
+                    using (HttpClient client = new HttpClient())
                     {
-                        File.Delete(filePath);
+                        client.Timeout = TimeSpan.FromMinutes(5);
+
+                        HttpResponseMessage response = await client.GetAsync(baseUrl, cts.Token);
+
+                        response.EnsureSuccessStatusCode();
+
+                        byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+                        string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                        string filePath = Path.Combine(downloadsFolder, "Downloads", $"S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}).zip");
+
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+
+                        await File.WriteAllBytesAsync(filePath, fileBytes);
+                        stepName.Log(Status.Pass, $"Downloading of latest S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) succeeded!");
                     }
-
-                    await File.WriteAllBytesAsync(filePath, fileBytes);
-
-                    stepName.Log(Status.Pass, $"Downloading of latest S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) is success!");
-                }
+                });
+            }
+            catch (TaskCanceledException ex)
+            {
+                stepName.Log(Status.Fail, "Download operation was canceled, possibly due to timeout.");
+            }
+            catch (HttpRequestException ex)
+            {
+                stepName.Log(Status.Fail, $"A network error occurred: {ex.Message}");
             }
             catch (Exception ex)
             {

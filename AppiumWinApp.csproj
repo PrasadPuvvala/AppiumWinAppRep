@@ -31,6 +31,7 @@
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="19.225.1" />
     <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="19.225.1" />
+    <PackageReference Include="Polly" Version="8.4.2" />
     <PackageReference Include="ReportGenerator" Version="5.3.8" />
     <PackageReference Include="SimpleMessageBoxes" Version="1.0.0" />
     <PackageReference Include="chilkat-x64" Version="9.5.0.91" />
