@@ -67,7 +67,7 @@ Examples:
 	| DeviceId  | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DumpD    | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo | FlashHI | DeviceCSlno | DeviceC | Devicetype   |
 
 	 #| RE962-DRW   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2026335124 | NoDev    | 2026335111       | Yes    | Cdevice  | Cdevice   |  Wired |
-#	 | RE962-DRWT   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2000803066 | NoDev    | 2000803069       | Yes   | Cdevice  | Cdevice   |  Wired |
+     #| RE962-DRWT   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2000803066 | NoDev    | 2000803069       | Yes   | Cdevice  | Cdevice   |  Wired |
 	 #| LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1600805063 | NoDev    | 1700803025       | Yes   | Cdevice  | Cdevice   |  Wired |
 	  #| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1600806836 | NoDev    | 1700600061       | Yes     | Cdevice  |  Cdevice  |  Wired |
 	 #| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2066070058 | NoDev    | 2026793947       | Yes     | Cdevice  | Cdevice   | D1rechargeableWired|
