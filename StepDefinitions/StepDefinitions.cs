@@ -70,7 +70,7 @@ namespace MyNamespace
       + Path.DirectorySeparatorChar + "appconfig.json";
         public static String textDir = Directory.GetCurrentDirectory();
         public TestContext TestContext { get; set; }
-
+       
         /*   declaration and initialization of a string variable */
 
         public static string workFlowProductSelection = "treeView";
@@ -85,7 +85,9 @@ namespace MyNamespace
         public StepDefinitions(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
+           
         }
+
 
         [Given(@"Importing Test Cases to Excel from TFS TestPlanID ""([^""]*)"" equivalent to Testcase Configuration ""([^""]*)"" to Create XML\.")]
         [Obsolete]
@@ -144,7 +146,7 @@ namespace MyNamespace
                                         // Load the XML string into an XDocument if it's not empty
                                         if (!string.IsNullOrEmpty(testcaseSteps))
                                         {
-                                            if(testcaseSteps== "N/A")
+                                            if (testcaseSteps == "N/A")
                                             {
 
                                             }
@@ -199,7 +201,7 @@ namespace MyNamespace
                 if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
                 {
 
-                    Thread.Sleep(240000);
+                    //Thread.Sleep(240000);
 
                     if (side.Equals("Left"))
                     {
@@ -218,15 +220,21 @@ namespace MyNamespace
 
 
             FunctionLibrary lib = new FunctionLibrary();
-            session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
+            //session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FDTSAppPath, config.workingdirectory.FDTS);
             Thread.Sleep(2000);
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", config.ApplicationPath.FDTSAppPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
-            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FDTSAppPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+            appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+            appCapabilities.AddAdditionalCapability("appWorkingDir", config.workingdirectory.FDTS);
+            appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+            appCapabilities.AddAdditionalCapability("automationName", "Windows");
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+            appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(8000);
-            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+            //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
             stepName.Log(Status.Pass, "Test Work Flow launched successfully");
 
@@ -239,8 +247,10 @@ namespace MyNamespace
 
             }
 
-            Thread.Sleep(2000);
-            session.FindElement(WorkFlowPageFactory.filterBox).Clear();
+            Thread.Sleep(5000);
+            //session.FindElement(WorkFlowPageFactory.filterBox).Clear();
+            var autoIDs = session.FindElementByAccessibilityId("textBoxFilter");
+            autoIDs.Clear();
             string devName = device;
             session.FindElement(WorkFlowPageFactory.filterBox).SendKeys(devName);
             Thread.Sleep(1000);
@@ -282,15 +292,15 @@ namespace MyNamespace
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(10000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(2000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(4000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 var secondWindow = session.FindElementsByClassName(workFlowProductSelection);
                 Thread.Sleep(2000);
             }
@@ -335,11 +345,11 @@ namespace MyNamespace
                 Thread.Sleep(2000);
                 Thread.Sleep(2000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                ////session.SwitchTo().ActiveElement();
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(4000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                ////session.SwitchTo().ActiveElement();
                 var secondWindow = session.FindElementsByClassName(workFlowProductSelection);
                 Thread.Sleep(2000);
             }
@@ -420,7 +430,7 @@ namespace MyNamespace
                 session.FindElementByName("Continue >>").Click();
                 Thread.Sleep(2000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
 
                 /** Passing Serial Number of HI device **/
 
@@ -461,7 +471,7 @@ namespace MyNamespace
                 {
 
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                 }
                 catch { }
@@ -473,7 +483,7 @@ namespace MyNamespace
                     do
                     {
                         allWindowHandles = session.WindowHandles;
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
 
 
                     } while ((session.FindElementByClassName("WindowsForms10.STATIC.app.0.27a2811_r21_ad1").Enabled));
@@ -495,10 +505,10 @@ namespace MyNamespace
                 try
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
                     if (DeviceType.Equals("Rechargeable"))
                     {
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         //lib.waitUntilElementExists(session, "testParameter-Multiple-BatteryType", 1);
                         session.FindElementByName("testParameter-Multiple-BatteryType");
                         session.FindElementByName("Continue >>").Click();
@@ -511,14 +521,14 @@ namespace MyNamespace
                 try
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     if (session.FindElementByName("Optimized").Displayed)
                     {
                         session.FindElementByName("Optimized").Click();
                         Thread.Sleep(2000);
                         session.SwitchTo().Window(session.WindowHandles.First());
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         Thread.Sleep(2000);
                     }
                 }
@@ -534,7 +544,7 @@ namespace MyNamespace
                 try
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     /** Passing administrator password **/
 
@@ -567,7 +577,7 @@ namespace MyNamespace
                 Thread.Sleep(2000);
 
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                ////session.SwitchTo().ActiveElement();
 
                 if (flashHIWithSlno == "Yes")
                 {
@@ -590,14 +600,14 @@ namespace MyNamespace
                 try
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     if (session.FindElementByName("Optimized").Displayed)
                     {
                         session.FindElementByName("Optimized").Click();
                         Thread.Sleep(2000);
                         session.SwitchTo().Window(session.WindowHandles.First());
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         Thread.Sleep(2000);
 
                     }
@@ -637,7 +647,7 @@ namespace MyNamespace
                     do
                     {
                         allWindowHandles = session.WindowHandles;
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
 
 
                     } while ((session.FindElementByClassName("Button").Enabled).ToString() == "False");
@@ -746,12 +756,12 @@ namespace MyNamespace
 
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.HiRegistrationPath, config.workingdirectory.HiRegistration);
             Thread.Sleep(2000);
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", config.ApplicationPath.HiRegistrationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
-            appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-            session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.HiRegistrationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+            appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+            session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
             stepName.Log(Status.Pass, "Hi Registration App launched successfully");
 
@@ -826,7 +836,10 @@ namespace MyNamespace
         }
 
         [Given(@"\[Set Service GROC System Role in Basic Setting for System Configuration]")]
+        [Obsolete]
+
         public void GivenSetServiceGROCSystemRoleInBasicSettingForSystemConfiguration()
+
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
@@ -874,85 +887,99 @@ namespace MyNamespace
                 catch (Exception ex) { }
                 try
                 {
-                    DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                    appCapabilities.SetCapability("platformName", "Windows");
-                    //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                    appCapabilities.SetCapability("automationName", "Windows");
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+                    
+                    try
+                    {
+                        string addPatientXpath = "//Button[@Name=' Add or Select Patient']";
+                        WindowsElement patientXpath = session.FindElement(By.XPath(addPatientXpath));
+                        patientXpath.Click();
+                    }
+                    catch (Exception ex)
+                    {
+                        string addPatientXpath = "//Button[@ClassName='btn btn-lg btn-secondary-dark w-30']";
+                        WindowsElement patientXpath = session.FindElement(By.XPath(addPatientXpath));
+                        patientXpath.Click();
+
+                    }
+                   
+                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FSWAppPath, config.workingdirectory.FSWWorkingPath);
+                   
+                    WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromMinutes(5));
+                    try
+                    {
+                        wait.Until(d => d.FindElements(By.XPath("//Group")).Count > 0);
+
+                        var allGroups = session.FindElements(By.XPath("//Group"));
+
+                        foreach (var group in allGroups)
+                        {
+                            Actions actions = new Actions(session);
+
+                            wait.Until(d => group.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                            var all = group.FindElements(By.XPath(".//Group[1]"));
+                            foreach (var element in all)
+                            {
+                                wait.Until(d => element.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                                var all2 = element.FindElements(By.XPath(".//Group[1]"));
+                                foreach (var child in all2)
+                                {
+                                    wait.Until(d => child.FindElements(By.XPath(".//*")).Count > 0);
+                                    var allChildElements = child.FindElements(By.XPath(".//*"));
+                                    if (allChildElements != null && allChildElements.Count >= 17)
+                                    {
+                                        var fourteenthElement = allChildElements[12];
+                                        Actions actions1 = new Actions(session);
+                                        actions1.MoveToElement(fourteenthElement).Click().Perform();
+
+                                        var selectPatient2 = wait.Until(d => d.FindElement(By.Name("Fit Patient")));
+                                        Thread.Sleep(2000);
+                                        Actions actions2 = new Actions(session);
+                                        actions2.MoveToElement(selectPatient2).Click().Perform();
+
+                                        break;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+ 
                     session.Manage().Window.Maximize();
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
-                    Actions act = new Actions(session);
-                    var btnAdd = session.FindElementByClassName("spinner-border spinner-border-sm visually-hidden");
-                    act.MoveToElement(btnAdd).Click().Perform();
-                    Thread.Sleep(5000);
-                    appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                    appCapabilities.SetCapability("platformName", "Windows");
-                    //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                    appCapabilities.SetCapability("automationName", "Windows");
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    session.Manage().Window.Maximize();
-                    session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
-                    Actions ac = new Actions(session);
-                    var ele = session.FindElementByName("abc");
-                    ac.MoveToElement(ele).Perform();
-                    Thread.Sleep(1000);
-                    session.FindElementByName("Fit Patient").Click();
-                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                    appCapabilities.SetCapability("platformName", "Windows");
-                    //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                    appCapabilities.SetCapability("automationName", "Windows");
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    session.Manage().Window.Maximize();
-                    session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
-                    session.FindElementByName("Connect to ReSound Smart Fit").Click();
-                    Thread.Sleep(12000);
+                    session.FindElementByAccessibilityId("fittingpath-button-connect").Click();
+                    Thread.Sleep(10000);
 
                     lib.clickOnAutomationName(session, "Assign Instruments");
-                    //session.FindElementByName("Back").Click();
-                    Thread.Sleep(5000);
-                    session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
-                   // Thread.Sleep(2000);
+                    WebDriverWait wait1 = new WebDriverWait(session, TimeSpan.FromMinutes(5));
+                    WindowsElement comboBox = (WindowsElement)wait1.Until(driver =>
+                    {
+                        var element = driver.FindElement(By.ClassName("ComboBox"));
+                        return element.Enabled ? element : null;
+                    });
+
+                    comboBox.Click();
+                
 
                     /** Select Noah link Wireless now, then click Connect.  **/
 
                     session.FindElementByName("Noahlink Wireless").Click();
-                    //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
-
-
                     try
                     {
                         session.FindElementByName("Unassign").Click();
                     }
                     catch { }
 
-                    Thread.Sleep(10000);
+                    Thread.Sleep(2000);
 
-                   
+
 
                     var SN1 = session.FindElementsByClassName("ListBoxItem");
 
@@ -963,12 +990,12 @@ namespace MyNamespace
                         string S = value.Text;
                         if (S.Contains(DeviceNo))
                         {
-                            
+
                             value.FindElementByName("Assign Left").Click();
                             break;
                         }
                     }
-                    Thread.Sleep(13000);
+                    Thread.Sleep(5000);
 
                     try
                     {
@@ -1029,74 +1056,95 @@ namespace MyNamespace
                                 try
                                 {
                                     Thread.Sleep(2000);
-                                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                                    appCapabilities.SetCapability("platformName", "Windows");
-                                    appCapabilities.SetCapability("ms:waitForAppLaunch", "20");
-                                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                                    appCapabilities.SetCapability("automationName", "Windows");
-                                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                                    Thread.Sleep(5000);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+
+                                    try
+                                    {
+                                        string addPatientXpath = "//Button[@Name=' Add or Select Patient']";
+                                        WindowsElement patientXpath = session.FindElement(By.XPath(addPatientXpath));
+                                        patientXpath.Click();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        string addPatientXpath = "//Button[@ClassName='btn btn-lg btn-secondary-dark w-30']";
+                                        WindowsElement patientXpath = session.FindElement(By.XPath(addPatientXpath));
+                                        patientXpath.Click();
+
+                                    }
+
+                                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FSWAppPath, config.workingdirectory.FSWWorkingPath);
+
+                                    wait = new WebDriverWait(session, TimeSpan.FromMinutes(5));
+                                    try
+                                    {
+                                        wait.Until(d => d.FindElements(By.XPath("//Group")).Count > 0);
+
+                                        var allGroups = session.FindElements(By.XPath("//Group"));
+
+                                        foreach (var group in allGroups)
+                                        {
+                                            Actions actions = new Actions(session);
+
+                                            wait.Until(d => group.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                                            var all = group.FindElements(By.XPath(".//Group[1]"));
+                                            foreach (var element in all)
+                                            {
+                                                wait.Until(d => element.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                                                var all2 = element.FindElements(By.XPath(".//Group[1]"));
+                                                foreach (var child in all2)
+                                                {
+                                                    wait.Until(d => child.FindElements(By.XPath(".//*")).Count > 0);
+                                                    var allChildElements = child.FindElements(By.XPath(".//*"));
+                                                    if (allChildElements != null && allChildElements.Count >= 17)
+                                                    {
+                                                        var fourteenthElement = allChildElements[12];
+                                                        Actions actions1 = new Actions(session);
+                                                        actions1.MoveToElement(fourteenthElement).Click().Perform();
+
+                                                        var selectPatient2 = wait.Until(d => d.FindElement(By.Name("Fit Patient")));
+                                                        actions1.MoveToElement(selectPatient2).Click().Perform();
+
+                                                        break;
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+
+                                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+
                                     session.Manage().Window.Maximize();
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
-                                    Actions act1 = new Actions(session);
-                                    var btnAdd1 = session.FindElementByClassName("spinner-border spinner-border-sm visually-hidden");
-                                    act1.MoveToElement(btnAdd1).Click().Perform();
+                                    session.FindElementByAccessibilityId("fittingpath-button-connect").Click();
                                     Thread.Sleep(10000);
-                                    appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                                    appCapabilities.SetCapability("platformName", "Windows");
-                                    appCapabilities.SetCapability("ms:waitForAppLaunch", "20");
-                                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                                    appCapabilities.SetCapability("automationName", "Windows");
-                                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                                    Thread.Sleep(5000);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                                    session.Manage().Window.Maximize();
-                                    session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
-                                    Actions ac1 = new Actions(session);
-                                    var ele1 = session.FindElementByName("abc");
-                                    ac1.MoveToElement(ele1).Perform();
-                                    Thread.Sleep(1000);
-                                    session.FindElementByName("Fit Patient").Click();
-                                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                                    appCapabilities.SetCapability("platformName", "Windows");
-                                    appCapabilities.SetCapability("ms:waitForAppLaunch", "20");
-                                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                                    appCapabilities.SetCapability("automationName", "Windows");
-                                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                                    Thread.Sleep(5000);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                                    session.Manage().Window.Maximize();
-                                    session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
-                                    session.FindElementByName("Connect to ReSound Smart Fit").Click();
-                                    Thread.Sleep(12000);
 
                                     lib.clickOnAutomationName(session, "Assign Instruments");
-                                    //session.FindElementByName("Back").Click();
-                                    Thread.Sleep(5000);
-                                    session.FindElementByAccessibilityId("ConnectionAutomationIds.CommunicationInterfaceItems").Click();
-                                    // Thread.Sleep(2000);
+                                    wait1 = new WebDriverWait(session, TimeSpan.FromMinutes(5));
+                                    comboBox = (WindowsElement)wait1.Until(driver =>
+                                    {
+                                        var element = driver.FindElement(By.ClassName("ComboBox"));
+                                        return element.Enabled ? element : null;
+                                    });
+
+                                    comboBox.Click();
+
 
                                     /** Select Noah link Wireless now, then click Connect.  **/
 
                                     session.FindElementByName("Noahlink Wireless").Click();
-                                    //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
-                                    Thread.Sleep(10000);
+                                    try
+                                    {
+                                        session.FindElementByName("Unassign").Click();
+                                    }
+                                    catch { }
+
+                                    Thread.Sleep(2000);
                                     var SN2 = session.FindElementsByClassName("ListBoxItem");
 
                                     // Check if DeviceNo is already discovered
@@ -1115,6 +1163,38 @@ namespace MyNamespace
                                 catch
                                 {
                                 }
+
+                                Thread.Sleep(5000);
+
+                                try
+                                {
+                                    if (session.FindElementByName("Unassign").Enabled)
+                                    {
+
+                                        lib.clickOnAutomationName(session, "Assign Instruments");
+
+                                        Thread.Sleep(10000); // Initial wait before searching
+
+                                        var SN = session.FindElementsByClassName("ListBoxItem");
+
+                                        // Check if DeviceNo is already discovered
+
+                                        foreach (WindowsElement value in SN)
+                                        {
+                                            string S = value.Text;
+                                            if (S.Contains(DeviceNo))
+                                            {
+                                                value.FindElementByName("Assign Left").Click();
+                                                break;
+                                            }
+                                        }
+
+                                    }
+                                }
+                                catch (Exception)
+                                {
+
+                                }
                             }
                         }
                     } while (!session.FindElementByName("Continue").Enabled);
@@ -1126,11 +1206,11 @@ namespace MyNamespace
 
                     Thread.Sleep(4000);
 
-                    //try
-                    //{
-                    //    lib.clickOnAutomationName(session, "Continue");
-                    //}
-                    //catch { }
+                    try
+                    {
+                        lib.clickOnAutomationName(session, "Continue");
+                    }
+                    catch { }
 
 
                 }
@@ -1146,13 +1226,13 @@ namespace MyNamespace
             {
                 Console.WriteLine("This is When method");
                 Thread.Sleep(2000);
-                DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                AppiumOptions appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
@@ -1188,14 +1268,14 @@ namespace MyNamespace
                 Thread.Sleep(10000);
                 session.Close();
 
-                appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
+                appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
 
                 /**   clicks the back button, selects the Speed Link and then clicks "connect" **/
@@ -1215,65 +1295,114 @@ namespace MyNamespace
 
             else if (DeviceType.Equals("Wired"))
             {
+                //session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+                //_appiumServer.StartServer();
+                session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+                Thread.Sleep(8000);
+                WindowsDriver<WindowsElement> session2 = null;
+                try
+                {
+                    string addPatientXpath = "//Button[@Name=' Add or Select Patient']";
+                    session.FindElement(By.XPath(addPatientXpath)).Click();
 
+                }
+                catch (Exception ex)
+                {
+                    string addPatientXpath = "//Button[@ClassName='btn btn-lg btn-secondary-dark w-30']";
+                    session.FindElement(By.XPath(addPatientXpath)).Click();
 
-                DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("platformName", "Windows");
-                //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                appCapabilities.SetCapability("appArguments", "Test.exe");
-                appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                appCapabilities.SetCapability("automationName", "Windows");
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                }
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FSWAppPath, config.workingdirectory.FSWWorkingPath);
+
+                //AppiumOptions appiumOptions = new AppiumOptions();
+                //appiumOptions.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                //appiumOptions.AddAdditionalCapability("platformName", "Windows");
+                //appiumOptions.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+                //appiumOptions.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                //appiumOptions.AddAdditionalCapability("appArguments", "Test.exe");
+                //appiumOptions.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                //appiumOptions.AddAdditionalCapability("automationName", "Windows");
+                //appiumOptions.AddAdditionalCapability("deviceName", "WindowsPC");
+                //appiumOptions.AddAdditionalCapability("ms:experimental-webdriver", true);
+                //session1 = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appiumOptions);
+                Thread.Sleep(5000);
                 session.Manage().Window.Maximize();
-                session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
-                Actions act = new Actions(session);
-                var btnAdd = session.FindElementByClassName("spinner-border spinner-border-sm visually-hidden");
-                act.MoveToElement(btnAdd).Click().Perform();
-                Thread.Sleep(5000);
-                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                appCapabilities.SetCapability("platformName", "Windows");
-                //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                appCapabilities.SetCapability("appArguments", "Test.exe");
-                appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                appCapabilities.SetCapability("automationName", "Windows");
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                session.Manage().Window.Maximize();
-                session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
-                Actions ac = new Actions(session);
-                var ele = session.FindElementByName("abc");
-                ac.MoveToElement(ele).Perform();
-                Thread.Sleep(1000);
-                session.FindElementByName("Fit Patient").Click();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("platformName", "Windows");
-                //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                appCapabilities.SetCapability("appArguments", "Test.exe");
-                appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                appCapabilities.SetCapability("automationName", "Windows");
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                session.Manage().Window.Maximize();
-                session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
-                session.FindElementByName("Connect to ReSound Smart Fit").Click();
+                //session.SwitchTo().Window(session.WindowHandles.First());
+                ////session.SwitchTo().ActiveElement();
+
+                WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromMinutes(5));
+                try
+                {
+                    wait.Until(d => d.FindElements(By.XPath("//Group")).Count > 0);
+
+                    var allGroups = session.FindElements(By.XPath("//Group"));
+
+                    foreach (var group in allGroups)
+                    {
+                        Actions actions = new Actions(session);
+
+                        wait.Until(d => group.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                        var all = group.FindElements(By.XPath(".//Group[1]"));
+                        foreach (var element in all)
+                        {
+                            wait.Until(d => element.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                            var all2 = element.FindElements(By.XPath(".//Group[1]"));
+                            foreach (var child in all2)
+                            {
+                                wait.Until(d => child.FindElements(By.XPath(".//*")).Count > 0);
+                                var allChildElements = child.FindElements(By.XPath(".//*"));
+                                if (allChildElements != null && allChildElements.Count >= 17)
+                                {
+                                    var fourteenthElement = allChildElements[12];
+                                    Actions actions1 = new Actions(session);
+                                    actions1.MoveToElement(fourteenthElement).Click().Perform();
+
+                                    var selectPatient2 = wait.Until(d => d.FindElement(By.Name("Fit Patient")));
+                                    actions1.MoveToElement(selectPatient2).Click().Perform();
+
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                catch (WebDriverTimeoutException ex)
+                {
+                }
+                catch (NoSuchElementException ex)
+                {
+                }
+                catch (Exception ex)
+                {
+                }
+
+                //appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                //appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                ////appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
+                //appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                //appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                //appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                //appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                //appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                //appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                //Thread.Sleep(5000);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
+                //session.Manage().Window.Maximize();
+                //session.SwitchTo().Window(session.WindowHandles.First());
+                ////session.SwitchTo().ActiveElement();
+                session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
                 Thread.Sleep(12000);
+                //session.FindElementByAccessibilityId("fittingpath-button-connect").Click();
+                //Thread.Sleep(12000);
+
+                session.FindElementByAccessibilityId("fittingpath-button-connect").Click();
+
+
 
                 lib.clickOnAutomationName(session, "Assign Instruments");
                 //session.FindElementByName("Back").Click();
@@ -1299,9 +1428,9 @@ namespace MyNamespace
                 //appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                 //appCapabilities.SetCapability("deviceName", "WindowsPC");
                 //appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(10000);
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(2000);
                 //session.Manage().Window.Maximize();
                 //var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
@@ -1338,9 +1467,9 @@ namespace MyNamespace
                 //appCapabilities.SetCapability("deviceName", "WindowsPC");
                 //appCapabilities.SetCapability("appArguments", "--run-as-administrator");
                 //Thread.Sleep(5000);
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(10000);
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(10000);
 
                 //try
@@ -1398,24 +1527,23 @@ namespace MyNamespace
                     {
 
                     }
-                    
+
                 }
                 catch (Exception)
                 { }
 
             }
 
-            Thread.Sleep(3000);
-
-            lib.clickOnAutomationName(session, "Continue");
-
             Thread.Sleep(10000);
+
             var textBlockelements = session.FindElementsByClassName("TextBlock");
+          
             foreach (var element in textBlockelements)
             {
                 try
                 {
-                    if (element.Text == "Connection Lost")
+
+                    if (element.Text == "Connection Error")
                     {
                         stepName.Log(Status.Fail, "Connection Error");
                         MailMessage mailMessage = new MailMessage();
@@ -1434,6 +1562,7 @@ namespace MyNamespace
                         lib.processKill("SmartFitSA");
                         break;
                     }
+
                     else if (element.Text == "Connection")
                     {
                         Thread.Sleep(10000);
@@ -1446,11 +1575,11 @@ namespace MyNamespace
 
                             do
                             {
-                                session.SwitchTo().ActiveElement();
+                                //session.SwitchTo().ActiveElement();
 
                                 if (buttonCount >= 1)
                                 {
-                                    session.SwitchTo().ActiveElement();
+                                    //session.SwitchTo().ActiveElement();
                                     session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
                                     try
                                     {
@@ -1498,13 +1627,13 @@ namespace MyNamespace
                                     /** To perform reset initial fit **/
 
                                     session.FindElementByName("Reset to Initial Fit").Click();
-                                    Thread.Sleep(2000);
-                                    session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    Thread.Sleep(4000);
+                                    //session.SwitchTo().Window(session.WindowHandles.First());
+                                    ////session.SwitchTo().ActiveElement();
 
                                     try
                                     {
-                                        Thread.Sleep(2000);
+                                        Thread.Sleep(4000);
                                         lib.clickOnAutomationName(session, "Continue");
                                     }
                                     catch (Exception e1)
@@ -1534,13 +1663,14 @@ namespace MyNamespace
                                     /** To perform reset initial fit **/
 
                                     session.FindElementByName("Reset to Initial Fit").Click();
-                                    Thread.Sleep(2000);
+                                    Thread.Sleep(4000);
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    ////session.SwitchTo().ActiveElement();
 
                                     try
                                     {
-                                        Thread.Sleep(2000);
+                                        Thread.Sleep(4000);
+
                                         lib.clickOnAutomationName(session, "Continue");
                                     }
                                     catch (Exception e1)
@@ -1637,11 +1767,11 @@ namespace MyNamespace
 
                             do
                             {
-                                session.SwitchTo().ActiveElement();
+                                ////session.SwitchTo().ActiveElement();
 
                                 if (buttonCount >= 1)
                                 {
-                                    session.SwitchTo().ActiveElement();
+                                    ////session.SwitchTo().ActiveElement();
                                     session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
                                     try
                                     {
@@ -1692,7 +1822,7 @@ namespace MyNamespace
                                     session.FindElementByName("Reset to Initial Fit").Click();
                                     Thread.Sleep(2000);
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    ////session.SwitchTo().ActiveElement();
 
                                     try
                                     {
@@ -1705,7 +1835,7 @@ namespace MyNamespace
 
                                     stepName.Pass("Reset is successfully done");
                                     Thread.Sleep(2000);
-                                  
+
                                     lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
 
                                     /** Add the music program **/
@@ -1728,7 +1858,7 @@ namespace MyNamespace
                                     session.FindElementByName("Reset to Initial Fit").Click();
                                     Thread.Sleep(2000);
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    ////session.SwitchTo().ActiveElement();
 
                                     try
                                     {
@@ -1877,6 +2007,7 @@ namespace MyNamespace
                 session.FindElementByName("Discover").Click();
                 stepName.Log(Status.Pass, "Clicked on Discover.");
                 session.SwitchTo().Window(session.WindowHandles.First());
+                Thread.Sleep(2000);
                 session.SwitchTo().ActiveElement();
 
                 /** Type the HI serial number in the search field. **/
@@ -2202,6 +2333,7 @@ namespace MyNamespace
                 //    return Path.GetDirectoryName(blob.Name) == formattedCurrentDate;
 
                 //}
+                
 
                 return blob.Name.Contains(DeviceNo);
 
@@ -2279,6 +2411,7 @@ namespace MyNamespace
 
             Thread.Sleep(2000);
             session.FindElementByName("Login").Click();
+            Thread.Sleep(5000);
             session = lib.functionWaitForName(session, "CAPTURE");
             var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
             var text = session.FindElementByAccessibilityId("textBlockMessage");
@@ -2288,7 +2421,7 @@ namespace MyNamespace
                 screenshot = ModuleFunctions.CaptureScreenshot(session);
                 stepName.Log(Status.Pass, "Capture Information : " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
-            else if(session.FindElementByAccessibilityId("labelHeader").Text == "Capture with low battery")
+            else if (session.FindElementByAccessibilityId("labelHeader").Text == "Capture with low battery")
             {
                 screenshot = ModuleFunctions.CaptureScreenshot(session);
                 stepName.Log(Status.Pass, "Capture Information : " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
@@ -2407,7 +2540,8 @@ namespace MyNamespace
             session = lib.waitForElement(session, "OK");
             var btnClose = session.FindElementByAccessibilityId("PART_Close");
             btnClose.Click();
-
+            //session.Quit();
+            //session.CloseApp();
             try
             {
                 if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
@@ -2452,7 +2586,7 @@ namespace MyNamespace
 
             Thread.Sleep(2000);
             session.FindElementByName("Login").Click();
-            Thread.Sleep(8000);
+            Thread.Sleep(20000);
 
             /** To Check the Setlistening checkbox **/
 
@@ -2464,6 +2598,18 @@ namespace MyNamespace
                     screenshot = ModuleFunctions.CaptureScreenshot(session);
                     stepName.Log(Status.Pass, "Listening test settings checkbox selected", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     session = lib.functionWaitForName(session, "CAPTURE");
+                    Thread.Sleep(5000);
+
+                    try
+                    {
+                        if (session.FindElementByAccessibilityId("labelHeader").Text == "Device Without Push Button")
+                        {
+                            session.FindElement(By.Name("OK")).Click();
+                        }
+
+
+                    }
+                    catch (Exception ex) { }
                     var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
                     var text = session.FindElementByAccessibilityId("textBlockMessage");
 
@@ -2521,6 +2667,18 @@ namespace MyNamespace
                     screenshot = ModuleFunctions.CaptureScreenshot(session);
                     stepName.Log(Status.Pass, "Listening test settings checkbox selected", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                     session = lib.functionWaitForName(session, "CAPTURE");
+                    Thread.Sleep(5000);
+
+                    try
+                    {
+                        if(session.FindElementByAccessibilityId("labelHeader").Text == "Device Without Push Button")
+                        {
+                            session.FindElement(By.Name("OK")).Click();
+                        }
+                       
+                        
+                    }
+                    catch (Exception ex) { }
 
                     var HIData = lib.waitUntilElementExists(session, "windowUserMessage", 1);
                     var text = session.FindElementByAccessibilityId("textBlockMessage");
@@ -2565,39 +2723,39 @@ namespace MyNamespace
                     }
                     else if (session.FindElementByAccessibilityId("labelHeader").Text == "FittingSessionNotFound")
                     {
-                            screenshot = ModuleFunctions.CaptureScreenshot(session);
-                            stepName.Log(Status.Pass, "FittingSessionNotFound" + ":" + "  " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
-                            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-                            session = lib.waitForElement(session, "Cancel");
-                            Thread.Sleep(4000);
-                            session.FindElementByName("Services").Click();
-                            ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-                            Thread.Sleep(4000);
-                            session = lib.functionWaitForName(session, "Capture");
-                            session = lib.functionWaitForName(session, "LOGIN REQUIRED");
-                            lib.clickOnElementWithIdonly(session, "PasswordBox");
+                        screenshot = ModuleFunctions.CaptureScreenshot(session);
+                        stepName.Log(Status.Pass, "FittingSessionNotFound" + ":" + "  " + text.Text, MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
+                        ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+                        session = lib.waitForElement(session, "Cancel");
+                        Thread.Sleep(4000);
+                        session.FindElementByName("Services").Click();
+                        ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+                        Thread.Sleep(4000);
+                        session = lib.functionWaitForName(session, "Capture");
+                        session = lib.functionWaitForName(session, "LOGIN REQUIRED");
+                        lib.clickOnElementWithIdonly(session, "PasswordBox");
 
-                            /** To passing the User password **/
+                        /** To passing the User password **/
 
-                            if (computer_name.Equals("FSWIRAY80"))
-                            {
-                                session.FindElementByAccessibilityId("PasswordBox").SendKeys("112233");
-                            }
-                            else
-                            {
-                                session.FindElementByAccessibilityId("PasswordBox").SendKeys("svk01");
-                            }
+                        if (computer_name.Equals("FSWIRAY80"))
+                        {
+                            session.FindElementByAccessibilityId("PasswordBox").SendKeys("112233");
+                        }
+                        else
+                        {
+                            session.FindElementByAccessibilityId("PasswordBox").SendKeys("svk01");
+                        }
 
-                            Thread.Sleep(2000);
-                            session.FindElementByName("Login").Click();
-                            session = lib.waitUntilElementExists(session, "checkBoxSetInListeningTest", 1);
-                            ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
-                            action = new Actions(session);
-                            action.MoveToElement(ext[0]).Build().Perform();
-                            Thread.Sleep(2000);
-                            action.MoveToElement(ext[0]).Click().Build().Perform();
-                            Thread.Sleep(2000);
-                            session.FindElementByName("CANCEL").Click();
+                        Thread.Sleep(2000);
+                        session.FindElementByName("Login").Click();
+                        session = lib.waitUntilElementExists(session, "checkBoxSetInListeningTest", 1);
+                        ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
+                        action = new Actions(session);
+                        action.MoveToElement(ext[0]).Build().Perform();
+                        Thread.Sleep(2000);
+                        action.MoveToElement(ext[0]).Click().Build().Perform();
+                        Thread.Sleep(2000);
+                        session.FindElementByName("CANCEL").Click();
 
                         //session.Close();
                     }
@@ -2740,17 +2898,18 @@ namespace MyNamespace
 
 
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
             session.FindElementByName("Device Info").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
 
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
                 stepName.Log(Status.Pass, "Clicked on Discover.");
                 session.SwitchTo().Window(session.WindowHandles.First());
+                Thread.Sleep(5000);
                 session.SwitchTo().ActiveElement();
-
+                Thread.Sleep(5000);
                 try
                 {
                     session.FindElementByAccessibilityId("SerialNumberTextBox").SendKeys(DeviceNo);
@@ -2944,62 +3103,129 @@ namespace MyNamespace
                 catch (Exception ex) { }
                 try
                 {
-                    DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                    appCapabilities.SetCapability("platformName", "Windows");
-                    //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                    appCapabilities.SetCapability("automationName", "Windows");
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    AppiumOptions appCapabilities = new AppiumOptions();
+                    session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+                    //AppiumOptions appCapabilities = new AppiumOptions();
+                    //appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                    //appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                    //appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+                    //appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                    //appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                    //appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                    //appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                    //appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                    //appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                    //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    //Thread.Sleep(5000);
+                    //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    //session.Manage().Window.Maximize();
+                    //session.SwitchTo().Window(session.WindowHandles.First());
+                    ////session.SwitchTo().ActiveElement();
+                    //Actions act = new Actions(session);
+                    //var btnAdd = session.FindElement(By.ClassName("btn btn-lg btn-secondary-dark w-30"));
+                    //act.MoveToElement(btnAdd).Click().Perform();
+                    try
+                    {
+                        string addPatientXpath = "//Button[@Name=' Add or Select Patient']";
+                        WindowsElement patientXpath = session.FindElement(By.XPath(addPatientXpath));
+                        patientXpath.Click();
+                    }
+                    catch (Exception ex)
+                    {
+                        string addPatientXpath = "//Button[@ClassName='btn btn-lg btn-secondary-dark w-30']";
+                        WindowsElement patientXpath = session.FindElement(By.XPath(addPatientXpath));
+                        patientXpath.Click();
+
+                    }
+                    //Thread.Sleep(5000);
+                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.FSWAppPath, config.workingdirectory.FSWWorkingPath);
+                    //appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                    //appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                    //appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+                    //appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                    //appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                    //appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                    //appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                    //appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                    ////appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                    //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    //Thread.Sleep(5000);
+                    //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    //session.Manage().Window.Maximize();
+                    //session.SwitchTo().Window(session.WindowHandles.First());
+                    //Actions acn1 = new Actions(session);
+                    //var elen1 = session.FindElementByName("abc");
+                    //acn1.MoveToElement(elen1).Perform();
+                    WebDriverWait wait = new WebDriverWait(session, TimeSpan.FromMinutes(5));
+                    try
+                    {
+                        wait.Until(d => d.FindElements(By.XPath("//Group")).Count > 0);
+
+                        var allGroups = session.FindElements(By.XPath("//Group"));
+
+                        foreach (var group in allGroups)
+                        {
+                            Actions actions = new Actions(session);
+
+                            wait.Until(d => group.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                            var all = group.FindElements(By.XPath(".//Group[1]"));
+                            foreach (var element in all)
+                            {
+                                wait.Until(d => element.FindElements(By.XPath(".//Group[1]")).Count > 0);
+
+                                var all2 = element.FindElements(By.XPath(".//Group[1]"));
+                                foreach (var child in all2)
+                                {
+                                    wait.Until(d => child.FindElements(By.XPath(".//*")).Count > 0);
+                                    var allChildElements = child.FindElements(By.XPath(".//*"));
+                                    if (allChildElements != null && allChildElements.Count >= 17)
+                                    {
+                                        var fourteenthElement = allChildElements[12];
+                                        Actions actions1 = new Actions(session);
+                                        actions1.MoveToElement(fourteenthElement).Click().Perform();
+
+                                        var selectPatient2 = wait.Until(d => d.FindElement(By.Name("Fit Patient")));
+                                        Actions actions2 = new Actions(session);
+                                        actions2.MoveToElement(selectPatient2).Click().Perform();
+
+                                        break;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    catch (WebDriverTimeoutException ex)
+                    {
+                    }
+                    catch (NoSuchElementException ex)
+                    {
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    //Thread.Sleep(1000);
+                    //session.FindElementByName("Fit Patient").Click();
+                    //appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                    //appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                    //appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "25");
+                    //appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                    //appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                    //appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                    //appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                    //appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                    //appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                    //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                    //Thread.Sleep(15000);
+                    session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SmartFitAppPath, config.workingdirectory.FSWWorkingPath);
+
+                    //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
                     session.Manage().Window.Maximize();
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
-                    Actions act = new Actions(session);
-                    var btnAdd = session.FindElementByClassName("spinner-border spinner-border-sm visually-hidden");
-                    act.MoveToElement(btnAdd).Click().Perform();
-                    Thread.Sleep(5000);
-                    appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                    appCapabilities.SetCapability("platformName", "Windows");
-                    //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                    appCapabilities.SetCapability("automationName", "Windows");
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    session.Manage().Window.Maximize();
-                    session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
-                    Actions ac = new Actions(session);
-                    var ele = session.FindElementByName("abc");
-                    ac.MoveToElement(ele).Perform();
-                    Thread.Sleep(1000);
-                    session.FindElementByName("Fit Patient").Click();
-                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                    appCapabilities.SetCapability("platformName", "Windows");
-                    //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                    appCapabilities.SetCapability("automationName", "Windows");
-                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    Thread.Sleep(5000);
-                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
-                    session.Manage().Window.Maximize();
-                    session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
-                    session.FindElementByName("Connect to ReSound Smart Fit").Click();
+                    ////session.SwitchTo().ActiveElement();
+                    session.FindElementByAccessibilityId("fittingpath-button-connect").Click();
                     Thread.Sleep(12000);
 
                     lib.clickOnAutomationName(session, "Assign Instruments");
@@ -3099,60 +3325,60 @@ namespace MyNamespace
                                 try
                                 {
                                     Thread.Sleep(2000);
-                                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                                    appCapabilities.SetCapability("platformName", "Windows");
-                                    appCapabilities.SetCapability("ms:waitForAppLaunch", "20");
-                                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                                    appCapabilities.SetCapability("automationName", "Windows");
-                                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                                    appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                                    appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "20");
+                                    appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                                    appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                                    appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                                    appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                                    appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                                    appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                                     Thread.Sleep(5000);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                                     session.Manage().Window.Maximize();
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    //session.SwitchTo().ActiveElement();
                                     Actions act1 = new Actions(session);
                                     var btnAdd1 = session.FindElementByClassName("spinner-border spinner-border-sm visually-hidden");
                                     act1.MoveToElement(btnAdd1).Click().Perform();
                                     Thread.Sleep(10000);
-                                    appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                                    appCapabilities.SetCapability("platformName", "Windows");
-                                    appCapabilities.SetCapability("ms:waitForAppLaunch", "20");
-                                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                                    appCapabilities.SetCapability("automationName", "Windows");
-                                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                                    appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                                    appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "20");
+                                    appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                                    appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                                    appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                                    appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                                    appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                                    appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                                     Thread.Sleep(5000);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                                     session.Manage().Window.Maximize();
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    //session.SwitchTo().ActiveElement();
                                     Actions ac1 = new Actions(session);
                                     var ele1 = session.FindElementByName("abc");
                                     ac1.MoveToElement(ele1).Perform();
                                     Thread.Sleep(1000);
                                     session.FindElementByName("Fit Patient").Click();
-                                    appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                                    appCapabilities.SetCapability("platformName", "Windows");
-                                    appCapabilities.SetCapability("ms:waitForAppLaunch", "20");
-                                    appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                                    appCapabilities.SetCapability("appArguments", "Test.exe");
-                                    appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                                    appCapabilities.SetCapability("automationName", "Windows");
-                                    appCapabilities.SetCapability("deviceName", "WindowsPC");
-                                    appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                                    appCapabilities.AddAdditionalCapability("platformName", "Windows");
+                                    appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "20");
+                                    appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                                    appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                                    appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                                    appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                                    appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                                    appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                                     Thread.Sleep(5000);
-                                    session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                                    session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                                     session.Manage().Window.Maximize();
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    //session.SwitchTo().ActiveElement();
                                     session.FindElementByName("Connect to ReSound Smart Fit").Click();
                                     Thread.Sleep(12000);
 
@@ -3213,61 +3439,61 @@ namespace MyNamespace
             {
 
 
-                DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("platformName", "Windows");
+                AppiumOptions appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                appCapabilities.AddAdditionalCapability("platformName", "Windows");
                 //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                appCapabilities.SetCapability("appArguments", "Test.exe");
-                appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                appCapabilities.SetCapability("automationName", "Windows");
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 session.Manage().Window.Maximize();
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 Actions act = new Actions(session);
                 var btnAdd = session.FindElementByClassName("spinner-border spinner-border-sm visually-hidden");
                 act.MoveToElement(btnAdd).Click().Perform();
                 Thread.Sleep(5000);
-                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                appCapabilities.SetCapability("platformName", "Windows");
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                appCapabilities.AddAdditionalCapability("platformName", "Windows");
                 //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                appCapabilities.SetCapability("appArguments", "Test.exe");
-                appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                appCapabilities.SetCapability("automationName", "Windows");
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 session.Manage().Window.Maximize();
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 Actions ac = new Actions(session);
                 var ele = session.FindElementByName("abc");
                 ac.MoveToElement(ele).Perform();
                 Thread.Sleep(1000);
                 session.FindElementByName("Fit Patient").Click();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("platformName", "Windows");
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                appCapabilities.AddAdditionalCapability("platformName", "Windows");
                 //appCapabilities.SetCapability("ms:waitForAppLaunch", "5");
-                appCapabilities.SetCapability("appArguments", "--run-as-administrator");
-                appCapabilities.SetCapability("appArguments", "Test.exe");
-                appCapabilities.SetCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
-                appCapabilities.SetCapability("automationName", "Windows");
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                appCapabilities.SetCapability("ms:experimental-webdriver", true);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
+                appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
+                appCapabilities.AddAdditionalCapability("appWorkingDir", @"C:\Program Files (x86)\ReSound\SmartFit");
+                appCapabilities.AddAdditionalCapability("automationName", "Windows");
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                appCapabilities.AddAdditionalCapability("ms:experimental-webdriver", true);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 session.Manage().Window.Maximize();
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 session.FindElementByName("Connect to ReSound Smart Fit").Click();
                 Thread.Sleep(12000);
 
@@ -3289,9 +3515,9 @@ namespace MyNamespace
                 //DesiredCapabilities appCapabilities = new DesiredCapabilities();
                 //appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
                 //appCapabilities.SetCapability("deviceName", "WindowsPC");
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(10000);
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(2000);
                 //session.Manage().Window.Maximize();
                 //var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
@@ -3333,9 +3559,9 @@ namespace MyNamespace
                 //appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
                 //appCapabilities.SetCapability("deviceName", "WindowsPC");
                 //Thread.Sleep(5000);
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(10000);
-                //session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                //session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 //Thread.Sleep(10000);
 
                 //try
@@ -3397,7 +3623,7 @@ namespace MyNamespace
                     {
 
                     }
-                  
+
                 }
                 catch (Exception)
                 { }
@@ -3416,11 +3642,11 @@ namespace MyNamespace
 
                 do
                 {
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     if (buttonCount >= 1)
                     {
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", stepName);
                         try
                         {
@@ -3550,7 +3776,7 @@ namespace MyNamespace
                     Thread.Sleep(10000);
                     lib.clickOnElementWithIdonly(session, "WindowAutomationIds.CloseAction");
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     /** Exit FSW with Out Saving **/
 
@@ -3810,29 +4036,58 @@ namespace MyNamespace
                                 lib.functionWaitForName(session, "Connect");
                                 lib.waitUntilElementExists(session, "File", 0);
                                 Thread.Sleep(4000);
-                                var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                                ext[0].Click();
-                                Thread.Sleep(2000);
-                                ext = session.FindElements(WorkFlowPageFactory.readHI);
-                                actions = new Actions(session);
-                                actions.MoveToElement(ext[0]).Build().Perform();
-                                Thread.Sleep(2000);
-                                session.Keyboard.PressKey(Keys.Enter);
-                                Thread.Sleep(5000);
+                                //var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                                //ext[0].Click();
+                                //Thread.Sleep(2000);
+                                //ext = session.FindElements(WorkFlowPageFactory.readHI);
+                                //actions = new Actions(session);
+                                //actions.MoveToElement(ext[0]).Build().Perform();
+                                //Thread.Sleep(2000);
+                                //session.Keyboard.PressKey(Keys.Enter);
+                                //Thread.Sleep(5000);
 
+                                ///** Click on Uncheck button **/
+
+                                //session.FindElementByName("Uncheck All").Click();
+                                //Thread.Sleep(3000);
+                                //session.FindElementByAccessibilityId("1001").Click();
+                                //Thread.Sleep(2000);
+
+                                ///** Choose the All option in drop down **/
+
+                                //var rd = session.FindElementByName("All");
+                                //actions.MoveToElement(rd).Click().Perform();
+                                //Thread.Sleep(2000);
+                                //var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                                //ext[0].Click();
+                                //Thread.Sleep(5000);
+                                //ext = session.FindElements(WorkFlowPageFactory.readHI);
+                                //actions = new Actions(session);
+                                //actions.MoveToElement(ext[0]).Build().Perform();
+                                //Thread.Sleep(5000);
+                                //session.Keyboard.PressKey(Keys.Enter);
+                                var read = "//*[@Name='_Read from']";
+                                var readFrom = session.FindElement(By.XPath(read));
+                                actions.MoveToElement(readFrom).Click().Perform();
+                                Thread.Sleep(10000);
+
+                                stepName.Log(Status.Info, "Device connected successfully..");
                                 /** Click on Uncheck button **/
 
                                 session.FindElementByName("Uncheck All").Click();
                                 Thread.Sleep(3000);
                                 session.FindElementByAccessibilityId("1001").Click();
-                                Thread.Sleep(2000);
+                                Thread.Sleep(4000);
 
                                 /** Choose the All option in drop down **/
 
-                                var rd = session.FindElementByName("All");
-                                actions.MoveToElement(rd).Click().Perform();
-                                Thread.Sleep(2000);
+                                // Find the element by XPath
 
+                                var all = "//*[@Name='All']";
+                                var allClick = session.FindElement(By.XPath(all));
+                                Thread.Sleep(4000);
+                                Actions actions1 = new Actions(session);
+                                actions1.MoveToElement(allClick).Click().Perform();
                                 /** To Click the Apply selection button **/
 
                                 session.FindElementByName("Apply selection").Click();
@@ -3924,7 +4179,7 @@ namespace MyNamespace
                                 try
                                 {
                                     session.SwitchTo().Window(session.WindowHandles.First());
-                                    session.SwitchTo().ActiveElement();
+                                    //session.SwitchTo().ActiveElement();
                                     Thread.Sleep(5000);
                                     if (session.FindElementByName("Channel").Displayed == true)
                                     {
@@ -4144,7 +4399,7 @@ namespace MyNamespace
                                             sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
                                             Thread.Sleep(2000);
                                             session.SwitchTo().Window(session.WindowHandles.First());
-                                            session.SwitchTo().ActiveElement();
+                                            //session.SwitchTo().ActiveElement();
 
                                             try
                                             {

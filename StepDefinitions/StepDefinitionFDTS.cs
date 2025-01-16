@@ -36,6 +36,9 @@ using org.xml.sax;
 using System.Net.Http;
 using System.Threading.Tasks;
 using File = System.IO.File;
+using System.Net;
+using Polly;
+using com.sun.corba.se.spi.activation;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -54,7 +57,7 @@ namespace AppiumWinApp.StepDefinitions
         protected static IOSDriver<IOSElement> DesktopSession;
         private static ExtentReports extent;
         private static ExtentHtmlReporter htmlReporter;
-
+    
         public TestContext TestContext { get; set; }
 
         string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
@@ -66,7 +69,7 @@ namespace AppiumWinApp.StepDefinitions
             _scenarioContext = scenarioContext;
             extent = ModuleFunctions.extent;
             _featureContext = featureContext;
-
+            
         }
 
         /** This is to clear exisisting dump image files in the c drive **/
@@ -394,18 +397,18 @@ namespace AppiumWinApp.StepDefinitions
             /** To lauch the S&R tool **/
 
             session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
             stepName.Log(Status.Pass, "S&R Tool launched successfully");
             session.FindElementByName("Device Info").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
 
             if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
             {
                 session.FindElementByName("Discover").Click();
                 stepName.Log(Status.Pass, "Clicked on Discover.");
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
-
+                ////session.SwitchTo().ActiveElement();
+                Thread.Sleep(5000);
                 try
                 {
 
@@ -501,7 +504,7 @@ namespace AppiumWinApp.StepDefinitions
                 session.FindElementByName("Connect to hearing instrument automatically").Click();
                 Thread.Sleep(8000);
             }
-
+            Thread.Sleep(5000);
             session.FindElementByName("Services").Click();
             Thread.Sleep(10000);
             var res = session.FindElementsByClassName("Button");
@@ -524,12 +527,12 @@ namespace AppiumWinApp.StepDefinitions
 
             Thread.Sleep(2000);
             session.FindElementByName("Login").Click();
-            Thread.Sleep(4000);
+            Thread.Sleep(8000);
 
             /** To pass the Device serial number **/
 
             session.FindElementByAccessibilityId("textBoxSerialNumber").SendKeys(DeviceLeftSlNo);
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
             session = lib.functionWaitForId(session, "buttonFind");
             WebDriverWait waitForMe = new WebDriverWait(session, TimeSpan.FromSeconds(50));
             session = lib.waitForElement(session, "SELECT");
@@ -633,12 +636,13 @@ namespace AppiumWinApp.StepDefinitions
                 Thread.Sleep(3000);
                 Console.WriteLine("This is When method");
                 Thread.Sleep(2000);
-                DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+            
+                AppiumOptions appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
@@ -673,14 +677,14 @@ namespace AppiumWinApp.StepDefinitions
                 Thread.Sleep(10000);
                 session.Close();
 
-                appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
+                appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
                 Thread.Sleep(5000);
 
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
                 Thread.Sleep(10000);
 
@@ -833,12 +837,12 @@ namespace AppiumWinApp.StepDefinitions
             {
 
                 Thread.Sleep(2000);
-                DesiredCapabilities appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.FSWAppPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                AppiumOptions appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FSWAppPath);
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(2000);
                 session.Manage().Window.Maximize();
                 var wait = new WebDriverWait(session, TimeSpan.FromSeconds(20));
@@ -868,13 +872,13 @@ namespace AppiumWinApp.StepDefinitions
                 stepName.Pass("Patient is clicked");
                 Thread.Sleep(10000);
                 session.Close();
-                appCapabilities = new DesiredCapabilities();
-                appCapabilities.SetCapability("app", config.ApplicationPath.SmartFitAppPath);
-                appCapabilities.SetCapability("deviceName", "WindowsPC");
+                appCapabilities = new AppiumOptions();
+                appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.SmartFitAppPath);
+                appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
                 Thread.Sleep(5000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
                 Thread.Sleep(10000);
-                session = new WindowsDriver<WindowsElement>(new Uri(config.TestEnvironment.WinappDriverUrl), appCapabilities);
+                session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
 
                 try
                 {
@@ -915,11 +919,11 @@ namespace AppiumWinApp.StepDefinitions
 
                 do
                 {
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     if (buttonCount >= 1)
                     {
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         session = ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", test);
                         try
                         {
@@ -1021,7 +1025,7 @@ namespace AppiumWinApp.StepDefinitions
             config = (appconfigsettings)_featureContext["config"];
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-            session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);         
+            session = ModuleFunctions.sessionInitialize1(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
         }
 
         [When(@"\[Navigate to settings tab and set the system role to ""([^""]*)""]")]
@@ -1043,7 +1047,7 @@ namespace AppiumWinApp.StepDefinitions
         [Then(@"\[Click on set sales order connection string and input the invalid base string ""([^""]*)""]")]
         public void ThenClickOnSetSalesOrderConnectionStringAndInputTheInvalidBaseString(string value)
         {
-            test = ScenarioContext.Current["extentTest"] as ExtentTest;          
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             session.FindElementByName("Set sales order connection string").Click();
             Thread.Sleep(2000);
@@ -1074,7 +1078,7 @@ namespace AppiumWinApp.StepDefinitions
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             config = (appconfigsettings)_featureContext["config"];
             try
-            {              
+            {
                 XmlDocument doc = new XmlDocument();
                 doc.Load(config.connectionStringPath.PathtoValue);
                 string settingName = "SalesOrderConnection";
@@ -1085,7 +1089,7 @@ namespace AppiumWinApp.StepDefinitions
             catch
             {
                 stepName.Log(Status.Pass, $"Invalid base64 connection string is not updated in the user.config file : {value}");
-            }       
+            }
         }
 
         [Then(@"\[Click on set sales order connection string and input the valid base string ""([^""]*)""]")]
@@ -1126,33 +1130,55 @@ namespace AppiumWinApp.StepDefinitions
         [Given(@"Downloading latest S&R beta version from the app-gop-apt-devops site")]
         public async Task GivenDownloadingLatestSRBetaVersionFromTheApp_Gop_Apt_DevopsSiteAsync()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             config = (appconfigsettings)_featureContext["config"];
 
             var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool/DEV/{config.sandRDownloadLinkUpdateParameters.Build}/Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}/S&R%20Tool%20{config.sandRDownloadLinkUpdateParameters.Build}%20(Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}).zip?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-11-01T17:11:32Z&st=2023-10-31T09:11:32Z&spr=https&sig=djt13wu5PaY7vBdyyrqI5RKFf4QRaIafPYu8f6xzuGA%3D";
+
             try
             {
-                using (HttpClient client = new HttpClient())
+                var cts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+
+                stepName.Log(Status.Info, "Download Started");
+
+                var retryPolicy = Policy
+                    .Handle<HttpRequestException>()
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                await retryPolicy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage response = await client.GetAsync(baseUrl);
 
-                    response.EnsureSuccessStatusCode();
-
-                    byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
-
-                    string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                    string filePath = Path.Combine(downloadsFolder, "Downloads", $"S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}).zip");
-
-                    if (File.Exists(filePath))
+                    using (HttpClient client = new HttpClient())
                     {
-                        File.Delete(filePath);
+                        client.Timeout = TimeSpan.FromMinutes(5);
+
+                        HttpResponseMessage response = await client.GetAsync(baseUrl, cts.Token);
+
+                        response.EnsureSuccessStatusCode();
+
+                        byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+                        string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                        string filePath = Path.Combine(downloadsFolder, "Downloads", $"S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}).zip");
+
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+
+                        await File.WriteAllBytesAsync(filePath, fileBytes);
+                        stepName.Log(Status.Pass, $"Downloading of latest S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) succeeded!");
                     }
-
-                    await File.WriteAllBytesAsync(filePath, fileBytes);
-
-                    stepName.Log(Status.Pass, $"Downloading of latest S&R Tool {config.sandRDownloadLinkUpdateParameters.Build} (Beta {config.sandRDownloadLinkUpdateParameters.Beta}) is success!");
-                }
+                });
+            }
+            catch (TaskCanceledException ex)
+            {
+                stepName.Log(Status.Fail, "Download operation was canceled, possibly due to timeout.");
+            }
+            catch (HttpRequestException ex)
+            {
+                stepName.Log(Status.Fail, $"A network error occurred: {ex.Message}");
             }
             catch (Exception ex)
             {
@@ -1204,10 +1230,10 @@ namespace AppiumWinApp.StepDefinitions
                 Assert.That(connectionStringButton, Is.EqualTo(actualConnectionStringButton));
                 stepName.Log(Status.Pass, "Sales order connection string button with value is preserved to latest S&R Tool", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 stepName.Log(Status.Fail, "Sales order connection string button with value is not preserved to latest S&R Tool", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
-            }                
+            }
         }
 
         //[AfterScenario]
@@ -1216,129 +1242,129 @@ namespace AppiumWinApp.StepDefinitions
         //public void ThenDone()
         //{
 
-            //Process winApp = new Process();
-            //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
-            //winApp.Kill();
+        //Process winApp = new Process();
+        //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+        //winApp.Kill();
 
-            //Console.WriteLine("This is Done method");
-            //var scenarioContext = ScenarioContext.Current;
-            //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+        //Console.WriteLine("This is Done method");
+        //var scenarioContext = ScenarioContext.Current;
+        //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
 
-            //var testcaseId = scenarioContext.Get<string>("TestCaseID");
-
-
-            //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
-
-            //foreach (var xmlFile in xmlFiles)
-            //{
-            //    XDocument xmlDoc = XDocument.Load(xmlFile);
+        //var testcaseId = scenarioContext.Get<string>("TestCaseID");
 
 
-            //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
-            //    {
-            //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
+        //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
 
-            //        if (elementTestCaseID == testcaseId)
-            //        {
-
-            //            var elementTestStatus = testResultSetElement.Element("TestStatus");
-            //            if (elementTestStatus != null)
-            //            {
-            //                elementTestStatus.Value = testStatus;
-            //            }
-            //        }
-            //    }
-
-            //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
-            //}
-            //{
-
-            //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
-
-            //    string xmlFolderPath = Path.Combine(projectPath, "XML");
-
-            //    string keyToUpdate = "WorkFlowsXMLsPath";
-            //    string valueToUpdate = xmlFolderPath;
-
-            //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
-
-            //    foreach (var configFile in configFiles)
-            //    {
-            //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
-            //    }
-            //}
-
-            //static void UpdateAppSettingValue(string configFilePath, string key, string value)
-            //{
-            //    try
-            //    {
-            //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
-            //        {
-            //            ExeConfigFilename = configFilePath
-            //        };
-            //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
-
-            //        if (config.AppSettings.Settings[key] != null)
-            //        {
-            //            config.AppSettings.Settings[key].Value = value;
-            //            config.Save(ConfigurationSaveMode.Modified);
-            //            ConfigurationManager.RefreshSection("appSettings");
-
-            //            string updatedValue = ConfigurationManager.AppSettings[key];
-            //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
-            //        }
-            //        else
-            //        {
-            //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
-            //    }
-            //}
-
-            //try
+        //foreach (var xmlFile in xmlFiles)
+        //{
+        //    XDocument xmlDoc = XDocument.Load(xmlFile);
 
 
-            //{
-            //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
+        //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
+        //    {
+        //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
 
-            //    if (System.IO.File.Exists(agentPath))
-            //    {
-            //        ProcessStartInfo startInfo = new ProcessStartInfo
-            //        {
-            //            FileName = agentPath,
-            //            UseShellExecute = false,
-            //            RedirectStandardOutput = true,
-            //            RedirectStandardError = true,
-            //            CreateNoWindow = true
-            //        };
+        //        if (elementTestCaseID == testcaseId)
+        //        {
 
-            //        Process process = new Process
-            //        {
-            //            StartInfo = startInfo
-            //        };
+        //            var elementTestStatus = testResultSetElement.Element("TestStatus");
+        //            if (elementTestStatus != null)
+        //            {
+        //                elementTestStatus.Value = testStatus;
+        //            }
+        //        }
+        //    }
+
+        //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
+        //}
+        //{
+
+        //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+
+        //    string xmlFolderPath = Path.Combine(projectPath, "XML");
+
+        //    string keyToUpdate = "WorkFlowsXMLsPath";
+        //    string valueToUpdate = xmlFolderPath;
+
+        //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
+
+        //    foreach (var configFile in configFiles)
+        //    {
+        //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
+        //    }
+        //}
+
+        //static void UpdateAppSettingValue(string configFilePath, string key, string value)
+        //{
+        //    try
+        //    {
+        //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+        //        {
+        //            ExeConfigFilename = configFilePath
+        //        };
+        //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+
+        //        if (config.AppSettings.Settings[key] != null)
+        //        {
+        //            config.AppSettings.Settings[key].Value = value;
+        //            config.Save(ConfigurationSaveMode.Modified);
+        //            ConfigurationManager.RefreshSection("appSettings");
+
+        //            string updatedValue = ConfigurationManager.AppSettings[key];
+        //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+        //    }
+        //}
+
+        //try
 
 
-            //        process.Start();
-            //        process.WaitForExit(); // Optionally wait for the process to complete
+        //{
+        //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
 
-            //        //string standardOutput = process.StandardOutput.ReadToEnd();
-            //        //string standardError = process.StandardError.ReadToEnd();
+        //    if (System.IO.File.Exists(agentPath))
+        //    {
+        //        ProcessStartInfo startInfo = new ProcessStartInfo
+        //        {
+        //            FileName = agentPath,
+        //            UseShellExecute = false,
+        //            RedirectStandardOutput = true,
+        //            RedirectStandardError = true,
+        //            CreateNoWindow = true
+        //        };
 
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("TFS agent executable not found at the specified path.");
-            //    }
-            //}
+        //        Process process = new Process
+        //        {
+        //            StartInfo = startInfo
+        //        };
 
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("An error occurred: " + ex.Message);
-            //}
-       // }
+
+        //        process.Start();
+        //        process.WaitForExit(); // Optionally wait for the process to complete
+
+        //        //string standardOutput = process.StandardOutput.ReadToEnd();
+        //        //string standardError = process.StandardError.ReadToEnd();
+
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("TFS agent executable not found at the specified path.");
+        //    }
+        //}
+
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine("An error occurred: " + ex.Message);
+        //}
+        // }
     }
 }
 

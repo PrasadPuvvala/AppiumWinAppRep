@@ -96,20 +96,20 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 8
+#line 9
     testRunner.Given("[Launch SandRTool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 9
+#line 10
  testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 10
+#line 11
  testRunner.Then(string.Format("[Click on set sales order connection string and input the invalid base string \"{0" +
                             "}\"]", invalidBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 11
+#line 12
  testRunner.Then(string.Format("[Verify the error message on the connection string pop-up window \"{0}\"]", message), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 12
+#line 13
  testRunner.Then(string.Format("[Verify that a \"{0}\" string in the user config file in the local machine]", invalidBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -128,7 +128,7 @@ this.ScenarioInitialize(scenarioInfo);
             argumentsOfScenario.Add("ValidBase64Value", validBase64Value);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02Test Case ID 1703237: S&R [VA] -  Verify that a valid connection string is save" +
                     "d in the user config file in the local machine", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 20
+#line 22
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -138,17 +138,17 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 22
+#line 25
      testRunner.Given("[Launch SandRTool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 23
+#line 26
      testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 24
+#line 27
   testRunner.Then(string.Format("[Click on set sales order connection string and input the valid base string \"{0}\"" +
                             "]", validBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 25
+#line 28
   testRunner.Then(string.Format("[Verify that a \"{0}\" string in the user config file in the local machine]", validBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -168,7 +168,7 @@ this.ScenarioInitialize(scenarioInfo);
             argumentsOfScenario.Add("ValidBase64Value2", validBase64Value2);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03Test Case ID 1703238: S&R [VA] -  Verify that a connection string is overridden" +
                     " when a new valid connection string is input.", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 33
+#line 37
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -178,24 +178,24 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 35
+#line 40
      testRunner.Given("[Launch SandRTool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 36
-     testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 41
+    testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 37
+#line 42
   testRunner.Then(string.Format("[Click on set sales order connection string and input the valid base string \"{0}\"" +
                             "]", validBase64Value1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 38
+#line 43
   testRunner.Then(string.Format("[Verify that a \"{0}\" string in the user config file in the local machine]", validBase64Value1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 39
+#line 44
   testRunner.Then(string.Format("[Click on set sales order connection string and input the valid base string \"{0}\"" +
                             "]", validBase64Value2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 40
+#line 45
   testRunner.Then(string.Format("[Verify that a \"{0}\" string in the user config file in the local machine]", validBase64Value2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -214,7 +214,7 @@ this.ScenarioInitialize(scenarioInfo);
             argumentsOfScenario.Add("SystemRole2", systemRole2);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04Test Case ID 1703240: S&R [VA] -  Verify that Set Sales Order Connection String" +
                     " feature is available only for VA role", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 47
+#line 52
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -224,19 +224,19 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 49
+#line 54
      testRunner.Given("[Launch SandRTool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 50
+#line 55
   testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 51
+#line 56
   testRunner.Then("[Verify the visibility of connection string]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 52
+#line 57
   testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 53
+#line 58
   testRunner.Then("[Verify the visibility of connection string other than VA system role]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -256,7 +256,7 @@ this.ScenarioInitialize(scenarioInfo);
             argumentsOfScenario.Add("ConnectionStringButton", connectionStringButton);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05Test Case ID 1696030: S&R [VA] - Inputting, Validating, and Retaining Connectio" +
                     "n String.", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 60
+#line 66
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -266,33 +266,33 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 62
+#line 69
       testRunner.Given("[Launch SandRTool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 63
+#line 70
    testRunner.When(string.Format("[Navigate to settings tab and set the system role to \"{0}\"]", systemRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 64
+#line 71
    testRunner.Then(string.Format("[Click on set sales order connection string and input the valid base string \"{0}\"" +
                             "]", validBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 65
+#line 72
    testRunner.Then(string.Format("[Verify that a \"{0}\" string in the user config file in the local machine]", validBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 66
+#line 73
    testRunner.When("[Uninstall the current S&R Tool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 67
+#line 74
    testRunner.When("[Install the latest S&R Tool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 68
+#line 75
    testRunner.Given("[Launch SandRTool]", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 69
+#line 76
    testRunner.Then(string.Format("[Validate the previous SystemRole \"{0}\" and valid base connection string \"{1}\" an" +
                             "d \"{2}\" is preserved to latest S&R]", systemRole, validBase64Value, connectionStringButton), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 70
+#line 77
    testRunner.Then(string.Format("[Verify that a \"{0}\" string in the user config file in the local machine]", validBase64Value), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -17,6 +17,8 @@ using Microsoft.SqlServer.Management.XEvent;
 using System.Linq;
 using OpenQA.Selenium;
 using TechTalk.SpecFlow;
+using OpenQA.Selenium.Appium;
+using AppiumWinApp.StepDefinitions;
 
 namespace AppiumWinApp.PageFactory
 {
@@ -29,15 +31,21 @@ namespace AppiumWinApp.PageFactory
         private static ExtentHtmlReporter htmlReporter;
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
+        //private static AppiumServer _appiumServer;
+    
 
+        //public SystemPageFactory()
+        //{
+        //    _appiumServer = Hooks1.AppiumServerInstance; // Accessing the AppiumServer from Hooks1
+        //}
         public static void launchSystemSettings(String sideSelection, ExtentReports extent1, ExtentTest stepName)
         {
             extent = extent1;
             String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
             Thread.Sleep(2000);
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(2000);
             standardElements.test(session);
@@ -52,9 +60,9 @@ namespace AppiumWinApp.PageFactory
             extent = extent1;
             String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
             Thread.Sleep(2000);
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(2000);
             standardElements.test(session);
@@ -70,9 +78,9 @@ namespace AppiumWinApp.PageFactory
             extent = extent1;
             String ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\System Configuration\\Camelot.SystemConfiguration.exe";
             Thread.Sleep(2000);
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(2000);
             standardElements.test(session);
@@ -102,7 +110,7 @@ namespace AppiumWinApp.PageFactory
                 continueButton.Click();
                 Thread.Sleep(2000);
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                ////session.SwitchTo().ActiveElement();
             }
 
 
@@ -117,7 +125,7 @@ namespace AppiumWinApp.PageFactory
                 FunctionLibrary lib = new FunctionLibrary();
                 lib.clickOnElementWithIdonly(session, "textBoxSystemSettings");
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                ////session.SwitchTo().ActiveElement();
                 Thread.Sleep(4000);
             }
 
@@ -137,8 +145,14 @@ namespace AppiumWinApp.PageFactory
             public static void changeChannel(WindowsDriver<WindowsElement> session, string sideSel)
             {
                 FunctionLibrary lib = new FunctionLibrary();
-                var expand = session.FindElementsByAccessibilityId("Expander");
-                expand[3].Click();
+                var expand = new List<WindowsElement>(session.FindElementsByAccessibilityId("Expander"));
+
+                // Ensure the list contains enough elements
+                if (expand.Count > 3)
+                {
+                    // Click on the 4th element (index 3)
+                    expand[3].Click();
+                }
                 Thread.Sleep(2000);
                 var combo = session.FindElementsByClassName("ComboBox");
                 foreach (var element in combo)
@@ -222,9 +236,9 @@ namespace AppiumWinApp.PageFactory
                 session.FindElementByName("Basic Settings").FindElementByAccessibilityId("Expander").Click();
                 var combo = session.FindElementsByClassName("ComboBox");
 
-                foreach( var item in combo )
+                foreach (var item in combo)
                 {
-                    if(item.Text=="Development and Verification")
+                    if (item.Text == "Development and Verification")
                     {
                         var items = session.FindElementsByClassName("Button");
                         items[1].Click();
@@ -249,7 +263,7 @@ namespace AppiumWinApp.PageFactory
                         items[0].Click();
                         break;
                     }
-                }    
+                }
             }
         }
 

@@ -57,6 +57,7 @@ using AppiumWinApp.PageFactory;
 using System.Xml.Linq;
 using System.Xml;
 using sun.tools.tree;
+using OpenQA.Selenium.Appium;
 
 namespace AppiumWinApp
 {
@@ -97,9 +98,9 @@ namespace AppiumWinApp
         {
             /* Thread.Sleep(2000);
 
-             DesiredCapabilities appCapabilities = new DesiredCapabilities();
-             appCapabilities.SetCapability("app", ApplicationPath);
-             appCapabilities.SetCapability("deviceName", "WindowsPC");
+             AppiumOptions appCapabilities = new AppiumOptions();
+             appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+             appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
              session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
              Thread.Sleep(10000);
              session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);*/
@@ -137,10 +138,10 @@ namespace AppiumWinApp
             ApplicationPath = "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime\\Camelot.WorkflowRuntime.exe";
             Thread.Sleep(2000);
 
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
-         //   appCapabilities.SetCapability("appWorkingDir", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+         //   appCapabilities.AddAdditionalCapability("appWorkingDir", "C:\\Program Files (x86)\\GN Hearing\\Camelot\\WorkflowRuntime");
 
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(10000);
@@ -163,7 +164,7 @@ namespace AppiumWinApp
             /*Test workflow*/
             Thread.Sleep(4000);
 
-            //   session.SwitchTo().ActiveElement();
+            //   //session.SwitchTo().ActiveElement();
 
 
             session.FindElementByAccessibilityId("textBoxFilter").Clear();
@@ -203,7 +204,7 @@ namespace AppiumWinApp
             session.SwitchTo().Window(session.WindowHandles.First());
 
 
-            session.SwitchTo().ActiveElement();
+            //session.SwitchTo().ActiveElement();
             //  session.SwitchTo().Frame("1");
             //   WindowsElement text = (WindowsElement)session.SwitchTo().Alert(session.CurrentWindowHandle);
 
@@ -235,7 +236,7 @@ namespace AppiumWinApp
                 Thread.Sleep(2000);
 
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
                 // session.FindElementByAccessibilityId("buttonReadFromDevice").Click();
                 session.FindElementByName("Read").Click();
 
@@ -251,14 +252,14 @@ namespace AppiumWinApp
                 try
                 {
                     session.SwitchTo().Window(session.WindowHandles.First());
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     if (session.FindElementByName("Optimized").Displayed)
                     {
                         session.FindElementByName("Optimized").Click();
                         Thread.Sleep(2000);
                         session.SwitchTo().Window(session.WindowHandles.First());
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         Thread.Sleep(2000);
                         session.FindElementByAccessibilityId("textBoxPassword").SendKeys("1234");
                         session.FindElementByName("Continue >>").Click();
@@ -296,7 +297,7 @@ namespace AppiumWinApp
                     do
                     {
                         allWindowHandles = session.WindowHandles;
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
 
 
                     } while ((session.FindElementByClassName("Button").Enabled).ToString() == "False");
@@ -331,7 +332,7 @@ namespace AppiumWinApp
             session = FunctionLibrary.clickOnCloseTestFlow(session, "Program Selection");
 
             /*  session.SwitchTo().Window(session.WindowHandles.First());
-              session.SwitchTo().ActiveElement();*/
+              //session.SwitchTo().ActiveElement();*/
             session = lib.waitUntilElementExists(session, "Stop", 0);
             session.FindElementByName("Stop").Click();
 
@@ -454,9 +455,9 @@ namespace AppiumWinApp
            ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFitSA.exe";
            Thread.Sleep(2000);
 
-            DesiredCapabilities appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            AppiumOptions appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(10000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
@@ -502,9 +503,9 @@ namespace AppiumWinApp
 
             ApplicationPath = "C:\\Program Files (x86)\\ReSound\\SmartFit\\SmartFit.exe";
 
-            appCapabilities = new DesiredCapabilities();
-            appCapabilities.SetCapability("app", ApplicationPath);
-            appCapabilities.SetCapability("deviceName", "WindowsPC");
+            appCapabilities = new AppiumOptions();
+            appCapabilities.AddAdditionalCapability("app", ApplicationPath);
+            appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
             Thread.Sleep(10000);
             session = new WindowsDriver<WindowsElement>(new Uri(WindowsApplicationDriverUrl), appCapabilities);
@@ -539,11 +540,11 @@ namespace AppiumWinApp
 
                 do
                 {
-                    session.SwitchTo().ActiveElement();
+                    //session.SwitchTo().ActiveElement();
 
                     if (buttonCount>=1)
                     {
-                        session.SwitchTo().ActiveElement();
+                        //session.SwitchTo().ActiveElement();
                         session= ModuleFunctions.getControlsOfParentWindow(session, "ScrollViewer", test);
                         try
                         {
@@ -671,8 +672,8 @@ namespace AppiumWinApp
 
             FunctionLibrary lib = new FunctionLibrary();
 
-            DesiredCapabilities desktopCapabilities = new DesiredCapabilities();
-            desktopCapabilities.SetCapability("app", "Root");
+            AppiumOptions desktopCapabilities = new AppiumOptions();
+            desktopCapabilities.AddAdditionalCapability("app", "Root");
             DesktopSession = new IOSDriver<IOSElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
             DesktopSession.FindElementByName("Service & Repair Tool  4.6").Click();
 
@@ -807,8 +808,8 @@ namespace AppiumWinApp
             /*Peforming Restore*/
 
            // ModuleFunctions.sessionInitialize("C:\\Program Files (x86)\\GN Hearing\\Lucan\\App\\Lucan.App.UI.exe");
-            desktopCapabilities = new DesiredCapabilities();
-            desktopCapabilities.SetCapability("app", "Root");
+            desktopCapabilities = new AppiumOptions();
+            desktopCapabilities.AddAdditionalCapability("app", "Root");
             DesktopSession = new IOSDriver<IOSElement>(new Uri(WindowsApplicationDriverUrl), desktopCapabilities);
             DesktopSession.FindElementByName("Service & Repair Tool 4.6").Click();
 
@@ -1068,7 +1069,7 @@ namespace AppiumWinApp
             Thread.Sleep(2000);
 
             session.SwitchTo().Window(session.WindowHandles.First());
-            session.SwitchTo().ActiveElement();
+            //session.SwitchTo().ActiveElement();
 
             try
             {

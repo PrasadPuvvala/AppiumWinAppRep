@@ -139,7 +139,7 @@ namespace AppiumWinApp.StepDefinitions
                 session.FindElementByName("Discover").Click();
                 stepName.Log(Status.Pass, "Clicked on Discover.");
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
 
                 try
                 {
@@ -354,7 +354,7 @@ namespace AppiumWinApp.StepDefinitions
                 stepName.Log(Status.Pass, "Clicked on Discover.");
 
                 session.SwitchTo().Window(session.WindowHandles.First());
-                session.SwitchTo().ActiveElement();
+                //session.SwitchTo().ActiveElement();
 
                 try
                 {

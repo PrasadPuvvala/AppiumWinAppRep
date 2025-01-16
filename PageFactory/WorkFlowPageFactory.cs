@@ -31,7 +31,7 @@ namespace AppiumWinApp.PageFactory
 {
     public static class WorkFlowPageFactory
     {
-        
+
 
         [SeleniumExtras.PageObjects.FindsBy(How = How.Id, Using = "logout")]
         private static IWebElement logoutElement;
@@ -41,8 +41,8 @@ namespace AppiumWinApp.PageFactory
         public static By workFlowProductSelection = MobileBy.AccessibilityId("treeView");
 
         /*File Menu*/
-        public static By fileMenu = By.XPath("(//*[@AutomationId= 'MainForm' ])//*[@Name='File']"); 
-        
+        public static By fileMenu = By.XPath("(//*[@AutomationId= 'MainForm' ])//*[@Name='File']");
+
         /*Channel Menu*/
         public static By channel = By.XPath("(//*[@AutomationId= 'MainForm' ])//*[@Name='Channel']");
 
@@ -86,7 +86,7 @@ namespace AppiumWinApp.PageFactory
 
 
 
-        
+
 
 
 
