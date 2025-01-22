@@ -289,10 +289,10 @@ namespace AppiumWinApp
         public static WindowsDriver<WindowsElement> clickOnCloseTestFlow(WindowsDriver<WindowsElement> session, string windowName)
         {
 
-            DesiredCapabilities desktopCapabilities = new DesiredCapabilities();
-            desktopCapabilities.SetCapability("platformName", "Windows");
-            desktopCapabilities.SetCapability("app", "Root");
-            desktopCapabilities.SetCapability("deviceName", "WindowsPC");
+            AppiumOptions desktopCapabilities = new AppiumOptions();
+            desktopCapabilities.AddAdditionalCapability("platformName", "Windows");
+            desktopCapabilities.AddAdditionalCapability("app", "Root");
+            desktopCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
             session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), desktopCapabilities);
             WindowsElement applicationWindow = null;
             Thread.Sleep(6000);
@@ -343,9 +343,9 @@ namespace AppiumWinApp
 
             topLevelWindowHandle = int.Parse(topLevelWindowHandle).ToString("X");
 
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.SetCapability("deviceName", "WindowsPC");
-            capabilities.SetCapability("appTopLevelWindow", topLevelWindowHandle);
+            AppiumOptions capabilities = new AppiumOptions();
+            capabilities.AddAdditionalCapability("deviceName", "WindowsPC");
+            capabilities.AddAdditionalCapability("appTopLevelWindow", topLevelWindowHandle);
             session = new WindowsDriver<WindowsElement>(new Uri("http://127.0.0.1:4723"), capabilities);
 
 
