@@ -1797,7 +1797,7 @@ namespace AppiumWinApp
                 if (rowNumber <= 0)
                 {
                     test.Info($"Scenario '{scenarioName}' not found in the Excel sheet.");
-                    ScenarioContext.Current.Pending();
+                    ScenarioContext.Current?.Pending();
                     return;
                 }
 

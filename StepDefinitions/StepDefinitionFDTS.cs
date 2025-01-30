@@ -1127,6 +1127,74 @@ namespace AppiumWinApp.StepDefinitions
             stepName.Log(Status.Pass, "Set sales order connection string is not displayed for other than VA system role", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
         }
 
+        [Given(@"Downloading latest S&R C(.*) extension from the app-gop-apt-devops site")]
+        public async Task GivenDownloadingLatestSRCExtensionFromTheApp_Gop_Apt_DevopsSite(int p0)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            config = (appconfigsettings)_featureContext["config"];
+          
+            var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool%20C4%20Extension%20Pack/PRD/1.2/S&R%20Tool%20C4%20Extension%20Pack%201.2.zip?sv=2023-01-03&ss=btqf&srt=sco&st=2024-10-01T10%3A28%3A42Z&se=2025-02-28T11%3A28%3A00Z&sp=rwdxftlacup&sig=cJHcGQgCNWjWph4DQZ3Kv9oK00tezBr1sYTLBeYS9Zk%3D";
+
+            try
+            {
+                var cts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+
+                stepName.Log(Status.Info, "Download Started");
+
+                var retryPolicy = Policy
+                    .Handle<HttpRequestException>()
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                await retryPolicy.ExecuteAsync(async () =>
+                {
+
+                    using (HttpClient client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromMinutes(5);
+
+                        HttpResponseMessage response = await client.GetAsync(baseUrl, cts.Token);
+
+                        response.EnsureSuccessStatusCode();
+
+                        byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+                        string downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                        string filePath = Path.Combine(downloadsFolder, "Downloads", $"S&R Tool C4 Extension Pack 1.2.zip");
+
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+
+                        await File.WriteAllBytesAsync(filePath, fileBytes);
+                        stepName.Log(Status.Pass, $"Downloading of latest S&R Tool C4 Extension Pack 1.2 succeeded!");
+                    }
+                });
+            }
+            catch (TaskCanceledException ex)
+            {
+                stepName.Log(Status.Fail, "Download operation was canceled, possibly due to timeout.");
+            }
+            catch (HttpRequestException ex)
+            {
+                stepName.Log(Status.Fail, $"A network error occurred: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                stepName.Log(Status.Fail, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [When(@"\[Install the latest S&R C(.*) extension]")]
+        public void WhenInstallTheLatestSRCExtension(int p0)
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ModuleFunctions.InstallSandRC4Extension(stepName);
+        }
+
+
         [Given(@"Downloading latest S&R beta version from the app-gop-apt-devops site")]
         public async Task GivenDownloadingLatestSRBetaVersionFromTheApp_Gop_Apt_DevopsSiteAsync()
         {
@@ -1135,7 +1203,8 @@ namespace AppiumWinApp.StepDefinitions
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
             config = (appconfigsettings)_featureContext["config"];
 
-            var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool/DEV/{config.sandRDownloadLinkUpdateParameters.Build}/Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}/S&R%20Tool%20{config.sandRDownloadLinkUpdateParameters.Build}%20(Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}).zip?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-11-01T17:11:32Z&st=2023-10-31T09:11:32Z&spr=https&sig=djt13wu5PaY7vBdyyrqI5RKFf4QRaIafPYu8f6xzuGA%3D";
+            //var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool/DEV/{config.sandRDownloadLinkUpdateParameters.Build}/Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}/S&R%20Tool%20{config.sandRDownloadLinkUpdateParameters.Build}%20(Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}).zip?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-11-01T17:11:32Z&st=2023-10-31T09:11:32Z&spr=https&sig=djt13wu5PaY7vBdyyrqI5RKFf4QRaIafPYu8f6xzuGA%3D";
+            var baseUrl = $"https://stogopaptweuprd01.file.core.windows.net/apt-azure-pipelines/Releases/Public/Service%20%26%20Repair%20Tool/DEV/{config.sandRDownloadLinkUpdateParameters.Build}/Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}/S&R%20Tool%20{config.sandRDownloadLinkUpdateParameters.Build}%20(Beta%20{config.sandRDownloadLinkUpdateParameters.Beta}).zip?sv=2023-01-03&ss=btqf&srt=sco&st=2024-10-01T10%3A28%3A42Z&se=2025-02-28T11%3A28%3A00Z&sp=rwdxftlacup&sig=cJHcGQgCNWjWph4DQZ3Kv9oK00tezBr1sYTLBeYS9Zk%3D";
 
             try
             {
@@ -1242,129 +1311,129 @@ namespace AppiumWinApp.StepDefinitions
         //public void ThenDone()
         //{
 
-        //Process winApp = new Process();
-        //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
-        //winApp.Kill();
+        //    //Process winApp = new Process();
+        //    //winApp.StartInfo.FileName = "C:\\Program Files (x86)\\Windows Application Driver\\WinAppDriver.exe";
+        //    //winApp.Kill();
 
-        //Console.WriteLine("This is Done method");
-        //var scenarioContext = ScenarioContext.Current;
-        //var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
+        //    Console.WriteLine("This is Done method");
+        //    var scenarioContext = ScenarioContext.Current;
+        //    var testStatus = scenarioContext.TestError == null ? "PASS" : "FAIL";
 
-        //var testcaseId = scenarioContext.Get<string>("TestCaseID");
-
-
-        //var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
-
-        //foreach (var xmlFile in xmlFiles)
-        //{
-        //    XDocument xmlDoc = XDocument.Load(xmlFile);
+        //    var testcaseId = scenarioContext.Get<string>("TestCaseID");
 
 
-        //    foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
+        //    var xmlFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{testcaseId}.xml", SearchOption.AllDirectories);
+
+        //    foreach (var xmlFile in xmlFiles)
         //    {
-        //        var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
+        //        XDocument xmlDoc = XDocument.Load(xmlFile);
 
-        //        if (elementTestCaseID == testcaseId)
+
+        //        foreach (var testResultSetElement in xmlDoc.Descendants("TFSTestResultsSet"))
         //        {
+        //            var elementTestCaseID = (string)testResultSetElement.Element("TestCaseID");
 
-        //            var elementTestStatus = testResultSetElement.Element("TestStatus");
-        //            if (elementTestStatus != null)
+        //            if (elementTestCaseID == testcaseId)
         //            {
-        //                elementTestStatus.Value = testStatus;
+
+        //                var elementTestStatus = testResultSetElement.Element("TestStatus");
+        //                if (elementTestStatus != null)
+        //                {
+        //                    elementTestStatus.Value = testStatus;
+        //                }
         //            }
+        //        }
+
+        //        xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
+        //    }
+        //    {
+
+        //        string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+
+        //        string xmlFolderPath = Path.Combine(projectPath, "XML");
+
+        //        string keyToUpdate = "WorkFlowsXMLsPath";
+        //        string valueToUpdate = xmlFolderPath;
+
+        //        string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
+
+        //        foreach (var configFile in configFiles)
+        //        {
+        //            UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
         //        }
         //    }
 
-        //    xmlDoc.Save(xmlFile);                                                                                                                                                                                                                                                                            // Save the updated XML
-        //}
-        //{
-
-        //    string projectPath = AppDomain.CurrentDomain.BaseDirectory;
-
-        //    string xmlFolderPath = Path.Combine(projectPath, "XML");
-
-        //    string keyToUpdate = "WorkFlowsXMLsPath";
-        //    string valueToUpdate = xmlFolderPath;
-
-        //    string[] configFiles = Directory.GetFiles(projectPath, "*.config", SearchOption.AllDirectories);
-
-        //    foreach (var configFile in configFiles)
+        //    static void UpdateAppSettingValue(string configFilePath, string key, string value)
         //    {
-        //        UpdateAppSettingValue(configFile, keyToUpdate, valueToUpdate);
+        //        try
+        //        {
+        //            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
+        //            {
+        //                ExeConfigFilename = configFilePath
+        //            };
+        //            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+
+        //            if (config.AppSettings.Settings[key] != null)
+        //            {
+        //                config.AppSettings.Settings[key].Value = value;
+        //                config.Save(ConfigurationSaveMode.Modified);
+        //                ConfigurationManager.RefreshSection("appSettings");
+
+        //                string updatedValue = ConfigurationManager.AppSettings[key];
+        //                Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine($"Key {key} not found in {configFilePath}.");
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+        //        }
         //    }
-        //}
 
-        //static void UpdateAppSettingValue(string configFilePath, string key, string value)
-        //{
         //    try
+
+
         //    {
-        //        ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap
-        //        {
-        //            ExeConfigFilename = configFilePath
-        //        };
-        //        Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+        //        string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
 
-        //        if (config.AppSettings.Settings[key] != null)
+        //        if (System.IO.File.Exists(agentPath))
         //        {
-        //            config.AppSettings.Settings[key].Value = value;
-        //            config.Save(ConfigurationSaveMode.Modified);
-        //            ConfigurationManager.RefreshSection("appSettings");
+        //            ProcessStartInfo startInfo = new ProcessStartInfo
+        //            {
+        //                FileName = agentPath,
+        //                UseShellExecute = false,
+        //                RedirectStandardOutput = true,
+        //                RedirectStandardError = true,
+        //                CreateNoWindow = true
+        //            };
 
-        //            string updatedValue = ConfigurationManager.AppSettings[key];
-        //            Console.WriteLine($"Updated {key} in {configFilePath}: {updatedValue}");
+        //            Process process = new Process
+        //            {
+        //                StartInfo = startInfo
+        //            };
+
+
+        //            process.Start();
+        //            process.WaitForExit(); // Optionally wait for the process to complete
+
+        //            //string standardOutput = process.StandardOutput.ReadToEnd();
+        //            //string standardError = process.StandardError.ReadToEnd();
+
         //        }
         //        else
         //        {
-        //            Console.WriteLine($"Key {key} not found in {configFilePath}.");
+        //            Console.WriteLine("TFS agent executable not found at the specified path.");
         //        }
         //    }
+
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine($"Error updating configuration file {configFilePath}: {ex.Message}");
+        //        Console.WriteLine("An error occurred: " + ex.Message);
         //    }
         //}
-
-        //try
-
-
-        //{
-        //    string agentPath = Path.Combine(Directory.GetCurrentDirectory(), @"XML\TFS API\TFS.Agent.Run\bin\Debug\TFS.Agent.Run.exe");
-
-        //    if (System.IO.File.Exists(agentPath))
-        //    {
-        //        ProcessStartInfo startInfo = new ProcessStartInfo
-        //        {
-        //            FileName = agentPath,
-        //            UseShellExecute = false,
-        //            RedirectStandardOutput = true,
-        //            RedirectStandardError = true,
-        //            CreateNoWindow = true
-        //        };
-
-        //        Process process = new Process
-        //        {
-        //            StartInfo = startInfo
-        //        };
-
-
-        //        process.Start();
-        //        process.WaitForExit(); // Optionally wait for the process to complete
-
-        //        //string standardOutput = process.StandardOutput.ReadToEnd();
-        //        //string standardError = process.StandardError.ReadToEnd();
-
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("TFS agent executable not found at the specified path.");
-        //    }
-        //}
-
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine("An error occurred: " + ex.Message);
-        //}
-        // }
     }
 }
 

@@ -264,6 +264,7 @@ namespace AppiumWinApp.StepDefinitions
 
             try
             {
+                Thread.Sleep(6000);
                 session = lib.functionWaitForId(session, "radioButtonRestoreAfterRepairOrSwap");
                 session = lib.functionWaitForName(session, "RESTORE");
             }
@@ -439,7 +440,7 @@ namespace AppiumWinApp.StepDefinitions
             }
 
             session.FindElementByName("Services").Click();
-            Thread.Sleep(10000);
+            Thread.Sleep(20000);
             var res = session.FindElementsByClassName("Button");
             res[14].Click();
             session = lib.functionWaitForName(session, "LOGIN REQUIRED");

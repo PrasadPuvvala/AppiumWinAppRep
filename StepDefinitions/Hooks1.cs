@@ -389,22 +389,22 @@ namespace AppiumWinApp.StepDefinitions
         {
             string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
             extent.Flush();
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
-            //mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
-            //mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
-            //mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
-            //mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
-            //mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
-            //mailMessage.Subject = "S&R Automation Report";
-            //mailMessage.Body = "Please find the attached S&R Automation Report.";
-            //Attachment attachment = new Attachment(reportPath);
-            //mailMessage.Attachments.Add(attachment);
-            //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
-            //smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
-            //smtpClient.EnableSsl = true; // Enable SSL/TLS
-            //smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
-            //smtpClient.Send(mailMessage);
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+            mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
+            mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
+            mailMessage.Subject = "S&R Automation Report";
+            mailMessage.Body = "Please find the attached S&R Automation Report.";
+            Attachment attachment = new Attachment(reportPath);
+            mailMessage.Attachments.Add(attachment);
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+            smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+            smtpClient.EnableSsl = true; // Enable SSL/TLS
+            smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+            smtpClient.Send(mailMessage);
         }
     }
 
