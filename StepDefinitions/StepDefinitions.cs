@@ -29,7 +29,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using TechTalk.SpecFlow;
 using WindowsInput;
 using WindowsInput.Native;
 using Xamarin.Forms;
@@ -53,6 +52,7 @@ using MailMessage = System.Net.Mail.MailMessage;
 using sun.security.x509;
 using OfficeOpenXml;
 using System.Xml;
+using Reqnroll;
 
 namespace MyNamespace
 {
@@ -227,7 +227,7 @@ namespace MyNamespace
             AppiumOptions appCapabilities = new AppiumOptions();
             appCapabilities.AddAdditionalCapability("app", config.ApplicationPath.FDTSAppPath);
             appCapabilities.AddAdditionalCapability("deviceName", "WindowsPC");
-            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "40");
             appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
             appCapabilities.AddAdditionalCapability("appWorkingDir", config.workingdirectory.FDTS);
             appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
@@ -829,7 +829,7 @@ namespace MyNamespace
             }
         }
 
-        [Given(@"\[Set Development and Verification System Role in Basic Setting for System Configuration]")]
+        [Given("[Set Development and Verification System Role in Basic Setting for System Configuration]")]
         public void GivenSetDevelopmentAndVerificationSystemRoleInBasicSettingForSystemConfiguration()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -837,7 +837,7 @@ namespace MyNamespace
             SystemPageFactory.launchSystemSettingsDevelopmentAndVerification(extent, stepName);
         }
 
-        [Given(@"\[Set Service GROC System Role in Basic Setting for System Configuration]")]
+        [Given("[Set Service GROC System Role in Basic Setting for System Configuration]")]
         [Obsolete]
 
         public void GivenSetServiceGROCSystemRoleInBasicSettingForSystemConfiguration()
@@ -2052,7 +2052,7 @@ namespace MyNamespace
         }
         /** Used to clear exisisting 'capture' and 'restore' reports in specified path **/
 
-        [When(@"\[Cleaning up Capture and Restore Reports Before Launch SandR]")]
+        [When("[Cleaning up Capture and Restore Reports Before Launch SandR]")]
         public void WhenCleaningUpCaptureAndRestoreReportsBeforeLaunchSandR()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -2119,7 +2119,7 @@ namespace MyNamespace
                 session.FindElementByName("Discover").Click();
                 stepName.Log(Status.Pass, "Clicked on Discover.");
                 session.SwitchTo().Window(session.WindowHandles.First());
-                Thread.Sleep(2000);
+                Thread.Sleep(8000);
                 session.SwitchTo().ActiveElement();
 
                 /** Type the HI serial number in the search field. **/
@@ -2361,7 +2361,7 @@ namespace MyNamespace
 
 
 
-        [When(@"\[Come back to Settings and wait till controls enabled]")]
+        [When("[Come back to Settings and wait till controls enabled]")]
         public void WhenComeBackToSettingsAndWaitTillControlsEnabled()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -2672,7 +2672,7 @@ namespace MyNamespace
           * Performs capture scenario **/
 
 
-        [When(@"\[Perform Capture with listening test settings]")]
+        [When("[Perform Capture with listening test settings]")]
         public void WhenPerformCaptureWithListeningTestSettings()
 
         {
@@ -2921,7 +2921,7 @@ namespace MyNamespace
 
         /** To verify the desired Capture time in log file **/
 
-        [When(@"\[Go to logs and verify capturing time]")]
+        [When("[Go to logs and verify capturing time]")]
         public void WhenGoToLogsAndVerifyCapturingTime()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -3129,7 +3129,7 @@ namespace MyNamespace
 
         /** Closes the S&R tool **/
 
-        [Then(@"\[Close SandR tool]")]
+        [Then("[Close SandR tool]")]
         public void ThenCloseSandRTool()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -3965,7 +3965,7 @@ namespace MyNamespace
 
         /** To Verify the desired restoration time in log file **/
 
-        [When(@"\[Go to log file for verifying Restore time]")]
+        [When("[Go to log file for verifying Restore time]")]
         public void WhenGoToLogFileForVerifyingRestoreTime()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -3979,7 +3979,7 @@ namespace MyNamespace
 
         /** Reports for "captured" and "restored" data. **/
 
-        [When(@"\[Open Capture and Restore report and log info in report]")]
+        [When("[Open Capture and Restore report and log info in report]")]
         public void WhenOpenCaptureAndRestoreReportAndLogInfoInReport()
         {
             /** This is to check if Capture and Restore files are existing **/

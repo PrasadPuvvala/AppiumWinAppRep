@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TechTalk.SpecFlow;
 using java.io;
-using TechTalk.SpecFlow;
 using java.awt;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using NUnit.Framework;
@@ -31,6 +29,7 @@ using System.IO;
 using AventStack.ExtentReports.Reporter;
 using AventStack.ExtentReports.Model;
 using Microsoft.SqlServer.Management.Smo;
+using Reqnroll;
 
 
 namespace AppiumWinApp.StepDefinitions
@@ -49,7 +48,7 @@ namespace AppiumWinApp.StepDefinitions
         protected static IOSDriver<IOSElement> AlarmClockSession;   // Temporary placeholder until Windows namespace exists
         protected static IOSDriver<IOSElement> DesktopSession;
         private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
 
         public TestContext TestContext { get; set; }
 

@@ -16,7 +16,6 @@ using OpenQA.Selenium.Interactions;
 using Microsoft.SqlServer.Management.XEvent;
 using System.Linq;
 using OpenQA.Selenium;
-using TechTalk.SpecFlow;
 using OpenQA.Selenium.Appium;
 using AppiumWinApp.StepDefinitions;
 
@@ -28,7 +27,7 @@ namespace AppiumWinApp.PageFactory
         protected static WindowsDriver<WindowsElement> session;
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
         private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
         //private static AppiumServer _appiumServer;

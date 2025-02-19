@@ -39,10 +39,8 @@ using Environment = System.Environment;
 using AventStack.ExtentReports.Reporter;
 using TestStack.BDDfy.Reporters.Html;
 using AventStack.ExtentReports;
-using AventStack.ExtentReports.Reporter.Configuration;
 using OpenQA.Selenium.Chrome;
 using System;
-using TechTalk.SpecFlow;
 using Chilkat;
 
 using System;
@@ -58,6 +56,8 @@ using System.Xml.Linq;
 using System.Xml;
 using sun.tools.tree;
 using OpenQA.Selenium.Appium;
+using Reqnroll;
+using AventStack.ExtentReports.Reporter.Config;
 
 namespace AppiumWinApp
 {
@@ -81,7 +81,7 @@ namespace AppiumWinApp
         protected static IOSDriver<IOSElement> DesktopSession;
 
         private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
         private static ExtentTest test;
 
         /* Variable Declaration */
@@ -112,13 +112,13 @@ namespace AppiumWinApp
 
 
           //  htmlReporter = new ExtentHtmlReporter("F:\\Winium\\AppiumWinApp\\AppiumWinApp\\report.html");
-            htmlReporter = new ExtentHtmlReporter(textDir+"\\report.html");
+            htmlReporter = new ExtentSparkReporter(textDir+"\\report.html");
 
          //   htmlReporter.LoadConfig("F:\\Winium\\AppiumWinApp\\AppiumWinApp\\ExtentConfig.xml");
 
             htmlReporter.LoadConfig(textDir+"\\ExtentConfig.xml");
 
-            htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
+            htmlReporter.Config.Theme = Theme.Dark;
             extent = new ExtentReports();
             extent.AttachReporter(htmlReporter);
         }

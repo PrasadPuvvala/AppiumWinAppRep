@@ -82,16 +82,16 @@ Examples:
 	 #| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2066070058 | NoDev    | 2026793947       | Yes     | Cdevice  | Cdevice   | D1rechargeableWired|
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2026335124 | NoDev    | 2026335111       | Yes     | Cdevice  | Cdevice   |Non-Rechargeable |
 	 #| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     | 2000816933  | Cdevice   |Rechargeable |
-	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2300809943 | NoDev    | 2300809942     | Yes     | 2000816933  | Cdevice | Rechargeable |
+	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2300809945 | NoDev    | 2300806645     | Yes     | 2000816933  | Cdevice | Rechargeable |
 	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | 2000816933  | Cdevice | Rechargeable |
 	 #| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     | 2000816933  | Cdevice   |Rechargeable |
-	 #| RE967-DWT   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 2026637923 | NoDev    | 2026682833       | Yes    | Cdevice  | Cdevice   |  Wired |
-	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130209 | NoDev    | 2476130208     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
+	 #| RE977-DWT   | Left       | Right       | Device A | Device B | Device C | Device D       | Yes      | No         | 1900809032 | NoDev    | 2026723064       | Yes    | Cdevice  | Cdevice   |  Wired |
+	| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130209 | NoDev    | 2476130208     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
 	#| NX961-DRW | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400800489 | NoDev    | 2400800488     | Yes     | 2000816933  | Cdevice |Non-Rechargeable |
 	#| CX160S-DRWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400801281 | NoDev    | 2400801280     | Yes     | 2000816933  | Cdevice |Rechargeable |
 	 #| RT977-DWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2100819768 | NoDev    | 2100817052     | Yes     | 2000816933  | Cdevice |Rechargeable |
 	 #| VI961-DRW | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400805734 | NoDev    | 2400805733     | Yes     | 2400805733  | Cdevice |Non-Rechargeable |
-	 | VI960S-DRWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400811737 | NoDev    | 2400811735     | Yes     | 2400811735  | Cdevice |Rechargeable |
+	 #| VI960S-DRWC | Left      | Right      | Device A | Device B | Device C | Device D       | Yes  | No  | 2400811737 | NoDev    | 2400811735     | Yes     | 2400811735  | Cdevice |Rechargeable |
 
 @tag4
 Scenario Outline: 04Test Case ID 1537268: Verify that battery ADL data is restored on original device
@@ -128,11 +128,11 @@ Examples:
  	#| RT962-DRW | 2026335111    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left        |    Wired         |
 	 #| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
-	#| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
+	#| RE977-DWT |  2026723064    | Yes     | Right       | Left       |     Wired        |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable |
 	#| RT977-DWC | 2100817052     | Yes     | Right       | Left       | Rechargeable     |
 	#| RE967-DWT |  2026682833    | Yes     | Right       | Left       |     Wired        |
@@ -144,7 +144,6 @@ Scenario Outline: 05Test Case ID 1103972: Verify device information is shown cor
 	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
 	Then [Close SandR tool]
-	
 
 
 Examples:
@@ -153,20 +152,20 @@ Examples:
      #| RE962-DRW |  2026335111    | Yes     | Right       | Left       |     Wired        |
 	#| RE962-DRWT | 2000803069     | Yes     | Right       | Left      |     Wired        |
  	#| RT962-DRW | 2026335111    | Yes     | Right       | Left        |Non-Rechargeable  |
-	| LT988-DW | 2286095238     | Yes     | Right       | Left        |    Wired         |
+	#| LT988-DW | 2286095238     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2226798513     | Yes     | Right       | Left      |Rechargeable      |	
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 2066070062     | Yes     | Right       | Left      |D1rechargeableWired|
 	# |XF9ITC-DWC-MP | 2476020406     | Yes     | Right       | Left       | Rechargeable     |
 	#| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
-	#| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable |
+	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable |
 	#| NX961-DRW | 2400800488    | Yes     | Right       | Left       | Non-Rechargeable     |
 	#| CX160S-DRWC | 2400801280    | Yes     | Right       | Left       | Rechargeable     |
 	#| RT977-DWC | 2100817051    | Yes     | Right       | Left       | Rechargeable     |
 	#| RT977-DWC | 2100817052    | Yes     | Right       | Left       | Rechargeable     |
-	#| RE967-DWT |  2026682833    | Yes     | Right       | Left       |     Wired        |
+	#| RE977-DWT |  2026723064    | Yes     | Right       | Left       |     Wired        |
 	#| VI961-DRW | 2400805733    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| VI960S-DRWC | 2400811734    | Yes     | Right       | Left        |Rechargeable  |
 
@@ -190,11 +189,11 @@ Examples:
  	#| RT962-DRW | 2000800246    | Yes     | Right       | Left        |Non-Rechargeable  |
 	 #| LT988-DW | 1700600061     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
-	#| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
+	#| RE977-DWT |  2026723064    | Yes     | Right       | Left       |     Wired        |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable |
 	#| RT977-DWC | 2100817052     | Yes     | Right       | Left       | Rechargeable     |
 	#| RE967-DWT |  2026682833    | Yes     | Right       | Left       |     Wired        |
@@ -224,11 +223,11 @@ Examples:
  	#| RT962-DRW | 2026335111    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	 #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
-	 #| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
+	 #| RE977-DWT |  2026723064    | Yes     | Right       | Left       |     Wired        |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable |
 	# | RT977-DWC | 2100817052     | Yes     | Right       | Left       | Rechargeable     |
 	#| RE967-DWT |  2026682833    | Yes     | Right       | Left       |     Wired        |
@@ -248,11 +247,11 @@ Examples:
  	#| RT962-DRW | 2026335111    | Yes     | Right       | Left        |Non-Rechargeable  |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left        |    Wired         |
 	#| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |
 	 #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|
-	 #| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |
+	 #| RE977-DWT |  2026723064    | Yes     | Right       | Left       |     Wired        |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable |
 	 #| RT977-DWC | 2100817052     | Yes     | Right       | Left       | Rechargeable     |
 	  #| RE967-DWT |  2026682833    | Yes     | Right       | Left       |     Wired        |
@@ -292,11 +291,11 @@ Examples:
  	#| RT962-DRW | 2026335111    | Yes     | Right       | Left        |Non-Rechargeable  |       capture         |       restore  |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left        |    Wired         |      capture          |      restore   |
 	 #| RT961-DRWC | 2000816936     | Yes     | Right       | Left      |Rechargeable      |	 capture          |      restore   |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | Rechargeable | capture              | restore              |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | Rechargeable | capture              | restore              |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | Rechargeable | capture              | restore              |
 	#| RU960-DRWC | 2326310145     | Yes     | Right       | Left      |Rechargeable      |      capture           |      restore  |
 	 #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |D1rechargeableWired|      capture           |     restore   |
-	 #| RE977-DWT |  2026723065    | Yes     | Right       | Left       |     Wired        |      capture         |     restore    |
+	 #| RE977-DWT |  2026723064    | Yes     | Right       | Left       |     Wired        |      capture         |     restore    |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | Non-Rechargeable | capture              | restore              |
 	 #| RT977-DWC | 2100817052     | Yes     | Right       | Left       | Rechargeable |           capture           |      restore  |
 	  #| RE967-DWT |  2026682833    | Yes     | Right       | Left       |     Wired        |      capture         |     restore    |
@@ -351,14 +350,14 @@ Examples:
 				 #| RE962-DRW |    2026335111  | Yes     | Right       | Left       | 2026335124 |  Wired    |
 				 #| RE967-DWT |    2026637923  | Yes     | Right       | Left       | 1900812195 |  Wired    |
 				 #| RT962-DRW | 2026335111     | Yes     | Right       | Left       | 2026335124 | Non-Rechargeable    |
-				  | LT988-DW | 2286095238     | Yes     | Right       | Left       | 2286095240 |Wired    |
+				  #| LT988-DW | 2286095238     | Yes     | Right       | Left       | 2286095240 |Wired    |
 				 #| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | Rechargeable |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809943 | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300809945 | Rechargeable |
 				  #| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144 | Rechargeable |
 				  #| RE961-DRWC | 2026793947     | Yes     | Right       | Left      |2066070058 |D1rechargeableWired|
-				  #| RE977-DWT |    2026723065  | Yes     | Right       | Left       | 2149002375 |  Wired    |
-	#| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | 2476130209 | Non-Rechargeable |
+				  #| RE977-DWT |    2026723064  | Yes     | Right       | Left       | 1900809032 |  Wired    |
+	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | 2476130209 | Non-Rechargeable |
 	 #| NX961-DRW | 2400800488     | Yes     | Right       | Left       | 2400800489 |Non-Rechargeable |
 	 #| CX160S-DRWC | 2400801280     | Yes     | Right       | Left       | 2400801281 |Rechargeable |
 	 #| RT977-DWC | 2100817052     | Yes     | Right       | Left       | 2100819768 |Rechargeable |
@@ -400,10 +399,10 @@ Examples:
  	#| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2066070058 | NoDev    | 2026793947       | Yes     | D1rechargeableWired    |
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     |Rechargeable |
-	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809943 | NoDev    | 2300809940     | Yes     | Rechargeable |
+	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809945 | NoDev    | 2300806645     | Yes     | Rechargeable |
 	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | Rechargeable |
 	#| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     |Rechargeable |
-	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2149002375 | NoDev    | 2026723065     | Yes     | Wired      |
+	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1900809032 | NoDev    | 2026723064     | Yes     | Wired      |
 	| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130209 | NoDev    | 2476130208       | Yes     | Non-Rechargeable |
 	 #| RT977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2100819768 | NoDev    | 2100817052     | Yes     |Rechargeable |
 	 #| RE967-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2026637923 | NoDev    | 2026682833     | Yes     | Wired      |
@@ -439,10 +438,10 @@ Examples:
 	#| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2066070058 | NoDev    | 2026793947       | Yes     | D1rechargeableWired    |
 	#| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     | Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936     | Yes     |Rechargeable |
-	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809943 | NoDev    | 2300809940     | Yes     | Rechargeable |
+	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809945 | NoDev    | 2300806645     | Yes     | Rechargeable |
 	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | Rechargeable |
 	#| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     |Rechargeable |
-	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2149002375 | NoDev    | 2026723065     | Yes     | Wired      |
+	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1900809032 | NoDev    | 2026723064     | Yes     | Wired      |
 	| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130209 | NoDev    | 2476130208       | Yes     | Non-Rechargeable |
      #| RT977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2100819768 | NoDev    | 2100817052     | Yes     |Rechargeable |
 	 #| RE967-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2026637923 | NoDev    | 2026682833     | Yes     | Wired      |
@@ -472,12 +471,12 @@ Examples:
 	 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269 |  capture    |Non-Rechargeable |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left       | 1600806836   | capture      |   Wired    |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934  | capture    |  Rechargeable |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809943 | capture       | Rechargeable |
+	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809945 | capture       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | capture       | Rechargeable |
-	 #| NX977-DWC | 2300809943     | Yes     | Right       | Left       | 2300809945 | capture       |Rechargeable |
+	 #| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300809945 | capture       |Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144  | capture | Rechargeable |
 	#| RE961-DRWC  | 2026793947     | Yes     | Right       | Left       | 2066070058  | capture | D1rechargeableWired |
-	#| RE977-DWT | 2026723065     | Yes     | Right       | Left       | 2149002375 | capture       | Wired      |
+	#| RE977-DWT | 2026723064     | Yes     | Right       | Left       | 1900809032 | capture       | Wired      |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | 2476130209 |  capture    |Non-Rechargeable |
 	#| RT977-DWC | 2100817052     | Yes     | Right       | Left       | 2100819768 | capture       |Rechargeable |
 	#| RE967-DWT | 2026682833     | Yes     | Right       | Left       | 2026637923 | capture       | Wired      |
@@ -510,11 +509,11 @@ Examples:
 	 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269  | service records |Non-Rechargeable |
 	 #| LT988-DW | 1700600061     | Yes     | Right       | Left       | 1600806836   | service records |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934  | service records | Rechargeable |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809943 | service records | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300809945 | service records | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | service records | Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144  | service records | Rechargeable |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left     | 2066070058    |service records | D1rechargeableWired|
-	#| RE977-DWT | 2026723065     | Yes     | Right       | Left       | 2149002375 | service records | Wired      |
+	#| RE977-DWT | 2026723064     | Yes     | Right       | Left       | 1900809032 | service records | Wired      |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | 2476130209  | service records |Non-Rechargeable |
 	 #| RT977-DWC | 2100817052     | Yes     | Right       | Left       | 2100819768 | service records  | Rechargeable  |
 	#| RE967-DWT | 2026682833     | Yes     | Right       | Left       | 2026637923 | service records | Wired      |
@@ -547,12 +546,12 @@ Examples:
 	 #| RT962-DRW | 2000800246     | Yes     | Right       | Left       | 2000800269  | restore   |Non-Rechargeable |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left       | 1600806836   | restore     |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | restore   | Rechargeable |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809943 | restore       | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300809945 | restore       | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | restore       | Rechargeable |
 	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300806615 | restore      |Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144 | restore    | Rechargeable |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left     | 2066070058    |restore    | D1rechargeableWired|
-	#| RE977-DWT | 2026723065     | Yes     | Right       | Left       | 2149002375 | restore       | Wired      |
+	#| RE977-DWT | 2026723064     | Yes     | Right       | Left       | 1900809032 | restore       | Wired      |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | 2476130209  | restore   |Non-Rechargeable |
 	#| RT977-DWC | 2100817052     | Yes     | Right   A    | Left       | 2100819768 | restore      |Rechargeable |	
 	#| RE967-DWT | 2026682833     | Yes     | Right       | Left       | 2026637923 | restore       | Wired      |
@@ -579,15 +578,15 @@ Examples:
 	#| RT962-DRW | 2026335111     | Yes     | Right       | Left       | 2026335124  | service records   |Non-Rechargeable |
 	#| LT988-DW | 1700600061     | Yes     | Right       | Left       | 1600806836   | service records     |Wired        |
 	#| RT961-DRWC  | 2000816936     | Yes     | Right       | Left       | 2000816934 | service records   | Rechargeable |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809943 | service records | Rechargeable |
+	#| NX977-DWC | 2300806645     | Yes     | Right       | Left       | 2300809945 | service records | Rechargeable |
 	#| NX960S-DRWC | 2400802586     | Yes     | Right       | Left       | 2400802587 | service records | Rechargeable |
-	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809943 | service records      |Rechargeable |
+	#| NX977-DWC | 2300809940     | Yes     | Right       | Left       | 2300809945 | service records      |Rechargeable |
 	#| RU960-DRWC  | 2326310145     | Yes     | Right       | Left       | 2326310144 | service records    | Rechargeable |
 	#| RE961-DRWC | 2026793947     | Yes     | Right       | Left     | 2066070058    |service records    | D1rechargeableWired|
 	#| RE962-DRW | 2026723065     | Yes     | Right       | Left       | 2149002375 | service records | Wired      |
 	| NX9ITC-DW-MP | 2476130208     | Yes     | Right       | Left       | 2476130209  | service records   |Non-Rechargeable |
 	#| RT977-DWC | 2100817052     | Yes     | Right       | Left       | 2100819768 | service records      |Rechargeable |
-	#| RE967-DWT | 2026682833     | Yes     | Right       | Left       | 2026637923 | service records       |  Wired |
+	#| RE977-DWT | 2026723064     | Yes     | Right       | Left       | 1900809032 | service records       |  Wired |
 @tag17
 
 Scenario Outline: 17Test Case ID 1105669: Verify that fitting data is properly restored during restoration on original device or Clone  (SWAP)
@@ -653,20 +652,20 @@ Examples:
 #	| RE962-DRWT   | Left       | Right       | Device A| Device B | Device C | Device D | Temp       | Yes      | No         | 2000803066 | NoDev    | 2000803069     | Yes     |Wired |
 #	| LT961-DRW-UP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1700800900 | NoDev    | 2000800436     | Yes     |Wired |
 	#| LT988-DW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2286095240 | NoDev    | 2286095238     | Yes     |Wired |
-	| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156058106 | NoDev    | 2066070062       | Yes     |D1rechargeableWired|
+	#| RE961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2156058106 | NoDev    | 2066070062       | Yes     |D1rechargeableWired|
 	 #| RT962-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000800269 | NoDev    | 2000800246       | Yes     |Non-Rechargeable |
 	#| RT961-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2000816934 | NoDev    | 2000816936    | Yes     |Rechargeable |
-	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809945 | NoDev    | 2300809944     | Yes     | Rechargeable |
+	#| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2300809945 | NoDev    | 2300806645     | Yes     | Rechargeable |
     #| RT977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2100817052 | NoDev    | 2100817051     | Yes     |Rechargeable |
 	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400802587 | NoDev    | 2400802586     | Yes     | Rechargeable |
      #| RU960-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2326310144 | NoDev    | 2326310145     | Yes     |Rechargeable |
 	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2149002375 | NoDev    | 2026723065     | Yes     | Wired      |
-	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130454 | NoDev    | 2476130453       | Yes     |Non-Rechargeable |
+	| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130209 | NoDev    | 2476130208       | Yes     |Non-Rechargeable |
 	#| NX961-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400800489 | NoDev    | 2400800488     | Yes     |Non-Rechargeable |
 	#| CX160S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400801281 | NoDev    | 2400801280     | Yes     |Rechargeable |
 	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2476130209 | NoDev    | 2476130208     | Yes     |Non-Rechargeable |
 	#| RT977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2100819768 | NoDev    | 2100817052     | Yes     |Rechargeable |
-	#| RE967-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2026637923 | NoDev    | 2026682833     | Yes     | Wired      |
+	#| RE977-DWT | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 1900809032 | NoDev    | 2026723064     | Yes     | Wired      |
 	#| VI961-DRW | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400805734 | NoDev    | 2400805733     | Yes     |Non-Rechargeable |
 	#| VI960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Temp       | Yes      | No         | 2400811737 | NoDev    | 2400811735     | Yes     |Rechargeable |
 

@@ -28,7 +28,6 @@ using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using AppiumWinApp.PageFactory;
 using RazorEngine.Compilation.ImpromptuInterface.Dynamic;
-using TechTalk.SpecFlow;
 using OpenQA.Selenium.Appium;
 using System.Collections.ObjectModel;
 using Microsoft.SqlServer.Management.XEvent;
@@ -50,6 +49,7 @@ using java.awt.geom;
 using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Appium.Interactions;
 using PointerInputDevice = OpenQA.Selenium.Appium.Interactions.PointerInputDevice;
+using Reqnroll;
 
 namespace AppiumWinApp
 {
@@ -58,7 +58,7 @@ namespace AppiumWinApp
         protected static WindowsDriver<WindowsElement> session;
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
         public static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
         private static ExtentTest test;
         public static ExtentReports extent1;
         public static string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
@@ -3611,31 +3611,56 @@ namespace AppiumWinApp
                 selection[5].Click();
             }
 
-            lib.waitUntilElementExists(session, "File", 0);
-            Thread.Sleep(4000);
-            var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-            ext[0].Click();
-            Thread.Sleep(2000);
-            ext = session.FindElements(WorkFlowPageFactory.readHI);
-            actions = new Actions(session);
-            actions.MoveToElement(ext[0]).Build().Perform();
-            Thread.Sleep(2000);
-            session.Keyboard.PressKey(Keys.Enter);
-            Thread.Sleep(5000);
+            //lib.waitUntilElementExists(session, "File", 0);
+            //Thread.Sleep(4000);
+            //var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+            //ext[0].Click();
+            //Thread.Sleep(2000);
+            //ext = session.FindElements(WorkFlowPageFactory.readHI);
+            //actions = new Actions(session);
+            //actions.MoveToElement(ext[0]).Build().Perform();
+            //Thread.Sleep(2000);
+            //session.Keyboard.PressKey(Keys.Enter);
+            //Thread.Sleep(5000);
 
+            ///** Click on Uncheck button **/
+
+            //session.FindElementByName("Uncheck All").Click();
+            //Thread.Sleep(3000);
+
+            //session.FindElementByAccessibilityId("1001").Click();
+            //Thread.Sleep(2000);
+
+            ///** Choose the All option in drop down **/
+
+            //var rd = session.FindElementByName("All");
+            //actions.MoveToElement(rd).Click().Perform();
+            //Thread.Sleep(2000);
+
+            var read = "//*[@Name='_Read from']";
+            var readFrom = session.FindElement(By.XPath(read));
+            actions.MoveToElement(readFrom).Click().Perform();
+            Thread.Sleep(10000);
+
+            stepName.Log(Status.Info, "Device connected successfully..");
             /** Click on Uncheck button **/
 
             session.FindElementByName("Uncheck All").Click();
             Thread.Sleep(3000);
-
             session.FindElementByAccessibilityId("1001").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(4000);
 
             /** Choose the All option in drop down **/
 
-            var rd = session.FindElementByName("All");
-            actions.MoveToElement(rd).Click().Perform();
-            Thread.Sleep(2000);
+            // Find the element by XPath
+
+            var all = "//*[@Name='All']";
+            var allClick = session.FindElement(By.XPath(all));
+            Thread.Sleep(4000);
+            Actions actions1 = new Actions(session);
+            actions1.MoveToElement(allClick).Click().Perform();
+
+
 
             /** To Click the Apply selection button **/
 

@@ -1,5 +1,4 @@
 ﻿using java.io;
-using TechTalk.SpecFlow;
 using java.awt;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using NUnit.Framework;
@@ -39,6 +38,7 @@ using File = System.IO.File;
 using System.Net;
 using Polly;
 using com.sun.corba.se.spi.activation;
+using Reqnroll;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -56,7 +56,7 @@ namespace AppiumWinApp.StepDefinitions
         protected static IOSDriver<IOSElement> AlarmClockSession;   // Temporary placeholder until Windows namespace exists
         protected static IOSDriver<IOSElement> DesktopSession;
         private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
     
         public TestContext TestContext { get; set; }
 
@@ -74,7 +74,7 @@ namespace AppiumWinApp.StepDefinitions
 
         /** This is to clear exisisting dump image files in the c drive **/
 
-        [Given(@"\[Cleaning up dumps before execution starts]")]
+        [Given("[Cleaning up dumps before execution starts]")]
         public void GivenCleaningUpDumpsBeforeExecutionStarts()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -1009,7 +1009,7 @@ namespace AppiumWinApp.StepDefinitions
         }
 
 
-        [Then(@"\[Do the Comparison between Azure Data and SandR Data]")]
+        [Then("[Do the Comparison between Azure Data and SandR Data]")]
         public void ThenDoTheComparisonBetweenAzureDataAndSandRData()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -1018,7 +1018,7 @@ namespace AppiumWinApp.StepDefinitions
             lib.AzureFileCompare(session, test);
         }
 
-        [Given(@"\[Launch SandRTool]")]
+        [Given("[Launch SandRTool]")]
         public void GivenLaunchSandRTool()
         {
             ModuleFunctions.SandRenvironmentchange();
@@ -1109,7 +1109,7 @@ namespace AppiumWinApp.StepDefinitions
             btncls.Click();
         }
 
-        [Then(@"\[Verify the visibility of connection string]")]
+        [Then("[Verify the visibility of connection string]")]
         public void ThenVerifyTheVisibilityOfConnectionString()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -1118,7 +1118,7 @@ namespace AppiumWinApp.StepDefinitions
             stepName.Log(Status.Pass, "Set sales order connection string is displayed", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
         }
 
-        [Then(@"\[Verify the visibility of connection string other than VA system role]")]
+        [Then("[Verify the visibility of connection string other than VA system role]")]
         public void ThenVerifyTheVisibilityOfConnectionStringOtherThanVASystemRole()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -1256,7 +1256,7 @@ namespace AppiumWinApp.StepDefinitions
         }
 
 
-        [When(@"\[Uninstall the current S&R Tool]")]
+        [When("[Uninstall the current S&R Tool]")]
         public static void WhenUninstallTheCurrentSRTool()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
@@ -1265,7 +1265,7 @@ namespace AppiumWinApp.StepDefinitions
             stepName.Log(Status.Pass, "S&R Tool Uninstalled successfully");
         }
 
-        [When(@"\[Install the latest S&R Tool]")]
+        [When("[Install the latest S&R Tool]")]
         public void WhenInstallTheLatestSRTool()
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;

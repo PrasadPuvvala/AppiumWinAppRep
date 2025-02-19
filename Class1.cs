@@ -1,11 +1,10 @@
 ﻿using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
-using AventStack.ExtentReports.Reporter.Configuration;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using Reqnroll;
 using System;
-using TechTalk.SpecFlow;
 
 
 namespace AppiumWinApp
@@ -15,13 +14,13 @@ namespace AppiumWinApp
     {
         private static IWebDriver driver;
         private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
         private static ExtentTest test;
 
         [OneTimeSetUp]
         public void SetupReporting()
         {
-            htmlReporter = new ExtentHtmlReporter("F:\\Winium\\AppiumWinApp\\report.html");
+            htmlReporter = new ExtentSparkReporter("F:\\Winium\\AppiumWinApp\\report.html");
             htmlReporter.LoadConfig("F:\\Winium\\AppiumWinApp\\AppiumWinApp\\ExtentConfig.xml");
             extent = new ExtentReports();
             extent.AttachReporter(htmlReporter);
