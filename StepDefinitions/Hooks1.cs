@@ -1,5 +1,4 @@
 ﻿using java.io;
-using TechTalk.SpecFlow;
 using java.awt;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using NUnit.Framework;
@@ -41,6 +40,8 @@ using ClosedXML.Excel;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Process = System.Diagnostics.Process;
 using MailMessage = System.Net.Mail.MailMessage;
+using AventStack.ExtentReports.Reporter.Config;
+using Reqnroll;
 
 namespace AppiumWinApp.StepDefinitions
 {
@@ -52,14 +53,14 @@ namespace AppiumWinApp.StepDefinitions
         static string configsettingpath = System.IO.Directory.GetParent(@"../../../").FullName
         + Path.DirectorySeparatorChar + "appconfig.json";
         private static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
         private static ExtentTest test;
         public static String textDir = Directory.GetCurrentDirectory();
         private static VssConnection vssConnection = null;
 
         [BeforeFeature]
         [Obsolete]
-        public static void beforeFeature()
+        public static void beforeFeature(FeatureContext featurecontext)
         {
             config = new appconfigsettings();
             ConfigurationBuilder builder = new ConfigurationBuilder();
@@ -68,11 +69,14 @@ namespace AppiumWinApp.StepDefinitions
             configuration.Bind(config);
             FeatureContext.Current["config"] = config;
             Console.WriteLine("This is BeforeFetaure method");
-            htmlReporter = new ExtentHtmlReporter(textDir + "\\report.html");
-            htmlReporter.Config.Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;
+            htmlReporter = new ExtentSparkReporter(textDir + "\\AutomationReport.html");
+            htmlReporter.Config.Theme = Theme.Dark;
             htmlReporter.Config.ReportName = "SandR Regression Test - Prasad PSSNV";
-            htmlReporter.Config.EnableTimeline = true;
             htmlReporter.Config.DocumentTitle = "S and R Report";
+            //htmlReporter = new ExtentSparkReporter(textDir + "\\APIAutomationReport.html");
+            //htmlReporter.Config.Theme = Theme.Dark;
+            //htmlReporter.Config.ReportName = "FDTS - API Verification - Prasad PSSNV";
+            //htmlReporter.Config.DocumentTitle = "FDTS Report";
             extent = new ExtentReports();
             extent.AttachReporter(htmlReporter);
             ModuleFunctions.callbyextentreport(extent);
@@ -83,7 +87,7 @@ namespace AppiumWinApp.StepDefinitions
 
             String[] csvVal = FunctionLibrary.readCSVFile();
         }
-    
+
         [BeforeScenario]
         [Obsolete]
         public static void BeforeScenario()
@@ -209,7 +213,7 @@ namespace AppiumWinApp.StepDefinitions
 
         [AfterScenario]
 
-        [Then(@"\[done]")]
+        [Then(@"[done]")]
         public void ThenDone()
         {
             //stopWinappdriver();
@@ -362,7 +366,7 @@ namespace AppiumWinApp.StepDefinitions
         public static void afterFeature()
         {
             Console.WriteLine("This is AfterFeature method");
-           // ModuleFunctions.UninstallSandRTool(test);
+            // ModuleFunctions.UninstallSandRTool(test);
             extent.Flush();
         }
 
@@ -387,24 +391,25 @@ namespace AppiumWinApp.StepDefinitions
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "index.html");
+            string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "AutomationReport.html");
+            //string reportPath = Path.Combine(Directory.GetCurrentDirectory(), "APIAutomationReport.html");
             extent.Flush();
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
-            //mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
-            //mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
-            //mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
-            //mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
-            //mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
-            //mailMessage.Subject = "S&R Automation Report";
-            //mailMessage.Body = "Please find the attached S&R Automation Report.";
-            //Attachment attachment = new Attachment(reportPath);
-            //mailMessage.Attachments.Add(attachment);
-            //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
-            //smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
-            //smtpClient.EnableSsl = true; // Enable SSL/TLS
-            //smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
-            //smtpClient.Send(mailMessage);
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("assettracker@i-raysolutions.com");
+            mailMessage.CC.Add(new MailAddress("prasad.puvvala@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("siva.bojja@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("sbojja@gnhearing.com"));
+            mailMessage.To.Add(new MailAddress("surya.kondreddy@i-raysolutions.com"));
+            mailMessage.To.Add(new MailAddress("xxsurkon@gnresound.com"));
+            mailMessage.Subject = "S&R Automation Report";
+            mailMessage.Body = "Please find the attached S&R Automation Report.";
+            Attachment attachment = new Attachment(reportPath);
+            mailMessage.Attachments.Add(attachment);
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com"); // Specify the SMTP host
+            smtpClient.Port = 587; // Specify the SMTP port (Gmail typically uses port 587 for TLS/SSL)
+            smtpClient.EnableSsl = true; // Enable SSL/TLS
+            smtpClient.Credentials = new NetworkCredential("assettracker@i-raysolutions.com", "asset@2k19"); // Provide credentials
+            smtpClient.Send(mailMessage);
         }
     }
 

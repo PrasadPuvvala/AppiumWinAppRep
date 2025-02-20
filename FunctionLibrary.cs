@@ -23,13 +23,13 @@ using AventStack.ExtentReports.Model;
 using Microsoft.Office.Interop.Excel;
 using Range = Microsoft.Office.Interop.Excel.Range;
 using System.Collections.ObjectModel;
-using TechTalk.SpecFlow;
 using NUnit.Framework.Internal;
 using Castle.Core.Internal;
 using System.IO.Compression;
 using Xamarin.Forms.Internals;
 using com.sun.xml.@internal.ws.api.pipe;
 using Chilkat;
+using Reqnroll;
 
 namespace AppiumWinApp
 {
@@ -1797,7 +1797,7 @@ namespace AppiumWinApp
                 if (rowNumber <= 0)
                 {
                     test.Info($"Scenario '{scenarioName}' not found in the Excel sheet.");
-                    ScenarioContext.Current.Pending();
+                    ScenarioContext.Current?.Pending();
                     return;
                 }
 

@@ -28,7 +28,6 @@ using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using AppiumWinApp.PageFactory;
 using RazorEngine.Compilation.ImpromptuInterface.Dynamic;
-using TechTalk.SpecFlow;
 using OpenQA.Selenium.Appium;
 using System.Collections.ObjectModel;
 using Microsoft.SqlServer.Management.XEvent;
@@ -50,6 +49,7 @@ using java.awt.geom;
 using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Appium.Interactions;
 using PointerInputDevice = OpenQA.Selenium.Appium.Interactions.PointerInputDevice;
+using Reqnroll;
 
 namespace AppiumWinApp
 {
@@ -58,7 +58,7 @@ namespace AppiumWinApp
         protected static WindowsDriver<WindowsElement> session;
         private const string WindowsApplicationDriverUrl = "http://127.0.0.1:4723";
         public static ExtentReports extent;
-        private static ExtentHtmlReporter htmlReporter;
+        private static ExtentSparkReporter htmlReporter;
         private static ExtentTest test;
         public static ExtentReports extent1;
         public static string computer_name = System.Environment.GetEnvironmentVariable("COMPUTERNAME");
@@ -3101,7 +3101,7 @@ namespace AppiumWinApp
 
                                 screenshot = CaptureScreenshot(session);
                                 stepName.Log(Status.Info, "Device dump image is in process", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
-                                Thread.Sleep(200000);
+                                Thread.Sleep(320000);
 
                                 try
                                 {
@@ -3611,31 +3611,56 @@ namespace AppiumWinApp
                 selection[5].Click();
             }
 
-            lib.waitUntilElementExists(session, "File", 0);
-            Thread.Sleep(4000);
-            var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-            ext[0].Click();
-            Thread.Sleep(2000);
-            ext = session.FindElements(WorkFlowPageFactory.readHI);
-            actions = new Actions(session);
-            actions.MoveToElement(ext[0]).Build().Perform();
-            Thread.Sleep(2000);
-            session.Keyboard.PressKey(Keys.Enter);
-            Thread.Sleep(5000);
+            //lib.waitUntilElementExists(session, "File", 0);
+            //Thread.Sleep(4000);
+            //var ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+            //ext[0].Click();
+            //Thread.Sleep(2000);
+            //ext = session.FindElements(WorkFlowPageFactory.readHI);
+            //actions = new Actions(session);
+            //actions.MoveToElement(ext[0]).Build().Perform();
+            //Thread.Sleep(2000);
+            //session.Keyboard.PressKey(Keys.Enter);
+            //Thread.Sleep(5000);
 
+            ///** Click on Uncheck button **/
+
+            //session.FindElementByName("Uncheck All").Click();
+            //Thread.Sleep(3000);
+
+            //session.FindElementByAccessibilityId("1001").Click();
+            //Thread.Sleep(2000);
+
+            ///** Choose the All option in drop down **/
+
+            //var rd = session.FindElementByName("All");
+            //actions.MoveToElement(rd).Click().Perform();
+            //Thread.Sleep(2000);
+
+            var read = "//*[@Name='_Read from']";
+            var readFrom = session.FindElement(By.XPath(read));
+            actions.MoveToElement(readFrom).Click().Perform();
+            Thread.Sleep(10000);
+
+            stepName.Log(Status.Info, "Device connected successfully..");
             /** Click on Uncheck button **/
 
             session.FindElementByName("Uncheck All").Click();
             Thread.Sleep(3000);
-
             session.FindElementByAccessibilityId("1001").Click();
-            Thread.Sleep(2000);
+            Thread.Sleep(4000);
 
             /** Choose the All option in drop down **/
 
-            var rd = session.FindElementByName("All");
-            actions.MoveToElement(rd).Click().Perform();
-            Thread.Sleep(2000);
+            // Find the element by XPath
+
+            var all = "//*[@Name='All']";
+            var allClick = session.FindElement(By.XPath(all));
+            Thread.Sleep(4000);
+            Actions actions1 = new Actions(session);
+            actions1.MoveToElement(allClick).Click().Perform();
+
+
 
             /** To Click the Apply selection button **/
 
@@ -4136,6 +4161,171 @@ namespace AppiumWinApp
             catch (Exception ex)
             {
                 stepName.Log(Status.Fail, $"Error: {ex.Message}");
+            }
+        }
+        public static void InstallSandRC4Extension(ExtentTest stepName)
+        {
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64);
+            if (key == null)
+            {
+                stepName.Log(Status.Fail, "Uninstall registry key not found.");
+                return;
+            }
+
+            var targetSubKey = key.GetSubKeyNames()
+                                 .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                 .Where(appKey => appKey != null)
+                                 .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                 .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool"))
+                                 .ToList();
+
+            if (targetSubKey.Any())
+            {
+                foreach (var item in targetSubKey)
+                {
+                    if (item.displayName.Contains("C4 Extension"))
+                    {
+                        UninstallSandRC4Extension(stepName);
+                        break;
+                    }
+                }
+            }
+
+            // Path to your .exe file
+            string filePath = $"C:\\Users\\iray3\\Downloads\\S&R Tool C4 Extension Pack 1.2.zip\\S&R Tool C4 Extension Pack.exe";
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = filePath,
+                    Arguments = "/quiet",
+                    Verb = "runas", // This prompts for administrative access
+                    UseShellExecute = true
+                };
+
+                Process process = new Process
+                {
+                    StartInfo = startInfo
+                };
+
+                process.Start();
+                process.WaitForExit(); // Optional: Wait for the process to exit if needed
+
+                var displayNames = key.GetSubKeyNames()
+                                  .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                  .Where(appKey => appKey != null)
+                                  .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                  .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool C4 Extension"))
+                                  .ToList();
+
+                if (displayNames.Any())
+                {
+                    foreach (var item in displayNames)
+                    {
+                        if (item.displayName == $"Service & Repair Tool C4 Extension Pack 1.2")
+                        {
+                            stepName.Log(Status.Pass, $"Service & Repair Tool C4 Extension Installed successfully");
+                            //item.appKey.Close();  // Close the appKey after processing
+                        }
+                        else
+                        {
+                            stepName.Log(Status.Info, $"Service & Repair Tool C4 Extension is not Installed");
+                            //item.appKey.Close();  // Close the appKey after processing
+                        }
+
+                    }
+                }
+                else
+                {
+                    stepName.Log(Status.Fail, $"Service & Repair Tool C4 Extension is not Installed");
+                }
+            }
+            catch (Exception ex)
+            {
+                stepName.Log(Status.Fail, $"Error: {ex.Message}");
+            }
+        }
+
+        public static void UninstallSandRC4Extension(ExtentTest stepName)
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64))
+            {
+                if (key == null)
+                {
+                    stepName.Log(Status.Fail, "Uninstall Registry key not found");
+                    return;
+                }
+
+                var targetSubKey = key.GetSubKeyNames()
+                                 .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                 .Where(appKey => appKey != null)
+                                 .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                 .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool"))
+                                 .ToList();
+
+                if (!targetSubKey.Any())
+                {
+                    stepName.Log(Status.Fail, "Service & Repair Tool not found");
+                    return;
+                }
+
+                foreach (var e in targetSubKey)
+                {
+                    if (e.displayName.Contains("C4 Extension"))
+                    {
+                        string uninstallString = e.appKey.GetValue("UninstallString") as string;
+                        if (string.IsNullOrEmpty(uninstallString))
+                        {
+                            stepName.Log(Status.Fail, $"UninstallString not found for {e.displayName}");
+                            continue;
+                        }
+                        string trimmedUninstallString = uninstallString?.TrimEnd(" /uninstall".ToCharArray());
+                        if (!string.IsNullOrEmpty(trimmedUninstallString))
+                        {
+                            try
+                            {
+                                // Create a process object
+                                using (Process uninstallProcess = new Process())
+                                {
+                                    // Configure the process using StartInfo properties
+                                    uninstallProcess.StartInfo.FileName = trimmedUninstallString;
+                                    uninstallProcess.StartInfo.Verb = "runas";
+                                    uninstallProcess.StartInfo.Arguments = "/uninstall /quiet"; // Adjust arguments as needed
+                                    uninstallProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Optional: hide the uninstall window
+                                    uninstallProcess.StartInfo.UseShellExecute = false; // Ensure no shell is used for better control
+
+                                    // Start the process
+                                    uninstallProcess.Start();
+                                    uninstallProcess.WaitForExit(); // Wait for the uninstallation to complete
+
+                                    // Check the exit code if needed
+                                    int exitCode = uninstallProcess.ExitCode;
+                                    Console.WriteLine($"Uninstallation exit code: {exitCode}");
+                                }
+
+                                var displayNames = key.GetSubKeyNames()
+                                     .Select(subKeyName => key.OpenSubKey(subKeyName))
+                                     .Where(appKey => appKey != null)
+                                     .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                                     .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains($"Service & Repair Tool"))
+                                     .ToList();
+
+                                if (displayNames.Any(app => app.displayName.Contains("C4 Extension")))
+                                {
+                                    stepName.Log(Status.Fail, "Serivce & Repair Tool C4 Extension was not uninstalled");
+                                }
+                                else
+                                {
+                                    stepName.Log(Status.Pass, "Service & Repair Tool C4 Extension sucessfully uninstalled");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                stepName.Log(Status.Fail, $"Error during uninstallation : {ex.Message}");
+                            }
+                        }
+                    }
+                }
             }
         }
 
