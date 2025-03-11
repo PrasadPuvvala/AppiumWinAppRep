@@ -58,6 +58,15 @@ namespace AppiumWinApp.StepDefinitions
                 long responseTimeMs = stopwatch.ElapsedMilliseconds;
                 List<double> responseTimes = new List<double>();
 
+                // Print response details
+                Console.WriteLine($"Status Code: {response.StatusCode} ({(int)response.StatusCode})");
+                Console.WriteLine($"Response Time: {responseTimeMs} ms");
+                Console.WriteLine($"Response Content: {response.Content}");
+
+                // Print response
+                Console.WriteLine("Response: " + response.Content);
+
+
                 // Check if response is successful
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
