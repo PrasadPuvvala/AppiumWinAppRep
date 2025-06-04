@@ -24,7 +24,7 @@ Scenario: 01Test Case ID 1685572: Verify that capture is not allowed on device s
 Examples:
 	| DeviceId     | DeviceLeftSlNo | FlashHI | DeviceRight | DeviceLeft | DeviceSlNo | Devicetype       |
 				
-	#| NX9ITC-DW-MP | 2476130453     | Yes     | Right       | Left       | 2476130454 | Non-Rechargeable |
+	##| NX9ITC-DW-MP | 2476130453     | Yes     | Right       | Left       | 2476130454 | Non-Rechargeable |
 	#| NX960S-DRWC | 2400802588     | Yes     | Right       | Left       | 2400802587 | Rechargeable |
 	| NX977-DWC | 2300809943     | Yes     | Right       | Left       | 2300809945 | Rechargeable |
 
@@ -53,7 +53,7 @@ Scenario: 02Test Case ID 1105675: Verify that the battery health of a RHI is res
 Examples:
 	| DeviceId     | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DumpD    | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo | FlashHI | DeviceCSlno | DeviceC | Devicetype       |
 
-	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
+	##| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
 	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2300809945 | NoDev    | 2300809943     | Yes     | Cdevice     | Cdevice | Rechargeable |
 	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2400802587 | NoDev    | 2400802588     | Yes     | Cdevice     | Cdevice | Rechargeable |
 
@@ -99,7 +99,7 @@ Scenario: 03Test Case ID 1413300: Verify that battery ADL data is reset during r
 Examples:
 	| DeviceId     | DeviceLeft | DeviceRight | DumpA    | DumpB    | DumpC    | DumpD    | AlterFSW | AlterFSWNo | DeviceSlNo | NoDevice | DeviceLeftSlNo | FlashHI | DeviceCSlno | DeviceC | Devicetype       |
 
-	#| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
+	##| NX9ITC-DW-MP | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2476130454 | NoDev    | 2476130453     | Yes     | Cdevice     | Cdevice | Non-Rechargeable |
 	| NX977-DWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2300809945 | NoDev    | 2300809943     | Yes     | Cdevice     | Cdevice | Rechargeable |
 	#| NX960S-DRWC | Left       | Right       | Device A | Device B | Device C | Device D | Yes      | No         | 2400802587 | NoDev    | 2400802588     | Yes     | Cdevice     | Cdevice | Rechargeable |
 
