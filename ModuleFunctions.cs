@@ -3224,8 +3224,10 @@ namespace AppiumWinApp
                                     {
 
                                         lib.waitUntilElementExists(session, "Channel", 0);
+                                        session.FindElementByName("Channel").Click();
+                                     
                                         var ext = session.FindElements(WorkFlowPageFactory.channel);
-                                        ext[0].Click();
+                                        //ext[0].Click();
                                         Thread.Sleep(2000);
 
                                         if (computer_name.Equals("FSWIRAY80"))
@@ -3267,8 +3269,8 @@ namespace AppiumWinApp
                                         {
                                             if (side.Equals("Left"))
                                             {
-                                                action.MoveToElement(ext[0]).Build().Perform();
-                                                Thread.Sleep(2000);
+                                                //action.MoveToElement(ext[0]).Build().Perform();
+                                                //Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.Enter);
                                                 Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.ArrowDown);
@@ -3283,8 +3285,8 @@ namespace AppiumWinApp
 
                                             else
                                             {
-                                                action.MoveToElement(ext[0]).Build().Perform();
-                                                Thread.Sleep(2000);
+                                                //action.MoveToElement(ext[0]).Build().Perform();
+                                                //Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.Enter);
                                                 Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.ArrowDown);
@@ -3302,41 +3304,70 @@ namespace AppiumWinApp
                                         /** selecting file menu and read **/
 
                                         ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                                        ext[0].Click();
+                                        //ext[0].Click();
+                                        session.FindElementByName("File").Click();
+                                        session.Keyboard.PressKey(Keys.Enter);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.Enter);
 
                                         /** selecting read option **/
 
-                                        ext = session.FindElements(WorkFlowPageFactory.readHI);
-                                        action = new Actions(session);
-                                        action.MoveToElement(ext[0]).Build().Perform();
-                                        Thread.Sleep(2000);
-                                        session.Keyboard.PressKey(Keys.Enter);
+                                        //ext = session.FindElements(WorkFlowPageFactory.readHI);
+                                        //action = new Actions(session);
+                                        //action.MoveToElement(ext[0]).Build().Perform();
+                                        //Thread.Sleep(2000);
+                                        //session.Keyboard.PressKey(Keys.Enter);
                                         Thread.Sleep(4000);
 
                                         /** selecting file menu and CheckNodes **/
 
-                                        ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                                        ext[0].Click();
+                                        //ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                                        //ext[0].Click();
+                                        //Thread.Sleep(2000);
+                                        //ext = session.FindElements(WorkFlowPageFactory.checkNodes);
+                                        //action = new Actions(session);
+                                        //action.MoveToElement(ext[0]).Build().Perform();
+                                        //Thread.Sleep(2000);
+                                        //session.Keyboard.PressKey(Keys.Enter);
+                                        //Thread.Sleep(4000);
+
+                                        ///** selecting dump option **/
+
+                                        //ext = session.FindElements(WorkFlowPageFactory.fileMenu);
+                                        //ext[0].Click();
+                                        //Thread.Sleep(2000);
+                                        //ext = session.FindElements(WorkFlowPageFactory.dumpP6HI);
+                                        //action = new Actions(session);
+                                        //action.MoveToElement(ext[0]).Build().Perform();
+                                        //Thread.Sleep(2000);
+                                        //session.Keyboard.PressKey(Keys.Enter);
+                                        //Thread.Sleep(4000);
+
+                                        session.FindElementByName("File").Click();
+                                        session.Keyboard.PressKey(Keys.Enter);
                                         Thread.Sleep(2000);
-                                        ext = session.FindElements(WorkFlowPageFactory.checkNodes);
-                                        action = new Actions(session);
-                                        action.MoveToElement(ext[0]).Build().Perform();
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
                                         Thread.Sleep(2000);
                                         session.Keyboard.PressKey(Keys.Enter);
-                                        Thread.Sleep(4000);
-
-                                        /** selecting dump option **/
-
-                                        ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                                        ext[0].Click();
                                         Thread.Sleep(2000);
-                                        ext = session.FindElements(WorkFlowPageFactory.dumpP6HI);
-                                        action = new Actions(session);
-                                        action.MoveToElement(ext[0]).Build().Perform();
-                                        Thread.Sleep(2000);
-                                        session.Keyboard.PressKey(Keys.Enter);
-                                        Thread.Sleep(4000);
-                                        session.FindElementByClassName("Edit").SendKeys("C:\\" + fileName + ".xml");
+                                        //session.SwitchTo().Window(session.WindowHandles.First());
+
+                                        //session.FindElementByName("File name:").SendKeys("C:\\" + fileName + ".xml");
+                                        string editFile = "//*[@ClassName='Edit']";
+                                        WindowsElement fileNameEdit = session.FindElement(By.XPath(editFile));
+                                        fileNameEdit.SendKeys("C:\\" + fileName + ".xml");
                                         Thread.Sleep(4000);
 
                                         /** To save the Dump in Xml file **/

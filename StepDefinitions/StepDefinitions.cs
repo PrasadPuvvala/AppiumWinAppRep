@@ -1643,7 +1643,7 @@ namespace MyNamespace
 
             }
 
-            Thread.Sleep(3000);
+            Thread.Sleep(10000);
 
             lib.clickOnAutomationName(session, "Continue");
             Thread.Sleep(40000);
@@ -1677,7 +1677,7 @@ namespace MyNamespace
 
                     else if (element.Text == "Connection")
                     {
-                        Thread.Sleep(10000);
+                        Thread.Sleep(20000);
                         stepName.Log(Status.Pass, "Connection Success");
                         int buttonCount = 0;
                         try
@@ -1752,7 +1752,8 @@ namespace MyNamespace
                                     {
                                     }
 
-                                    stepName.Pass("Reset is successfully done");
+                                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+                                    stepName.Pass("Reset is successfully done", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                                     Thread.Sleep(2000);
 
                                     lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
@@ -1788,7 +1789,8 @@ namespace MyNamespace
                                     catch (Exception e1)
                                     {
                                     }
-                                    stepName.Pass("Reset is successfully done");
+                                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+                                    stepName.Pass("Reset is successfully done", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                                     Thread.Sleep(2000);
                                     lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
 
@@ -1869,7 +1871,7 @@ namespace MyNamespace
                     }
                     else
                     {
-                        Thread.Sleep(10000);
+                        Thread.Sleep(20000);
                         stepName.Log(Status.Pass, "Connection Success");
                         int buttonCount = 0;
                         try
@@ -1944,8 +1946,8 @@ namespace MyNamespace
                                     catch (Exception e1)
                                     {
                                     }
-
-                                    stepName.Pass("Reset is successfully done");
+                                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+                                    stepName.Pass("Reset is successfully done", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                                     Thread.Sleep(2000);
 
                                     lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
@@ -1980,7 +1982,8 @@ namespace MyNamespace
                                     catch (Exception e1)
                                     {
                                     }
-                                    stepName.Pass("Reset is successfully done");
+                                    screenshot = ModuleFunctions.CaptureScreenshot(session);
+                                    stepName.Pass("Reset is successfully done", MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot).Build());
                                     Thread.Sleep(2000);
                                     lib.clickOnElementWithIdonly(session, "ProgramStripAutomationIds.AddProgramAction");
 
@@ -2760,20 +2763,20 @@ namespace MyNamespace
                     session = lib.waitUntilElementExists(session, "checkBoxSetInListeningTest", 1);
                     var ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
                     Actions action = new Actions(session);
-                    action.MoveToElement(ext[0]).Build().Perform();
+                    action.MoveToElement(ext[1]).Build().Perform();
                     Thread.Sleep(2000);
-                    action.MoveToElement(ext[0]).Click().Build().Perform();
+                    action.MoveToElement(ext[1]).Click().Build().Perform();
                     Thread.Sleep(2000);
                     //session.Close();
                 }
 
                 else
                 {
-                    var ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
+                    var ext = session.FindElements(MobileBy.Name("Set HI in listening test mode after capture"));
                     Actions action = new Actions(session);
-                    action.MoveToElement(ext[0]).Build().Perform();
+                    action.MoveToElement(ext[1]).Build().Perform();
                     Thread.Sleep(2000);
-                    action.MoveToElement(ext[0]).Click().Build().Perform();
+                    action.MoveToElement(ext[1]).Click().Build().Perform();
                     Thread.Sleep(2000);
                     Thread.Sleep(2000);
                     screenshot = ModuleFunctions.CaptureScreenshot(session);
@@ -2824,9 +2827,9 @@ namespace MyNamespace
                         session = lib.waitUntilElementExists(session, "checkBoxSetInListeningTest", 1);
                         ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
                         action = new Actions(session);
-                        action.MoveToElement(ext[0]).Build().Perform();
+                        action.MoveToElement(ext[1]).Build().Perform();
                         Thread.Sleep(2000);
-                        action.MoveToElement(ext[0]).Click().Build().Perform();
+                        action.MoveToElement(ext[1]).Click().Build().Perform();
                         Thread.Sleep(2000);
                         session.FindElementByName("CANCEL").Click();
 
@@ -2863,9 +2866,9 @@ namespace MyNamespace
                         session = lib.waitUntilElementExists(session, "checkBoxSetInListeningTest", 1);
                         ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
                         action = new Actions(session);
-                        action.MoveToElement(ext[0]).Build().Perform();
+                        action.MoveToElement(ext[1]).Build().Perform();
                         Thread.Sleep(2000);
-                        action.MoveToElement(ext[0]).Click().Build().Perform();
+                        action.MoveToElement(ext[1]).Click().Build().Perform();
                         Thread.Sleep(2000);
                         session.FindElementByName("CANCEL").Click();
 
@@ -2902,9 +2905,9 @@ namespace MyNamespace
                         session = lib.waitUntilElementExists(session, "checkBoxSetInListeningTest", 1);
                         ext = session.FindElements(MobileBy.AccessibilityId("checkBoxSetInListeningTest"));
                         action = new Actions(session);
-                        action.MoveToElement(ext[0]).Build().Perform();
+                        action.MoveToElement(ext[1]).Build().Perform();
                         Thread.Sleep(2000);
-                        action.MoveToElement(ext[0]).Click().Build().Perform();
+                        action.MoveToElement(ext[1]).Click().Build().Perform();
                         Thread.Sleep(2000);
                         session.FindElementByName("CANCEL").Click();
 
@@ -3793,6 +3796,7 @@ namespace MyNamespace
             Thread.Sleep(3000);
 
             lib.clickOnAutomationName(session, "Continue");
+            Thread.Sleep(40000);
 
             int buttonCount = 0;
 
@@ -3848,7 +3852,7 @@ namespace MyNamespace
                 session.FindElementByName("Instrument").Click();
                 Thread.Sleep(2000);
                 session.FindElementByName("Read Instrument").Click();
-                Thread.Sleep(7000);
+                Thread.Sleep(12000);
                 screenshot = ModuleFunctions.CaptureScreenshot(session);
                 try
                 {
@@ -4347,8 +4351,9 @@ namespace MyNamespace
                                         FunctionLibrary lib = new FunctionLibrary();
                                         InputSimulator sim = new InputSimulator();
                                         lib.waitUntilElementExists(session, "Channel", 0);
+                                        session.FindElementByName("Channel").Click();
                                         var ext = session.FindElements(WorkFlowPageFactory.channel);
-                                        ext[0].Click();
+                                        //ext[0].Click();
                                         Thread.Sleep(2000);
 
                                         if (computer_name.Equals("FSWIRAY80"))
@@ -4392,11 +4397,15 @@ namespace MyNamespace
                                         {
                                             if (side.Equals("Left"))
                                             {
-                                                action.MoveToElement(ext[1]).Build().Perform();
-                                                Thread.Sleep(2000);
+                                                //action.MoveToElement(ext[1]).Build().Perform();
+                                                //Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.Enter);
                                                 Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.ArrowDown);
+                                                Thread.Sleep(2000);
+                                                session.Keyboard.PressKey(Keys.Enter);
                                                 Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.ArrowDown);
                                                 Thread.Sleep(2000);
@@ -4404,8 +4413,8 @@ namespace MyNamespace
 
                                             else
                                             {
-                                                action.MoveToElement(ext[1]).Build().Perform();
-                                                Thread.Sleep(2000);
+                                                //action.MoveToElement(ext[1]).Build().Perform();
+                                                //Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.Enter);
                                                 Thread.Sleep(2000);
                                                 session.Keyboard.PressKey(Keys.ArrowDown);
@@ -4422,13 +4431,21 @@ namespace MyNamespace
                                         lib.waitUntilElementExists(session, "File", 0);
                                         Thread.Sleep(4000);
                                         ext = session.FindElements(WorkFlowPageFactory.fileMenu);
-                                        ext[0].Click();
-                                        Thread.Sleep(2000);
-                                        ext = session.FindElements(WorkFlowPageFactory.readHI);
-                                        action = new Actions(session);
-                                        action.MoveToElement(ext[0]).Build().Perform();
+                                        //ext[0].Click();
+                                        session.FindElementByName("File").Click();
                                         Thread.Sleep(2000);
                                         session.Keyboard.PressKey(Keys.Enter);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.ArrowDown);
+                                        Thread.Sleep(2000);
+                                        session.Keyboard.PressKey(Keys.Enter);
+                                        //ext = session.FindElements(WorkFlowPageFactory.readHI);
+                                        //action = new Actions(session);
+                                        //action.MoveToElement(ext[0]).Build().Perform();
+                                        //Thread.Sleep(2000);
+                                        //session.Keyboard.PressKey(Keys.Enter);
                                         Thread.Sleep(2000);
 
                                         if (computer_name.Equals("FSWIRAY80"))
@@ -4630,10 +4647,18 @@ namespace MyNamespace
                                             row.SendKeys(unixTimestamp.ToString());
                                             Thread.Sleep(2000);
                                             lib.clickOnAutomationName(session, "File");
+                                            session.FindElementByName("File").Click();
                                             Thread.Sleep(4000);
-                                            ext = session.FindElements(WorkFlowPageFactory.writeHI);
-                                            action = new Actions(session);
-                                            action.MoveToElement(ext[0]).Build().Perform();
+                                            //ext = session.FindElements(WorkFlowPageFactory.writeHI);
+                                            //action = new Actions(session);
+                                            //action.MoveToElement(ext[0]).Build().Perform();
+                                            session.Keyboard.PressKey(Keys.Enter);
+                                            Thread.Sleep(2000);
+                                            session.Keyboard.PressKey(Keys.ArrowDown);
+                                            Thread.Sleep(2000);
+                                            session.Keyboard.PressKey(Keys.ArrowDown);
+                                            Thread.Sleep(2000);
+                                            session.Keyboard.PressKey(Keys.ArrowDown);
                                             Thread.Sleep(2000);
                                             session.Keyboard.PressKey(Keys.Enter);
 

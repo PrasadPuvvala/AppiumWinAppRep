@@ -117,10 +117,11 @@ namespace AppiumWinApp.StepDefinitions
                 var result = JsonConvert.DeserializeObject<List<dynamic>>(response.Content);
 
                 // Log each result item
-                foreach (var item in result)
-                {
-                    stepName.Log(Status.Pass, $"Image Analysis Data : {item}");
-                }
+                //foreach (var item in result)
+                //{
+                //    stepName.Log(Status.Pass, $"Image Analysis Data : {item}");
+                //}
+                stepName.Log(Status.Pass, $"Image Analysis Data : {response.Content}");
             }
             else
             {
