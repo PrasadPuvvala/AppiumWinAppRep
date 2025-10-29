@@ -4711,5 +4711,64 @@ namespace MyNamespace
 
         }
 
+        [Then("[Set EnableModelValidation to false in app settings]")]
+        public void ThenSetEnableModelValidationToFalseInAppSettings()
+        {
+            // Reuse config from FeatureContext
+            config = FeatureContext.Current["config"] as appconfigsettings;
+            // 2️⃣ Get path from JSON
+            string configPath = config.navisionSalesOrder?.EnableModelValidationPath;
+            if (!File.Exists(configPath))
+                throw new FileNotFoundException($"XML config file not found at: {configPath}");
+
+            // 3️⃣ Load and update the XML file
+            XDocument xmlDoc = XDocument.Load(configPath);
+            var setting = xmlDoc.Descendants("add")
+                                .FirstOrDefault(e => (string)e.Attribute("key") == "EnableModelValidation");
+
+            if (setting != null)
+            {
+                setting.SetAttributeValue("value", "false");
+                xmlDoc.Save(configPath);
+            }
+        }
+
+
+        [Then("[Perform pre-fitting by clicking the Prefit or Prefit Wireless button if device is wireless {string} and {string} and {string} and {string}and{string}]")]
+        public void ThenPerformPre_FittingByClickingThePrefitOrPrefitWirelessButtonIfDeviceIsWirelessAndAndAndAnd(string DeviceLeftSlNo, string deviceSlNo, string device, string side, string DeviceType)
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            config = FeatureContext.Current["config"] as appconfigsettings;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            FunctionLibrary lib = new FunctionLibrary();
+
+            if (DeviceType.Equals("Non-Rechargeable") || DeviceType.Equals("Rechargeable"))
+            {
+                if (side.Equals("Left"))
+                {
+                    ModuleFunctions.socketA(session, test, DeviceType);
+                }
+
+                else if (side.Equals("Right"))
+
+                {
+                    ModuleFunctions.socketB(session, test, DeviceType);
+                }
+
+                else if (side.Equals("Cdevice"))
+
+                {
+                    ModuleFunctions.socketC(session, test, DeviceType);
+                }
+                session = lib.functionWaitForName(session, "Pre-fit");
+                stepName.Log(Status.Pass, "Clicked on preFit.");
+
+            }
+            else
+            {
+
+            }
+        }
+
     }
 }

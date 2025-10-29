@@ -14,6 +14,7 @@ namespace AppiumWinApp
         public ConnectionStringPath connectionStringPath { get; set; }
         public SandRToolUninstallation sandRToolUninstallation { get; set; }
         public SandRDownloadLinkUpdateParameters sandRDownloadLinkUpdateParameters { get; set; }
+        public NavisionSalesOrder navisionSalesOrder { get; set; }
     }
 
     public class Algo
@@ -75,4 +76,21 @@ namespace AppiumWinApp
         public string Build { get; set; } = string.Empty;
         public string Beta { get; set; } = string.Empty;
     }
+
+    public class NavisionSalesOrder
+    {
+        public string Binaural { get; set; } = string.Empty;
+
+        public string Monaural { get; set; } = string.Empty;
+
+        public string EnableModelValidationPath { get; set; } = string.Empty;
+
+        public string ValidBase64ConnectionString { get; set; } = string.Empty;
+
+        public string ValidBase64ConnectionStringPath { get; set; } = string.Empty;
+
+        public string userConfigDir { get; set; } = string.Empty;
+    }
+
+
 }

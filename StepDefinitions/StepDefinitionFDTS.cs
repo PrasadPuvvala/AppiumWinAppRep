@@ -1433,6 +1433,98 @@ namespace AppiumWinApp.StepDefinitions
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
         }
+
+        [When("[Launch S and R set sales order connection string and set System Role to Prefit]")]
+        public void WhenLaunchSAndRSetSalesOrderConnectionStringAndSetSystemRoleToPrefit()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            try
+            {
+                session = ModuleFunctions.launchApp(Directory.GetCurrentDirectory() + "\\LaunchSandR.bat", Directory.GetCurrentDirectory());
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            Thread.Sleep(8000);
+            config = (appconfigsettings)_featureContext["config"];
+            session = ModuleFunctions.sessionInitialize(config.ApplicationPath.SandRAppPath, config.workingdirectory.SandR);
+
+            Thread.Sleep(2000);
+            stepName.Log(Status.Pass, "S&R Tool launched successfully");
+            session.FindElementByName("Device Info").Click();
+            Thread.Sleep(20000);
+
+            /** Navigation to settings tab **/
+
+            session.FindElementByName("Settings").Click();
+            Thread.Sleep(8000);
+
+            session.FindElementByName("Set sales order connection string").Click();
+            Thread.Sleep(5000);
+
+            session.FindElementByAccessibilityId("ConnectionStringTextBox").Click();
+            Thread.Sleep(2000);
+            session.FindElementByAccessibilityId("ConnectionStringTextBox").SendKeys(config.navisionSalesOrder.ValidBase64ConnectionString);
+            Thread.Sleep(2000);
+            session.FindElementByAccessibilityId("SaveButton").Click();
+            Thread.Sleep(5000);
+            stepName.Log(Status.Pass, "Sales Order connection string is set successfully");
+
+            var ele = session.FindElementsByClassName("ComboBox");
+            try
+            {
+                do
+                {
+
+                } while ((ele[3].GetAttribute("IsEnabled").ToString()) == "False");
+            }
+            catch (Exception e) { }
+
+            ele[3].Click();
+            Thread.Sleep(5000);
+            session.FindElementByName("VA").Click();
+            Thread.Sleep(2000);
+            stepName.Log(Status.Pass, "System Role is set to VA successfully");
+            session.FindElementByName("Services").Click();
+            session.CloseApp();
+        }
+
+        [Then("[Validate Sales Order Connection String matches configuration]")]
+        public void ThenValidateSalesOrderConnectionStringMatchesConfiguration()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            config = (appconfigsettings)_featureContext["config"];
+
+            // 1️⃣ Build user.config path dynamically
+            string userConfigDir = config.navisionSalesOrder.userConfigDir;
+            string buildVersion = config.sandRDownloadLinkUpdateParameters.Build;
+            string userConfigPath = Path.Combine(userConfigDir, $"{buildVersion}.0.0", "user.config");
+
+            // 2️⃣ Load XML
+            XDocument document = XDocument.Load(userConfigPath);
+
+            // 3️⃣ Extract SalesOrderConnection value
+            string actualValue = document.Descendants("setting")
+                                   .FirstOrDefault(x => (string)x.Attribute("name") == "SalesOrderConnection")
+                                   ?.Element("value")?.Value?.Trim();
+
+            // 4️⃣ Compare with expected JSON value
+            string expectedValue = config.navisionSalesOrder.ValidBase64ConnectionString?.Trim();
+
+            if (expectedValue == actualValue)
+            {
+                stepName.Log(Status.Pass, $"✅ SalesOrderConnection matches configuration.<br><b>Value:</b> {actualValue}");
+            }
+            else
+            {
+                stepName.Log(Status.Fail, $"❌ Mismatch in SalesOrderConnection.<br><b>Expected:</b> {expectedValue}<br><b>Found:</b> {actualValue}");
+            }
+        }
+
     }
 }
 
