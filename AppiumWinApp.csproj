@@ -79,6 +79,7 @@
         </mailSettings>
       </system.net>
     </configuration>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
 </Project>

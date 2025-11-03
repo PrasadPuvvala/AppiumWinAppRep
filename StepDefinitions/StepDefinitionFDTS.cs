@@ -1269,7 +1269,7 @@ namespace AppiumWinApp.StepDefinitions
         {
             test = ScenarioContext.Current["extentTest"] as ExtentTest;
             ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
-            ModuleFunctions.InstallSandRTool(stepName);
+            //ModuleFunctions.InstallSandRTool(stepName);
             ModuleFunctions.SandRenvironmentchange();
         }
 

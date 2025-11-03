@@ -1447,8 +1447,8 @@ namespace AppiumWinApp
                 //Process.Start("C:\\Users\\iray3\\Desktop\\Socket_Power - Copy\\dist\\Socket_Box1\\Socket_Box1.exe");
 
                 Process process = new Process();
-                process.StartInfo.FileName = "C:\\Users\\iray3\\Desktop\\Socket_Power - Copy\\dist\\Socket_Box1\\Socket_Box1.exe"; // .bat file path
-                process.StartInfo.WorkingDirectory = "C:\\Users\\iray3\\Desktop\\Socket_Power - Copy\\dist\\Socket_Box1"; // Set the working directory
+                process.StartInfo.FileName = "C:\\Socket_Power\\Socket_Power\\dist\\Socket_Box1\\Socket_Box1.exe"; // .bat file path
+                process.StartInfo.WorkingDirectory = "C:\\Socket_Power\\Socket_Power\\dist\\Socket_Box1"; // Set the working directory
                 process.StartInfo.UseShellExecute = true; // Use shell to execute (important for running with administrator rights)
                 process.StartInfo.Verb = "runas"; // This will run the batch file as administrator
 
