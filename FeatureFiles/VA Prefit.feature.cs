@@ -84,7 +84,7 @@ namespace AppiumWinApp.FeatureFiles
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("01Test Case ID 511987: Verify binaural prefitting can be performed")]
         [NUnit.Framework.CategoryAttribute("tag1")]
-        [NUnit.Framework.TestCaseAttribute("NX960S-DRWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Yes", "No", "2400802586", "NoDev", "2300804242", "Yes", "2300804242", "Cdevice", "Rechargeable", null)]
+        [NUnit.Framework.TestCaseAttribute("VI960S-DRWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Yes", "No", "2586136545", "NoDev", "2586146387", "Yes", "2586146387", "Cdevice", "Rechargeable", null)]
         public async System.Threading.Tasks.Task _01TestCaseID511987VerifyBinauralPrefittingCanBePerformed(
                     string deviceId, 
                     string deviceLeft, 
@@ -177,6 +177,221 @@ this.ScenarioInitialize(scenarioInfo);
 #line 18
     await testRunner.ThenAsync(string.Format("[Perform pre-fitting by clicking the Prefit or Prefit Wireless button if device i" +
                             "s wireless \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"]", deviceLeftSlNo, deviceSlNo, deviceId, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 19
+    await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 20
+    await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 21
+ await testRunner.WhenAsync(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 22
+ await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 23
+ await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 24
+     await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceSlNo, devicetype, deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 25
+ await testRunner.WhenAsync(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
+                            "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 26
+ await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 27
+ await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("02Test Case ID 511923: Verify pre-fitting flow works as expected")]
+        [NUnit.Framework.CategoryAttribute("tag2")]
+        [NUnit.Framework.TestCaseAttribute("VI960S-DRWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Yes", "No", "2586114318", "NoDev", "2586146387", "Yes", "2586146387", "Cdevice", "Rechargeable", null)]
+        public async System.Threading.Tasks.Task _02TestCaseID511923VerifyPre_FittingFlowWorksAsExpected(
+                    string deviceId, 
+                    string deviceLeft, 
+                    string deviceRight, 
+                    string dumpA, 
+                    string dumpB, 
+                    string dumpC, 
+                    string dumpD, 
+                    string alterFSW, 
+                    string alterFSWNo, 
+                    string deviceSlNo, 
+                    string noDevice, 
+                    string deviceLeftSlNo, 
+                    string flashHI, 
+                    string deviceCSlno, 
+                    string deviceC, 
+                    string devicetype, 
+                    string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "tag2"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("DeviceId", deviceId);
+            argumentsOfScenario.Add("DeviceLeft", deviceLeft);
+            argumentsOfScenario.Add("DeviceRight", deviceRight);
+            argumentsOfScenario.Add("DumpA", dumpA);
+            argumentsOfScenario.Add("DumpB", dumpB);
+            argumentsOfScenario.Add("DumpC", dumpC);
+            argumentsOfScenario.Add("DumpD", dumpD);
+            argumentsOfScenario.Add("AlterFSW", alterFSW);
+            argumentsOfScenario.Add("AlterFSWNo", alterFSWNo);
+            argumentsOfScenario.Add("DeviceSlNo", deviceSlNo);
+            argumentsOfScenario.Add("NoDevice", noDevice);
+            argumentsOfScenario.Add("DeviceLeftSlNo", deviceLeftSlNo);
+            argumentsOfScenario.Add("FlashHI", flashHI);
+            argumentsOfScenario.Add("DeviceCSlno", deviceCSlno);
+            argumentsOfScenario.Add("DeviceC", deviceC);
+            argumentsOfScenario.Add("Devicetype", devicetype);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("02Test Case ID 511923: Verify pre-fitting flow works as expected", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 52
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 53
+    await testRunner.GivenAsync("[Cleaning up dumps before execution starts]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 54
+   await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 55
+ await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
+                            "", deviceId, deviceSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 56
+    await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceSlNo, devicetype, deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 57
+    await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 58
+    await testRunner.ThenAsync(string.Format("[Perform monaural pre-fitting by clicking the Prefit or Prefit Wireless button if" +
+                            " device is wireless \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"]", deviceLeftSlNo, deviceSlNo, deviceId, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 59
+    await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 60
+    await testRunner.ThenAsync("[Connect HI device to SmartFit and Verify that audiogram settings]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("03Test Case ID 511962: Verify supported FSW version")]
+        [NUnit.Framework.CategoryAttribute("tag3")]
+        [NUnit.Framework.TestCaseAttribute("VI960S-DRWC", "Left", "Right", "Device A", "Device B", "Device C", "Device D", "Yes", "No", "2586136545", "NoDev", "2586146387", "Yes", "2586146387", "Cdevice", "Rechargeable", null)]
+        public async System.Threading.Tasks.Task _03TestCaseID511962VerifySupportedFSWVersion(
+                    string deviceId, 
+                    string deviceLeft, 
+                    string deviceRight, 
+                    string dumpA, 
+                    string dumpB, 
+                    string dumpC, 
+                    string dumpD, 
+                    string alterFSW, 
+                    string alterFSWNo, 
+                    string deviceSlNo, 
+                    string noDevice, 
+                    string deviceLeftSlNo, 
+                    string flashHI, 
+                    string deviceCSlno, 
+                    string deviceC, 
+                    string devicetype, 
+                    string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "tag3"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("DeviceId", deviceId);
+            argumentsOfScenario.Add("DeviceLeft", deviceLeft);
+            argumentsOfScenario.Add("DeviceRight", deviceRight);
+            argumentsOfScenario.Add("DumpA", dumpA);
+            argumentsOfScenario.Add("DumpB", dumpB);
+            argumentsOfScenario.Add("DumpC", dumpC);
+            argumentsOfScenario.Add("DumpD", dumpD);
+            argumentsOfScenario.Add("AlterFSW", alterFSW);
+            argumentsOfScenario.Add("AlterFSWNo", alterFSWNo);
+            argumentsOfScenario.Add("DeviceSlNo", deviceSlNo);
+            argumentsOfScenario.Add("NoDevice", noDevice);
+            argumentsOfScenario.Add("DeviceLeftSlNo", deviceLeftSlNo);
+            argumentsOfScenario.Add("FlashHI", flashHI);
+            argumentsOfScenario.Add("DeviceCSlno", deviceCSlno);
+            argumentsOfScenario.Add("DeviceC", deviceC);
+            argumentsOfScenario.Add("Devicetype", devicetype);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("03Test Case ID 511962: Verify supported FSW version", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 86
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 87
+    await testRunner.GivenAsync("[Cleaning up dumps before execution starts]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 88
+    await testRunner.GivenAsync("[Cleaning up dumps before execution starts]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 89
+    await testRunner.GivenAsync(string.Format("Launch socket Driver \"{0}\"and\"{1}\"", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 90
+    await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 91
+    await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
+                            "", deviceId, deviceLeftSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 92
+    await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 93
+    await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
+                            "", deviceId, deviceSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 94
+    await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 95
+    await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 96
+    await testRunner.ThenAsync(string.Format("[Perform pre-fitting by clicking the Prefit or Prefit Wireless button if device i" +
+                            "s wireless \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"]", deviceLeftSlNo, deviceSlNo, deviceId, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 97
+    await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

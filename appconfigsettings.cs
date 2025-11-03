@@ -79,9 +79,9 @@ namespace AppiumWinApp
 
     public class NavisionSalesOrder
     {
-        public string Binaural { get; set; } = string.Empty;
+        public string BinauralSalesOrder { get; set; } = string.Empty;
 
-        public string Monaural { get; set; } = string.Empty;
+        public string MonauralSalesOrder { get; set; } = string.Empty;
 
         public string EnableModelValidationPath { get; set; } = string.Empty;
 

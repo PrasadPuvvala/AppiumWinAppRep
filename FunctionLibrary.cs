@@ -610,7 +610,6 @@ namespace AppiumWinApp
         /** To read the CSV files **/
         public static String[] readCSVFile()
         {
-
             using (var reader = new StreamReader(textDir + "\\TestData.csv"))
             {
 
