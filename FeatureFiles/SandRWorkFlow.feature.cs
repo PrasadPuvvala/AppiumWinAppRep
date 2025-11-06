@@ -429,20 +429,21 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 110
- await testRunner.GivenAsync(string.Format("Launch socket Driver \"{0}\"and\"{1}\"", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line 109
+ await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"<AlterFSWNo>\" and \"{0}\" and \"{1}\" and \"{" +
+                            "2}\"and\"{3}\"]", deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 112
+#line 110
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 113
+#line 111
  await testRunner.WhenAsync(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
                             "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 114
+#line 112
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 115
+#line 113
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -472,7 +473,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("06Test Case ID 1105474: Verify capture operation is performed within desired time" +
                     "", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 142
+#line 140
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -485,19 +486,19 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 144
+#line 142
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 145
+#line 143
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 146
+#line 144
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 147
+#line 145
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 148
+#line 146
  await testRunner.WhenAsync("[Go to logs and verify capturing time]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
             }
@@ -525,7 +526,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("DeviceLeft", deviceLeft);
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("07Test Case ID 1103482: Verify supported PC configuration", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 169
+#line 167
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -538,25 +539,25 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 171
+#line 169
  await testRunner.GivenAsync(string.Format("Launch socket Driver \"{0}\"and\"{1}\"", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 172
+#line 170
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 173
+#line 171
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 174
+#line 172
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 175
+#line 173
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 176
+#line 174
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image \"{0}\" and \"{1}\"and\"{2}\" and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 177
+#line 175
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -584,7 +585,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("DeviceLeft", deviceLeft);
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("08Test Case ID 1103833: Verify channel can be changed while S&R tool is running", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 200
+#line 198
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -597,7 +598,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 202
+#line 200
  await testRunner.WhenAsync(string.Format("[Change communication channel in S and R{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
             }
@@ -627,7 +628,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("CaptureScenarioTitle", captureScenarioTitle);
             argumentsOfScenario.Add("RestoreScenarioTitle", restoreScenarioTitle);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("09Test Case ID 1104002: Verify HI capture/restoration report", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 223
+#line 221
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -640,53 +641,53 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 225
+#line 223
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 226
+#line 224
  await testRunner.WhenAsync("[Cleaning up Capture and Restore Reports Before Launch SandR]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 227
+#line 225
  await testRunner.WhenAsync(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
                             "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 228
+#line 226
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 229
+#line 227
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 230
+#line 228
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 231
+#line 229
  await testRunner.GivenAsync(string.Format("[Download and verify azure storage files \"{0}\" and \"{1}\"]", captureScenarioTitle, deviceLeftSlNo), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 232
+#line 230
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 233
+#line 231
  await testRunner.ThenAsync("[Do the Comparison between Azure Data and SandR Data]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 234
+#line 232
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 235
+#line 233
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image \"{0}\" and \"{1}\"and\"{2}\" and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 236
+#line 234
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 237
+#line 235
  await testRunner.GivenAsync(string.Format("[Download and verify azure storage files \"{0}\" and \"{1}\"]", restoreScenarioTitle, deviceLeftSlNo), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 238
+#line 236
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 239
+#line 237
  await testRunner.ThenAsync("[Do the Comparison between Azure Data and SandR Data]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 240
+#line 238
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -717,7 +718,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("10Test Case ID 1105498: Verify that S&R Tool properly sets listening test setting" +
                     "s", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 284
+#line 282
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -730,29 +731,29 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 286
+#line 284
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"<AlterFSWNo>\" and \"{0}\" and \"{1}\" and \"{" +
                             "2}\"and\"{3}\"]", deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 287
+#line 285
  await testRunner.WhenAsync(string.Format("[Change communication channel in S and R{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 288
+#line 286
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 289
+#line 287
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 290
+#line 288
  await testRunner.WhenAsync("[Perform Capture with listening test settings]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 291
+#line 289
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 292
+#line 290
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 293
+#line 291
  await testRunner.ThenAsync(string.Format("[Launch FSW and check the added programs \"{0}\" and \"{1}\" and \"{2}\"and\"{3}\"]", deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -805,7 +806,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("FlashHI", flashHI);
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("11Test Case ID 1629628: Verify that firmware is upgraded if conditions apply", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 318
+#line 316
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -818,36 +819,36 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 320
+#line 318
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4" +
                             "}\"]", alterFSW, deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 321
+#line 319
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 322
+#line 320
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 323
+#line 321
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 322
+ await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 323
+ await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image using SWAP option \"{0}\" and \"{1}\" and " +
+                            "\"{2}\" and \"{3}\"and\"{4}\"]", deviceSlNo, deviceLeftSlNo, deviceId, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 324
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 325
- await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image using SWAP option \"{0}\" and \"{1}\" and " +
-                            "\"{2}\" and \"{3}\"and\"{4}\"]", deviceSlNo, deviceLeftSlNo, deviceId, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 326
- await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 327
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 328
+#line 326
  await testRunner.ThenAsync(string.Format("[Compare firmware version is upgraded successfully \"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 329
+#line 327
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -900,7 +901,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("FlashHI", flashHI);
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("12Test Case ID 1629629: Verify that firmware is downgraded if conditions apply", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 350
+#line 348
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -913,40 +914,40 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 352
+#line 350
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4" +
                             "}\"]", alterFSW, deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 353
+#line 351
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 354
+#line 352
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 355
+#line 353
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 356
+#line 354
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 357
+#line 355
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4" +
                             "}\"]", alterFSW, deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 358
+#line 356
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image using SWAP option \"{0}\" and \"{1}\" and " +
                             "\"{2}\" and \"{3}\"and\"{4}\"]", deviceSlNo, deviceLeftSlNo, deviceId, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 359
+#line 357
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 360
+#line 358
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 361
+#line 359
  await testRunner.ThenAsync(string.Format("[Compare firmware version is upgraded successfully \"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 362
+#line 360
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -978,7 +979,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("13Test Case ID 1105470: Verify the data saved during capture and cleaning in Came" +
                     "lot Cloud", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 383
+#line 381
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -991,36 +992,36 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 385
+#line 383
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"<AlterFSWNo>\" and \"{0}\" and \"{1}\" and \"{" +
                             "2}\"and\"{3}\"]", deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 386
+#line 384
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 387
+#line 385
  await testRunner.WhenAsync(string.Format("[Go to Device Info tab and capture device info in excel then verify the device in" +
                             "formation is shown correctly \"{0}\"]", devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 388
+#line 386
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 389
+#line 387
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 390
+#line 388
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 391
+#line 389
  await testRunner.GivenAsync(string.Format("[Download and verify azure storage files \"{0}\" and \"{1}\"]", scenarioTitle, deviceLeftSlNo), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 392
+#line 390
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 393
+#line 391
  await testRunner.ThenAsync("[Do the Comparison between Azure Data and SandR Data]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 394
+#line 392
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1052,7 +1053,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("14Test Case ID 1101758: Verify device information is uploaded to Camelot cloud co" +
                     "rrectly", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 415
+#line 413
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1065,33 +1066,33 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 417
+#line 415
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"<AlterFSWNo>\" and \"{0}\" and \"{1}\" and \"{" +
                             "2}\"and\"{3}\"]", deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 418
+#line 416
  await testRunner.WhenAsync(string.Format("[Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon \"{0}\" and " +
                             "\"{1}\" and \"{2}\"and\"{3}\"]", deviceId, deviceLeft, deviceLeftSlNo, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 419
+#line 417
  await testRunner.WhenAsync(string.Format("[Change communication channel in S and R{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 420
+#line 418
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 421
+#line 419
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 422
+#line 420
  await testRunner.GivenAsync(string.Format("[Download and verify azure storage files \"{0}\" and \"{1}\"]", scenarioTitle, deviceLeftSlNo), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 423
+#line 421
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 424
+#line 422
  await testRunner.ThenAsync("[Do the Comparison between Azure Data and SandR Data]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 425
+#line 423
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1121,7 +1122,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("ScenarioTitle", scenarioTitle);
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("15Test Case ID 1105521: Verify the data saved during restore in Camelot Cloud", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 445
+#line 443
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1134,31 +1135,31 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 447
+#line 445
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 448
+#line 446
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 449
+#line 447
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 450
+#line 448
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image \"{0}\" and \"{1}\"and\"{2}\" and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 451
+#line 449
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 452
+#line 450
  await testRunner.GivenAsync(string.Format("[Download and verify azure storage files \"{0}\" and \"{1}\"]", scenarioTitle, deviceLeftSlNo), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 453
+#line 451
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 454
+#line 452
  await testRunner.ThenAsync("[Do the Comparison between Azure Data and SandR Data]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 455
+#line 453
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1190,7 +1191,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("16Test Case ID 1103983: Verify cloud icon is shown when device information in sav" +
                     "ed in cloud", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 476
+#line 474
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1203,20 +1204,20 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 478
+#line 476
  await testRunner.WhenAsync(string.Format("[Verify StorageLayout Scenario By Changing Date and Confirm Cloud Icon \"{0}\" and " +
                             "\"{1}\" and \"{2}\"and\"{3}\"]", deviceId, deviceLeft, deviceLeftSlNo, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 479
+#line 477
  await testRunner.WhenAsync(string.Format("[Change communication channel in S and R{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 480
+#line 478
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 481
+#line 479
  await testRunner.GivenAsync(string.Format("[Download and verify azure storage files \"{0}\" and \"{1}\"]", scenarioTitle, deviceLeftSlNo), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 482
+#line 480
  await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1271,7 +1272,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("17Test Case ID 1105669: Verify that fitting data is properly restored during rest" +
                     "oration on original device or Clone  (SWAP)", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 503
+#line 501
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1284,107 +1285,107 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 505
+#line 503
  await testRunner.GivenAsync("[Cleaning up dumps before execution starts]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 506
+#line 504
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4" +
                             "}\"]", alterFSW, deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 507
+#line 505
  await testRunner.WhenAsync(string.Format("[Get the dump of connected device by storage layout \"{0}\" and \"{1}\" and \"{2}\"and\"" +
                             "{3}\"]", deviceId, deviceLeft, deviceLeftSlNo, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 508
+#line 506
  await testRunner.WhenAsync("[Cleaning up Capture and Restore Reports Before Launch SandR]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 509
+#line 507
  await testRunner.WhenAsync(string.Format("[Change communication channel in S and R{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 510
+#line 508
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 511
+#line 509
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 512
+#line 510
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 513
+#line 511
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 514
+#line 512
  await testRunner.WhenAsync("[Go to logs and verify capturing time]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 515
+#line 513
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4" +
                             "}\"]", alterFSWNo, deviceId, deviceLeftSlNo, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 516
+#line 514
  await testRunner.WhenAsync(string.Format("[Get the dump of connected device left of DumpB by storage layout \"{0}\" and \"{1}\"" +
                             " and \"{2}\"and\"{3}\"]", deviceId, deviceLeft, deviceLeftSlNo, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 517
+#line 515
  await testRunner.ThenAsync(string.Format("[Do the dump comparison between two devices in Swap dumps\"{0}\"]", dumpB), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 518
+#line 516
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image using SWAP option \"{0}\" and \"{1}\" and " +
                             "\"{2}\" and \"{3}\"and\"{4}\"]", deviceSlNo, deviceLeftSlNo, deviceId, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 519
+#line 517
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 520
+#line 518
  await testRunner.WhenAsync(string.Format("[Get the dump of connected device of left DumpC by storage layout \"{0}\" and \"{1}\"" +
                             " and \"{2}\"and\"{3}\"]", deviceId, deviceLeft, deviceLeftSlNo, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 521
+#line 519
  await testRunner.ThenAsync(string.Format("[Do the dump comparison between two devices in Swap dumps\"{0}\"]", dumpC), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 522
+#line 520
  await testRunner.WhenAsync(string.Format("[Change communication channel in S and R{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 523
+#line 521
  await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceLeftSlNo, devicetype, deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 524
+#line 522
  await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 525
+#line 523
  await testRunner.WhenAsync(string.Format("[Perform Capture\"{0}\"and\"{1}\"]", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 526
+#line 524
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 527
+#line 525
  await testRunner.WhenAsync("[Go to logs and verify capturing time]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 528
+#line 526
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image using SWAP with left \"{0}\" and \"{1}\" a" +
                             "nd \"{2}\" and \"{3}\"and\"{4}\"]", deviceSlNo, deviceLeftSlNo, deviceId, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 529
+#line 527
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 530
+#line 528
  await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 531
+#line 529
  await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
                             "", deviceId, deviceLeftSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 532
+#line 530
  await testRunner.WhenAsync(string.Format("[Perform Restore with above captured image using SWAP with left \"{0}\" and \"{0}\" a" +
                             "nd \"{1}\" and \"{2}\"and\"{3}\"]", deviceLeftSlNo, deviceId, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 533
+#line 531
  await testRunner.AndAsync("[Open Capture and Restore report and log info in report]", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 534
+#line 532
  await testRunner.WhenAsync(string.Format("[Get the dump of connected device of DumpD by storage layout \"{0}\" and \"{1}\" and " +
                             "\"{2}\"and\"{3}\"]", deviceId, deviceRight, deviceLeftSlNo, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 536
+#line 534
  await testRunner.ThenAsync(string.Format("[Do the dump comparison between two device DeviceC and DeviceD dumps{0}]", dumpD), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1413,7 +1414,7 @@ await this.FeatureBackgroundAsync();
             argumentsOfScenario.Add("DeviceSlNo", deviceSlNo);
             argumentsOfScenario.Add("Devicetype", devicetype);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("18Test Case ID 1142328: PC_Verify HI can be PC programmed properly.", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 563
+#line 561
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1426,24 +1427,24 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 await this.FeatureBackgroundAsync();
 #line hidden
-#line 565
+#line 563
  await testRunner.GivenAsync(string.Format("Launch socket Driver \"{0}\"and\"{1}\"", deviceId, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 566
+#line 564
  await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceLeft), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 567
+#line 565
  await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
                             "", deviceId, deviceLeftSlNo, flashHI, deviceLeft, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 568
+#line 566
  await testRunner.WhenAsync(string.Format("[Create a Patient and Fitting HI In FSW \"<AlterFSW>\" and \"{0}\" and \"{1}\" and \"{2}" +
                             "\"and\"{3}\"]", deviceId, deviceSlNo, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 569
+#line 567
  await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 570
+#line 568
  await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
                             "", deviceId, deviceSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden

@@ -15,6 +15,8 @@ namespace AppiumWinApp
         public SandRToolUninstallation sandRToolUninstallation { get; set; }
         public SandRDownloadLinkUpdateParameters sandRDownloadLinkUpdateParameters { get; set; }
         public NavisionSalesOrder navisionSalesOrder { get; set; }
+
+        public SmartFitUnIstallation smartFitUnIstallation { get; set; }
     }
 
     public class Algo
@@ -71,6 +73,11 @@ namespace AppiumWinApp
     {
         public string UninstallKeyWow64 { get; set; } = string.Empty;
     }
+
+    public class SmartFitUnIstallation
+    {
+        public string smartFitUninstallationKey { get; set; } = string.Empty;
+    }
     public class SandRDownloadLinkUpdateParameters
     {
         public string Build { get; set; } = string.Empty;
@@ -90,6 +97,8 @@ namespace AppiumWinApp
         public string ValidBase64ConnectionStringPath { get; set; } = string.Empty;
 
         public string userConfigDir { get; set; } = string.Empty;
+
+        public string DomeSalesOrder { get; set; } = string.Empty;
     }
 
 

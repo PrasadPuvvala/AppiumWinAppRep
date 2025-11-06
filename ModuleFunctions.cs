@@ -78,7 +78,7 @@ namespace AppiumWinApp
             AppiumOptions appCapabilities = new AppiumOptions();
             appCapabilities.AddAdditionalCapability("app", ApplicationPath);
             appCapabilities.AddAdditionalCapability("platformName", "Windows");
-            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "50");
             appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
             appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
             appCapabilities.AddAdditionalCapability("appWorkingDir", path);
@@ -113,7 +113,7 @@ namespace AppiumWinApp
             AppiumOptions appCapabilities = new AppiumOptions();
             appCapabilities.AddAdditionalCapability("app", ApplicationPath);
             appCapabilities.AddAdditionalCapability("platformName", "Windows");
-            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "30");
+            appCapabilities.AddAdditionalCapability("ms:waitForAppLaunch", "50");
             appCapabilities.AddAdditionalCapability("appArguments", "--run-as-administrator");
             //appCapabilities.AddAdditionalCapability("appPackage", "ReSound");
             appCapabilities.AddAdditionalCapability("appArguments", "Test.exe");
@@ -4029,6 +4029,99 @@ namespace AppiumWinApp
             Console.WriteLine("XML files updated successfully.");
         }
 
+        public static void UnInstallSmartFit(ExtentTest stepName)
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(config.smartFitUnIstallation.smartFitUninstallationKey))
+            {
+                if (key == null)
+                {
+                    stepName.Log(Status.Fail, "Uninstall registry key not found.");
+                    return;
+                }
+
+                var targetSubKey = key.GetSubKeyNames()
+                    .Select(subKeyName => key.OpenSubKey(subKeyName))
+                    .Where(appKey => appKey != null)
+                    .Select(appKey => new { appKey, displayName = appKey.GetValue("DisplayName") as string })
+                    .Where(x => !string.IsNullOrEmpty(x.displayName) && x.displayName.Contains("Smart Fit"))
+                    .ToList();
+
+                if (!targetSubKey.Any())
+                {
+                    stepName.Log(Status.Fail, "Smart Fit key not found");
+                    return;
+                }
+
+                foreach (var e in targetSubKey)
+                {
+                    string uninstallString = e.appKey.GetValue("UninstallString") as string;
+                    if (string.IsNullOrEmpty(uninstallString))
+                    {
+                        stepName.Log(Status.Fail, $"UninstallString not found for {e.displayName}");
+                        continue;
+                    }
+
+                    try
+                    {
+                        string exePath;
+                        string arguments;
+
+                        // Handle MSI-based uninstallers separately
+                        if (uninstallString.StartsWith("MsiExec", StringComparison.OrdinalIgnoreCase))
+                        {
+                            exePath = "msiexec.exe"; // msiexec is in the PATH
+                            arguments = uninstallString.Substring(uninstallString.IndexOf(" ") + 1);
+
+                            // Replace /I (install) with /X (uninstall)
+                            if (arguments.Contains("/I", StringComparison.OrdinalIgnoreCase))
+                                arguments = arguments.Replace("/I", "/X");
+
+                            arguments += " /quiet";
+                        }
+                        else
+                        {
+                            // Handle EXE-based uninstallers
+                            var parts = uninstallString.Split(new[] { ' ' }, 2);
+                            exePath = parts[0];
+                            arguments = (parts.Length > 1 ? parts[1] + " " : "") + "/uninstall /quiet";
+                        }
+
+                        using (Process uninstallProcess = new Process())
+                        {
+                            uninstallProcess.StartInfo.FileName = exePath;
+                            uninstallProcess.StartInfo.Arguments = arguments;
+                            uninstallProcess.StartInfo.UseShellExecute = false;
+                            uninstallProcess.StartInfo.CreateNoWindow = true;
+                            uninstallProcess.StartInfo.Verb = "runas"; // run as admin
+                            uninstallProcess.Start();
+
+                            uninstallProcess.WaitForExit();
+                            int exitCode = uninstallProcess.ExitCode;
+                            Console.WriteLine($"Uninstallation exit code: {exitCode}");
+                        }
+
+                        // Verify uninstallation
+                        var remaining = key.GetSubKeyNames()
+                            .Select(subKeyName => key.OpenSubKey(subKeyName))
+                            .Where(appKey => appKey != null)
+                            .Select(appKey => appKey.GetValue("DisplayName") as string)
+                            .Where(name => !string.IsNullOrEmpty(name) && name.Contains("Smart Fit"))
+                            .ToList();
+
+                        if (remaining.Any())
+                            stepName.Log(Status.Fail, "Smart Fit was not uninstalled.");
+                        else
+                            stepName.Log(Status.Pass, "Smart Fit uninstalled successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        stepName.Log(Status.Fail, $"Error during uninstallation: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+
         public static void UninstallSandRTool(ExtentTest stepName)
         {
             using (RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64))
@@ -4112,6 +4205,8 @@ namespace AppiumWinApp
             }
         }
 
+
+      
         public static void InstallSandRTool(ExtentTest stepName)
         {
             RegistryKey key = Registry.LocalMachine.OpenSubKey(config.sandRToolUninstallation.UninstallKeyWow64);

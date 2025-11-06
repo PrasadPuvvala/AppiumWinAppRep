@@ -1254,6 +1254,15 @@ namespace AppiumWinApp.StepDefinitions
             }
         }
 
+        [Given("[Uninstall the current SmartFit]")]
+        public void GivenUninstallTheCurrentSmartFit()
+        {
+            test = ScenarioContext.Current["extentTest"] as ExtentTest;
+            ExtentTest stepName = test.CreateNode(ScenarioStepContext.Current.StepInfo.Text.ToString());
+            ModuleFunctions.UnInstallSmartFit(stepName);
+            stepName.Log(Status.Pass, "SmartFit Uninstalled successfully");
+        }
+
 
         [When("[Uninstall the current S&R Tool]")]
         public static void WhenUninstallTheCurrentSRTool()
@@ -1467,6 +1476,7 @@ namespace AppiumWinApp.StepDefinitions
 
             session.FindElementByAccessibilityId("ConnectionStringTextBox").Click();
             Thread.Sleep(2000);
+            //string validConnectionString = Environment.GetEnvironmentVariable("VALID_CONN_STRING", EnvironmentVariableTarget.Machine);
             session.FindElementByAccessibilityId("ConnectionStringTextBox").SendKeys(config.navisionSalesOrder.ValidBase64ConnectionString);
             Thread.Sleep(2000);
             session.FindElementByAccessibilityId("SaveButton").Click();

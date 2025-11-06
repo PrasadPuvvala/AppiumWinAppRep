@@ -106,9 +106,7 @@ Examples:
 
 @tag5
 Scenario Outline: 05Test Case ID 1103972: Verify device information is shown correctly
-
-	Given Launch socket Driver "<DeviceId>"and"<Devicetype>"
-	#When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
+	When [Create a Patient and Fitting HI In FSW "<AlterFSWNo>" and "<DeviceId>" and "<DeviceLeftSlNo>" and "<DeviceLeft>"and"<Devicetype>"]
 	When [Launch SandR "<DeviceId>" and "<DeviceLeftSlNo>"and"<Devicetype>"and "<DeviceLeft>"]
 	When [Go to Device Info tab and capture device info in excel then verify the device information is shown correctly "<Devicetype>"]
 	When [Come back to Settings and wait till controls enabled]
