@@ -555,6 +555,33 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
+#line 157
+    await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 158
+ await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
+                            "", deviceId, deviceSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 159
+    await testRunner.GivenAsync(string.Format("[Change channel side in FDTS{0}]", deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 160
+ await testRunner.GivenAsync(string.Format("Launch FDTS WorkFlow And Flash Device \"{0}\" and \"{1}\" and \"{2}\" and \"{3}\"and\"{4}\"" +
+                            "", deviceId, deviceSlNo, flashHI, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 161
+    await testRunner.WhenAsync(string.Format("[Launch SandR \"{0}\" and \"{1}\"and\"{2}\"and \"{3}\"]", deviceId, deviceSlNo, devicetype, deviceRight), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 162
+    await testRunner.WhenAsync("[Come back to Settings and wait till controls enabled]", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 163
+    await testRunner.ThenAsync(string.Format("[Perform pre-fitting by clicking the Prefit or Prefit Wireless \"{0}\" and \"{1}\" an" +
+                            "d \"{2}\" and \"{3}\"and\"{4}\"]", deviceLeftSlNo, deviceSlNo, deviceId, deviceRight, devicetype), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 164
+    await testRunner.ThenAsync("[Close SandR tool]", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
 #line 165
     await testRunner.WhenAsync(string.Format("[Connect the device to SmartFit and inspect the fitted dome \"{0}\" and \"{1}\" and \"" +
                             "{2}\"and\"{3}\"and\"{4}\"]", deviceId, deviceSlNo, deviceRight, devicetype, dOME), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");

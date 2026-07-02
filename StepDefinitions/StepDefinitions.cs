@@ -1007,9 +1007,11 @@ namespace MyNamespace
                         //{
 
                         //}
-                        var container = session.FindElement(By.XPath($"//Group[.//Text[@Name='{DeviceNo}']]"));
-
-                        var leftButton = container.FindElement(By.XPath(".//Button[@Name='Left']"));
+                        var leftButton = session.FindElement(By.XPath(
+  $"//Text[@Name='SN:']" +
+  $"/following-sibling::Text[@Name='{DeviceNo}']" +
+  $"/following::Button[@Name='Right'][1]"
+  ));
                         leftButton.Click();
                         //var leftButton = session.FindElement(By.XPath($"//*[contains(@Name, '{DeviceNo}')]//ancestor::*[1]//Button[@Name='Left']"));
 
@@ -1199,9 +1201,12 @@ namespace MyNamespace
 
                                         Thread.Sleep(2000);
                                         //var SN2 = session.FindElementsByClassName("ListBoxItem");
-                                        var container3 = session.FindElement(By.XPath($"//Group[.//Text[@Name='{DeviceNo}']]"));
-
-                                        var leftButton3 = container3.FindElement(By.XPath(".//Button[@Name='Left']"));
+                                        var leftButton1 = session.FindElement(By.XPath(
+$"//Text[@Name='SN:']" +
+$"/following-sibling::Text[@Name='{DeviceNo}']" +
+$"/following::Button[@Name='Right'][1]"
+));
+                                        leftButton1.Click();
                                         // Check if DeviceNo is already discovered
 
                                         //foreach (WindowsElement value in SN2)
@@ -1790,17 +1795,18 @@ namespace MyNamespace
                                     int stepIncrement = 0;
                                     if (alterValue.Equals("Yes"))
                                     {
-                                        /** Clicks on Fiiting menu buttion **/
-
-                                        session.FindElementByName("Fitting").Click();
-                                        Thread.Sleep(2000);
-
-                                        /** To perform reset initial fit **/
-
+                                        Thread.Sleep(5000);
+                                        session.FindElementByAccessibilityId("sidebar-button-instrumentsetupsidenavigation").Click();
+                                        Thread.Sleep(10000);
                                         session.FindElementByName("Reset to Initial Fit").Click();
-                                        Thread.Sleep(4000);
-                                        //session.SwitchTo().Window(session.WindowHandles.First());
-                                        ////////session.SwitchTo().ActiveElement();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("resettoinitialfitdialog-button-continue").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByName("Gain Adjustments").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("sidebar-button-finetuningsidenavigation").Click();
+                                        Thread.Sleep(10000);
+
 
                                         try
                                         {
@@ -1827,15 +1833,17 @@ namespace MyNamespace
 
                                     else
                                     {
-                                        /** Clicks on "Fiiting" Redmenu buttion **/
-
-                                        session.FindElementByName("Fitting").Click();
-                                        Thread.Sleep(2000);
-
-                                        /** To perform reset initial fit **/
-
+                                        Thread.Sleep(5000);
+                                        session.FindElementByAccessibilityId("sidebar-button-instrumentsetupsidenavigation").Click();
+                                        Thread.Sleep(10000);
                                         session.FindElementByName("Reset to Initial Fit").Click();
-                                        Thread.Sleep(4000);
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("resettoinitialfitdialog-button-continue").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByName("Gain Adjustments").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("sidebar-button-finetuningsidenavigation").Click();
+                                        Thread.Sleep(10000);
                                         session.SwitchTo().Window(session.WindowHandles.First());
                                         ////////session.SwitchTo().ActiveElement();
 
@@ -1884,8 +1892,9 @@ namespace MyNamespace
                                     try
                                     {
                                         Thread.Sleep(2000);
-                                        lib.clickOnAutomationName(session, "Skip & Save");
+                                        session.FindElementByAccessibilityId("loginneededdialog-button-skipandsave").Click();
                                     }
+
                                     catch (Exception)
                                     {
                                         lib.clickOnElementWithIdonly(session, "PART_Cancel");
@@ -1899,7 +1908,8 @@ namespace MyNamespace
 
 
                                 stepName.Pass("Click on FSW Exit button");
-                                lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+                                //lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+                                session.FindElementByName("Exit ReSound Smart Fit").Click();
 
                                 /** Exit the FSW **/
 
@@ -1985,17 +1995,17 @@ namespace MyNamespace
                                     int stepIncrement = 0;
                                     if (alterValue.Equals("Yes"))
                                     {
-                                        /** Clicks on Fiiting menu buttion **/
-
-                                        session.FindElementByName("Fitting").Click();
-                                        Thread.Sleep(2000);
-
-                                        /** To perform reset initial fit **/
-
+                                        Thread.Sleep(5000);
+                                        session.FindElementByAccessibilityId("sidebar-button-instrumentsetupsidenavigation").Click();
+                                        Thread.Sleep(10000);
                                         session.FindElementByName("Reset to Initial Fit").Click();
-                                        Thread.Sleep(2000);
-                                        session.SwitchTo().Window(session.WindowHandles.First());
-                                        ////////session.SwitchTo().ActiveElement();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("resettoinitialfitdialog-button-continue").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByName("Gain Adjustments").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("sidebar-button-finetuningsidenavigation").Click();
+                                        Thread.Sleep(10000);
 
                                         try
                                         {
@@ -2021,17 +2031,17 @@ namespace MyNamespace
 
                                     else
                                     {
-                                        /** Clicks on "Fiiting" Redmenu buttion **/
-
-                                        session.FindElementByName("Fitting").Click();
-                                        Thread.Sleep(2000);
-
-                                        /** To perform reset initial fit **/
-
+                                        Thread.Sleep(5000);
+                                        session.FindElementByAccessibilityId("sidebar-button-instrumentsetupsidenavigation").Click();
+                                        Thread.Sleep(10000);
                                         session.FindElementByName("Reset to Initial Fit").Click();
-                                        Thread.Sleep(2000);
-                                        session.SwitchTo().Window(session.WindowHandles.First());
-                                        ////////session.SwitchTo().ActiveElement();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("resettoinitialfitdialog-button-continue").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByName("Gain Adjustments").Click();
+                                        Thread.Sleep(10000);
+                                        session.FindElementByAccessibilityId("sidebar-button-finetuningsidenavigation").Click();
+                                        Thread.Sleep(10000);
 
                                         try
                                         {
@@ -2078,8 +2088,9 @@ namespace MyNamespace
                                     try
                                     {
                                         Thread.Sleep(2000);
-                                        lib.clickOnAutomationName(session, "Skip & Save");
+                                        session.FindElementByAccessibilityId("loginneededdialog-button-skipandsave").Click();
                                     }
+
                                     catch (Exception)
                                     {
                                         lib.clickOnElementWithIdonly(session, "PART_Cancel");
@@ -2095,7 +2106,8 @@ namespace MyNamespace
 
 
                                 stepName.Pass("Click on FSW Exit button");
-                                lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+                                //lib.clickOnElementWithIdonly(session, "SaveAutomationIds.PerformSaveAutomationIds.ExitAction");
+                                session.FindElementByName("Exit ReSound Smart Fit").Click();
 
                                 /** Exit the FSW **/
 
@@ -3448,10 +3460,13 @@ namespace MyNamespace
                     //{
 
                     //}
-                    var container = session.FindElement(By.XPath($"//Group[.//Text[@Name='{DeviceNo}']]"));
-
-                    var leftButton = container.FindElement(By.XPath(".//Button[@Name='Left']"));
+                    var leftButton = session.FindElement(By.XPath(
+$"//Text[@Name='SN:']" +
+$"/following-sibling::Text[@Name='{DeviceNo}']" +
+$"/following::Button[@Name='Right'][1]"
+));
                     leftButton.Click();
+
                     //var leftButton = session.FindElement(By.XPath($"//*[contains(@Name, '{DeviceNo}')]//ancestor::*[1]//Button[@Name='Left']"));
 
 
@@ -3600,10 +3615,13 @@ namespace MyNamespace
                                     session.FindElementByName("Noahlink Wireless").Click();
                                     //lib.clickOnAutomationId(session, "Connect", "SidebarAutomationIds.ConnectAction");
                                     Thread.Sleep(10000);
-                                    var container2 = session.FindElement(By.XPath($"//Group[.//Text[@Name='{DeviceNo}']]"));
+                                    var leftButton1 = session.FindElement(By.XPath(
+$"//Text[@Name='SN:']" +
+$"/following-sibling::Text[@Name='{DeviceNo}']" +
+$"/following::Button[@Name='Right'][1]"
+));
+                                    leftButton1.Click();
 
-                                    var leftButton2 = container2.FindElement(By.XPath(".//Button[@Name='Left']"));
-                                    leftButton2.Click();
                                     //var SN2 = session.FindElementsByClassName("ListBoxItem");
 
                                     //// Check if DeviceNo is already discovered
@@ -3881,9 +3899,13 @@ namespace MyNamespace
 
                             Thread.Sleep(10000); // Initial wait before searching
 
-                            var container = session.FindElement(By.XPath($"//Group[.//Text[@Name='{DeviceNo}']]"));
+                            var leftButton = session.FindElement(By.XPath(
+$"//Text[@Name='SN:']" +
+$"/following-sibling::Text[@Name='{DeviceNo}']" +
+$"/following::Button[@Name='Right'][1]"
+));
+                            leftButton.Click();
 
-                            var leftButton = container.FindElement(By.XPath(".//Button[@Name='Left']"));
 
                             //var SN = session.FindElementsByClassName("ListBoxItem");
 
@@ -3976,11 +3998,11 @@ namespace MyNamespace
                 Thread.Sleep(5000);
                 try
                 {
-                    session.FindElementByName("Instrument").Click();
+                    session.FindElementByAccessibilityId("sidebar-button-instrumentsetupsidenavigation").Click();
                 }
                 catch { }
 
-                Thread.Sleep(2000);
+                Thread.Sleep(10000);
                 try
                 {
                     session.FindElementByName("Read Instrument").Click();
